@@ -923,7 +923,7 @@
     ```Ruby
     string = "some injection\nusername"
     string[/^username$/]   # 匹配
-    string[/\Ausername\Z/] # 無匹配
+    string[/\Ausername\z/] # 無匹配
     ```
 * 針對複雜的正規表示法，使用 `x` 修飾符。這讓它們的可讀性更高並且你可以加入有用的註解。只是要小心忽略的空白。
 
