@@ -724,6 +724,7 @@
       puts "Cannot divide by 0!"
     else
       n / d
+    end
     ```
   
 * 避免救援 `Exception` 類別。這會把信號困住，並呼叫 `exit`，導致你需要 `kill -9` 進程。
