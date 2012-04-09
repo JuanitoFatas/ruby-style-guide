@@ -572,8 +572,24 @@
         @last_name = last_name
       end
     end
-    ```  
-  
+    ```
+* 考慮使用 `Struct.new`，它替你定義了那些瑣碎的存取器（accessors），建構式（constructor）以及比較運算元（comparison operators）。
+
+    ```Ruby
+    # 好
+    class Person
+      attr_reader :first_name, :last_name
+
+      def initialize(first_name, last_name)
+        @first_name = first_name
+        @last_name = last_name
+      end
+    end
+
+    # 較佳
+    class Person < Struct.new (:first_name, :last_name)
+    end
+    ````
 * 考慮加入工廠方法來提供額外合理的方式，來創造一個特定類別的實體。
 
     ```Ruby
