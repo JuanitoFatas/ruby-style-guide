@@ -607,8 +607,8 @@ syntax.
     counter += 1 # increments counter by one
     ```
 
-* Keep existing comments up-to-date. No comment is better than an outdated
-  comment.
+* Keep existing comments up-to-date. An outdated is worse than no comment
+  at all.
 * Avoid writing comments to explain bad code. Refactor the code to
   make it self-explanatory. (Do or do not - there is no try.)
 
@@ -707,6 +707,24 @@ mutators.
       end
     end
     ```  
+* Consider using `Struct.new`, which defines the trivial accessors,
+constructor and comparison operators for you.
+
+    ```Ruby
+    # good
+    class Person
+      attr_reader :first_name, :last_name
+
+      def initialize(first_name, last_name)
+        @first_name = first_name
+        @last_name = last_name
+      end
+    end
+
+    # better
+    class Person < Struct.new (:first_name, :last_name)
+    end
+    ````
   
 * Consider adding factory methods to provide additional sensible ways
 to create instances of a particular class.
@@ -855,6 +873,7 @@ in *Ruby* now, not in *Python*.
       puts "Cannot divide by 0!"
     else
       n / d
+    end
     ```
   
 * Avoid rescuing the `Exception` class.  This will trap signals and calls to
@@ -1076,12 +1095,13 @@ syntax.
   `^`, `-`, `\`, `]`, so don't escape `.` or brackets in `[]`.
 
 * Be careful with `^` and `$` as they match start/end of line, not string endings.
-  If you want to match the whole string use: `\A` and `\Z`.
+  If you want to match the whole string use: `\A` and `\z` (not to be
+  confused with `\Z` which is the equivalent of `/\n?\z/`).
 
     ```Ruby
     string = "some injection\nusername"
     string[/^username$/]   # matches
-    string[/\Ausername\Z/] # don't match
+    string[/\Ausername\z/] # don't match
     ```
 
 * Use `x` modifier for complex regexps. This makes them more readable and you
