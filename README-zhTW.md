@@ -468,7 +468,51 @@
 * 類別與模組使用駝峰式大小寫（CamelCase）。（保留像是 HTTP、RFC、XML 這種縮寫為大寫）
 * 其他常數使用尖叫蛇底式大寫（SCREAMING_SNAKE_CASE）。
 * 判斷式（predicate）方法的名字（回傳布林值的方法）應以問號結尾。(即 `Array#empty?` )
-* 有潛在 "危險" 的方法（即改動 `self` 或改動參數、 `exit!` 等等）應以驚嘆號結尾。
+* 有潛在“危險性”的方法，若此 *危險* 方法有安全版本存在時，應以驚嘆號結尾（即：改動 `self` 或參數、 `exit!`` 等等方法）。
+
+    ```Ruby
+    # 不好 - 沒有對應的安全方法
+    class Person
+      def update!
+      end
+    end
+
+    # 好
+    class Person
+      def update
+      end
+    end
+
+    # 好
+    class Person
+      def update!
+      end
+
+      def update
+      end
+    end
+    ```
+
+* 如果可能的話，從危險方法（bang）的角度來定義對應的安全方法（non-bang）。 
+
+    ```Ruby
+    class Array
+      def flatten_once!
+        res = []
+      
+        each do |e|
+          [*e].each { |f| res << f }
+        end
+
+        replace(res)
+      end
+
+      def flatten_once
+        dup.flatten_once!
+      end
+    end
+    ```    
+
 * 在短的區塊使用 `reduce` 時，把參數命名為 `|a, e|` (累加器，元素)
 * 當定義二元運算元時，把參數命名為 `other` 。
 
