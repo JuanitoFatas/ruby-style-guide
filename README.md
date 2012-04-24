@@ -374,6 +374,29 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
+* Favor modifier `while/until` usage when you have a single-line
+  body. 
+
+    ```Ruby
+    # bad
+    while some_condition
+      do_something
+    end
+
+    # good
+    do_something while some_condition
+    ```
+
+* Favor `until` over `while` for negative conditions.
+
+    ```Ruby
+    # bad
+    do_something while !some_condition
+
+    # good
+    do_something until some_condition
+    ```
+
 * Omit parentheses around parameters for methods that are part of an
   internal DSL (e.g. Rake, Rails, RSpec), methods that are with
   "keyword" status in Ruby (e.g. `attr_reader`, `puts`) and attribute
@@ -654,7 +677,11 @@ syntax.
     ```
 
 * Keep existing comments up-to-date. An outdated is worse than no comment
-  at all.
+at all.
+
+> Good code is a like a good joke - it needs no explanation. <br/>
+> -- Russ Olsen
+
 * Avoid writing comments to explain bad code. Refactor the code to
   make it self-explanatory. (Do or do not - there is no try.)
 
@@ -894,14 +921,45 @@ in *Ruby* now, not in *Python*.
 
 ## Exceptions
 
+* Signal exceptions using the `fail` keyword. Use `raise` only when
+  catching an exception and re-raising it (because here you're not failing, but explicitly and purposefully raising an exception).
+
+    ```Ruby
+    begin
+     fail "Oops";
+    rescue => error
+      raise if error.message != "Oops"
+    end
+    ```  
+
+* Never return form an `ensure` block. If you explicitly return from a
+  method inside an `ensure` block, the return will take precedence over
+  any exception being raised, and the method will return as if no
+  exception had been raised at all. In effect, the exception will be
+  silently thrown away.
+
+    ```Ruby
+    def foo
+      begin
+        fail
+      ensure
+        return "very bad idea"
+      end
+    end
+    ```
+    
 * Don't suppress exceptions.
 
     ```Ruby
+    # bad
     begin
       # an exception occurs here
     rescue SomeError
       # the rescue clause does absolutely nothing
     end
+
+    # bad
+    do_something rescue nil
     ```
   
 * Don't use exceptions for flow of control.
@@ -995,6 +1053,19 @@ introducing new exception classes.
 
 ## Collections
 
+* Prefer literal array and hash creation notation (unless you need to
+pass parameters to their constructors, that is).
+
+    ```Ruby
+    # bad
+    arr = Array.new
+    hash = Hash.new
+
+    # good
+    arr = []
+    hash = {}
+    ```
+
 * Prefer `%w` to the literal array syntax when you need an array of
 strings.
 
@@ -1052,6 +1123,13 @@ syntax.
 
     # good
     email_with_name = "#{user.name} <#{user.email}>"
+    ```
+
+* Consider padding string interpolation code with space. It more clearly sets the
+  code apart from the string.
+
+    ```Ruby
+    "#{ user.last_name }, #{ user.first_name }"
     ```
 
 * Prefer single-quoted strings when you don't need string interpolation or
