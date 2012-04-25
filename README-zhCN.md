@@ -303,6 +303,28 @@
     end
     ```
 
+* 当你有单行主体时，偏爱使用 `while/until` 修饰符。
+
+    ```Ruby
+    # bad
+    while some_condition
+      do_something
+    end
+
+    # good
+    do_something while some_condition
+    ```
+
+* 负面条件偏爱 `until` 胜于 `while` 。
+
+    ```Ruby
+    # bad
+    do_something while !some_condition
+
+    # good
+    do_something until some_condition
+    ```
+
 * 忽略围绕方法参数的括号，如内部 DSL (如：Rake, Rails, RSpec)，Ruby 中带有 "关键字" 状态的方法（如：`attr_reader`, `puts`）以及属性存取方法。所有其他的方法呼叫使用括号围绕参数。
 
     ```Ruby
@@ -469,7 +491,7 @@
 * 类别与模组使用驼峰式大小写（CamelCase）。 （保留像是HTTP、RFC、XML 这种缩写为大写）
 * 其他常数使用尖叫蛇底式大写（SCREAMING_SNAKE_CASE）。
 * 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (即 `Array#empty?` )
-* 有潜在“危险性”的方法，若此*危险* 方法有安全版本存在时，应以惊叹号结尾（即：改动 `self` 或参数、 `exit!`` 等等方法）。
+* 有潜在“危险性”的方法，若此*危险* 方法有安全版本存在时，应以惊叹号结尾（即：改动 `self` 或参数、 `exit!` 等等方法）。
 
     ```Ruby
     # 不好 - 没有对应的安全方法
@@ -539,6 +561,8 @@
     counter += 1 # 把计数器加一
     ```
 * 保持现有的注释是最新的。过时的注解比没有注解还差。
+> 好代码就像是好的笑话 - 它不需要解释 <br/>
+> -- Russ Olsen
 * 避免替烂代码写注解。重构代码让它们看起来一目了然。 （要嘛就做，要嘛不做― 不要只是试试看。）
 
 ## 注解
@@ -747,6 +771,28 @@
 
 ## 异常
 
+* 使用 `fail` 关键字来侦测异常。仅在捕捉到异常时使用 `raise` 来重新抛出异常（因为没有失败，但可以显式地抛出异常） 
+
+    ```Ruby
+    begin
+     fail "Oops";
+    rescue => error
+      raise if error.message != "Oops"
+    end
+    ```  
+
+* 永远不要从 `ensure` 区块返回。如果你显式地从 `ensure` 区块中的一个方法返回，那么这方法会如同没有异常般的返回。实际上，异常会被默默丢掉。
+
+    ```Ruby
+    def foo
+      begin
+        fail
+      ensure
+        return "very bad idea"
+      end
+    end
+    ```
+
 * 不要封锁异常。
 
     ```Ruby
@@ -755,6 +801,9 @@
     rescue SomeError
       # 拯救子句完全没有做事
     end
+
+    # bad
+    do_something rescue nil    
     ```
 * 不要为了控制流程而使用异常。
 
@@ -840,6 +889,18 @@
 
 ## 集合
 
+* 偏好数组及哈希的字面表示法（除非你需要给建构子传入参数）。
+
+    ```Ruby
+    # bad
+    arr = Array.new
+    hash = Hash.new
+
+    # good
+    arr = []
+    hash = {}
+    ```
+
 * 当你需要使用一个字串的数组时，偏好使用 `%w` 的字面数组语法。
 
     ```Ruby
@@ -890,6 +951,12 @@
     # 好
     email_with_name = "#{user.name} <#{user.email}>"
     ```
+* 考慮替字串插值留白。這使插值在字串裡看起來更清楚。考虑替字串插值留白。这使插值在字串里看起来更清楚。t
+
+    ```Ruby
+    "#{ user.last_name }, #{ user.first_name }"
+    ```
+
 * 当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，偏好单引号的字串。
 
     ```Ruby

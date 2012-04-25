@@ -303,6 +303,28 @@
     end
     ```
 
+* 當你有一個單行的主體時，偏愛使用 `while/until` 修飾子。
+
+    ```Ruby
+    # bad
+    while some_condition
+      do_something
+    end
+
+    # good
+    do_something while some_condition
+    ```
+
+* 負面條件偏愛 `until` 勝於 `while`。
+
+    ```Ruby
+    # bad
+    do_something while !some_condition
+
+    # good
+    do_something until some_condition
+    ```
+
 * 忽略圍繞方法參數的括號，如內部 DSL (如：Rake, Rails, RSpec)，Ruby 中帶有 "關鍵字" 狀態的方法（如：`attr_reader`, `puts`）以及屬性存取方法。所有其他的方法呼叫，使用括號圍繞參數。
 
     ```Ruby
@@ -468,7 +490,7 @@
 * 類別與模組使用駝峰式大小寫（CamelCase）。（保留像是 HTTP、RFC、XML 這種縮寫為大寫）
 * 其他常數使用尖叫蛇底式大寫（SCREAMING_SNAKE_CASE）。
 * 判斷式（predicate）方法的名字（回傳布林值的方法）應以問號結尾。(即 `Array#empty?` )
-* 有潛在“危險性”的方法，若此 *危險* 方法有安全版本存在時，應以驚嘆號結尾（即：改動 `self` 或參數、 `exit!`` 等等方法）。
+* 有潛在“危險性”的方法，若此 *危險* 方法有安全版本存在時，應以驚嘆號結尾（即：改動 `self` 或參數、 `exit!` 等等方法）。
 
     ```Ruby
     # 不好 - 沒有對應的安全方法
@@ -538,6 +560,8 @@
     counter += 1 # 把計數器加一
     ```
 * 保持現有的註解是最新的。過時的註解比沒有註解還差。
+> 好的程式碼就像是好的笑話 -- 它不需要解釋<br/>
+> -- Russ Olsen
 * 避免替爛程式碼寫註解。重構程式碼讓它們看起來一目了然。（要嘛就做，要嘛不做 ― 不要只是試試看。）
 
 ## 註釋 (Annotation)
@@ -714,6 +738,7 @@
         # ...
       end
     end
+
 * 使用 `def self.method` 來定義 singleton 方法。這讓方法更能抵抗重構帶來的變化。
 
     ```Ruby
@@ -744,6 +769,28 @@
 
 ## 異常
 
+* 使用 `fail` 關鍵字來偵測異常。仅在捕捉到異常時使用 `raise` 來重新拋出異常（因為沒有失敗，但可以顯式地拋出異常） 
+
+    ```Ruby
+    begin
+     fail "Oops";
+    rescue => error
+      raise if error.message != "Oops"
+    end
+    ```  
+
+* 永遠不要從 `ensure` 區塊返回。如果你顯式地從 `ensure` 區塊中的一個方法返回，那麼這方法會如同沒有異常般的返回。實際上，異常會被默默地丟掉。
+
+    ```Ruby
+    def foo
+      begin
+        fail
+      ensure
+        return "very bad idea"
+      end
+    end
+    ```
+
 * 不要封鎖異常。
 
     ```Ruby
@@ -752,7 +799,11 @@
     rescue SomeError
       # 救援子句完全沒有做事
     end
+
+    # bad
+    do_something rescue nil
     ```
+
 * 不要為了控制流程而使用異常。
 
     ```Ruby
@@ -798,7 +849,6 @@
     rescue StandardError => e
       # 異常處理
     end
-
     ```
 
 * 把較具體的異常放在救援串連的較上層，不然它們永遠不會被救援。
@@ -837,6 +887,18 @@
 * 偏愛使用標準函式庫的異常處理勝於導入新的異常類別。
 
 ## 集合
+
+* 偏好陣列及雜湊的字面表示法（除非你需要給建構子傳入參數）。
+
+    ```Ruby
+    # 不好
+    arr = Array.new
+    hash = Hash.new
+
+    # 好
+    arr = []
+    hash = {}
+    ```
 
 * 當你需要使用一個字串的陣列時，偏好使用 `%w` 的字面陣列語法。
 
@@ -888,6 +950,13 @@
     # 好
     email_with_name = "#{user.name} <#{user.email}>"
     ```
+
+* 考慮替字串插值留白。這使插值在字串裡看起來更清楚。
+
+    ```Ruby
+    "#{ user.last_name }, #{ user.first_name }"
+    ```
+
 * 當你不需要插入特殊符號如 `\t`, `\n`, `'`, 等等時，偏好單引號的字串。
 
     ```Ruby
@@ -983,7 +1052,7 @@
 
 * 針對複雜的替換，`sub` 或 `gsub` 可以與區塊或雜湊來使用。
 
-## 百分比字面 
+## 百分比字面
 
 * 隨意使用 `%w` 。
 
@@ -1081,7 +1150,7 @@
       end
     end
 
-    # 而最好的是，在每個可找到的屬性被宣告時，使用 `define_method`。
+    # 而最好是在每個可找到的屬性被宣告時，使用 define_method。
     ```
 
 ## 其它
@@ -1106,6 +1175,7 @@
 
     Foo.bar = 1
     ```
+
 * 當 `alias_method` 可以做到時，避免使用 `alias` 。
 * 使用 `OptionParser` 來解析複雜的命令行選項及 `ruby -s` 來處理瑣碎的命令行選項。
 * 用函數式的方法寫程式，在有意義的情況下避免賦值。
