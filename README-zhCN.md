@@ -793,6 +793,54 @@
     end
     ```
 
+* 尽可能使用隐式的 `begin` 区块。
+
+    ```Ruby
+    # bad
+    def foo
+      begin
+        # main logic goes here
+      rescue
+        # failure handling goes here
+      end
+    end
+
+    # good
+    def foo
+      # main logic goes here
+    rescue
+      # failure handling goes here
+    end
+    ```
+
+* 透过 *contingency* 方法 (一个由 Avdi Grimm 创造的词)来减少 `begin` 区块的使用。
+
+    ```Ruby
+    # 差
+    begin
+      something_that_might_fail
+    rescue IOError
+      # handle IOError
+    end
+
+    begin
+      something_else_that_might_fail
+    rescue IOError
+      # handle IOError
+    end
+
+    # 好
+    def with_io_error_handling
+       yield
+    rescue
+      # handle IOError
+    end
+
+    with_io_error_handling { something_that_might_fail }
+
+    with_io_error_handling { something_else_that_might_fail }
+    ```
+
 * 不要封锁异常。
 
     ```Ruby
