@@ -346,7 +346,7 @@
 * 单行区块喜好 `{...}` 胜于 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 "控制流程" 及 "方法定义" ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
 
     ```Ruby
-    names = ["Bozhidar", "Steve", "Sarah"]
+    names = ['Bozhidar', 'Steve', 'Sarah']
 
     # 好
     names.each { |name| puts name }
@@ -357,11 +357,11 @@
     end
 
     # 好
-    names.select { |name| name.start_with?("S") }.map { |name| name.upcase }
+    names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
 
     # 差
     names.select do |name|
-      name.start_with?("S")
+      name.start_with?('S')
     end.map { |name| name.upcase }
     ```
     某些人会争论多行串连时，使用 `{...}` 看起来还可以，但他们应该问问自己— 这样代码真的可读吗以及不能把区块内容取出来放到绝妙的方法中吗。
@@ -419,7 +419,7 @@
     if v = array.grep(/foo/) ...
     
     # 也很好 — 演示赋值的目标用途及有正确的优先序
-    if (v = self.next_value) == "hello" ...
+    if (v = self.next_value) == 'hello' ...
     ```
 * 随意使用 `||=` 来初始化变量
 
@@ -563,7 +563,7 @@
 * 保持现有的注释是最新的。过时的注解比没有注解还差。
 > 好代码就像是好的笑话 - 它不需要解释 <br/>
 > -- Russ Olsen
-* 避免替烂代码写注解。重构代码让它们看起来一目了然。 （要嘛就做，要嘛不做― 不要只是试试看。）
+* 避免替烂代码写注解。重构代码让它们看起来一目了然。 （要嘛就做，要嘛不做― 不要只是试试看。-- Yoda）
 
 ## 注解
 
@@ -775,9 +775,9 @@
 
     ```Ruby
     begin
-     fail "Oops";
+     fail 'Oops';
     rescue => error
-      raise if error.message != "Oops"
+      raise if error.message != 'Oops'
     end
     ```  
 
@@ -788,7 +788,7 @@
       begin
         fail
       ensure
-        return "very bad idea"
+        return 'very bad idea'
       end
     end
     ```
@@ -860,12 +860,12 @@
     begin
       n / d
     rescue ZeroDivisionError
-      puts "Cannot divide by 0!"
+      puts 'Cannot divide by 0!'
     end
 
     # 好
     if d.zero?
-      puts "Cannot divide by 0!"
+      puts 'Cannot divide by 0!'
     else
       n / d
     end
@@ -924,7 +924,7 @@
 * 在 ensure 区块中释放你的程式的外部资源。
 
     ```Ruby
-    f = File.open("testfile")
+    f = File.open('testfile')
     begin
       # .. 处理
     rescue
@@ -1173,7 +1173,7 @@
       end
     end
     ```
-* 元编程避免使用 `method_missing`。会让 Backtraces 变得很凌乱；行为没有列在 `#methods` 里；拼错的方法呼叫可能默默的工作（`nukes.luanch_state = false`)。考虑使用 delegation, proxy, 或是 `define_method` 来取代。如果你必须使用 `method_missing`，
+* 元编程避免使用 `method_missing`。会让 Backtraces 变得很凌乱；行为没有列在 `#methods` 里；拼错的方法呼叫可能默默的工作（`nukes.launch_state = false`)。考虑使用 delegation, proxy, 或是 `define_method` 来取代。如果你必须使用 `method_missing`，
   - 确保[也定义了`respond_to?`](http://devblog.avdi.org/2011/12/07/defining-method_missing-and-respond_to-at-the-same-time/)
   - 仅捕捉字首定义良好的方法，像是 `find_by_*` ― 让你的代码愈肯定(assertive)愈好。
   - 在最后的叙述句(statement)呼叫 `super`

@@ -346,7 +346,7 @@
 * 單行區塊喜好 `{...}` 勝於 `do..end`。多行區塊避免使用 `{...}`（多行串連總是醜陋）。在 `do...end` 、 "控制流程" 及"方法定義"，永遠使用 `do...end` （如 Rakefile 及某些 DSL）。串連時避免使用 `do...end`。
 
     ```Ruby
-    names = ["Bozhidar", "Steve", "Sarah"]
+    names = ['Bozhidar', 'Steve', 'Sarah']
 
     # 好
     names.each { |name| puts name }
@@ -357,11 +357,11 @@
     end
 
     # 好
-    names.select { |name| name.start_with?("S") }.map { |name| name.upcase }
+    names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
 
     # 不好
     names.select do |name|
-      name.start_with?("S")
+      name.start_with?('S')
     end.map { |name| name.upcase }
     ```
     某些人會爭論多行串連時，使用`{...}`看起來還可以，但他們應該問問自己 — 這樣程式碼真的可讀嗎以及不能把區塊內容取出來放到絕妙的方法中嗎。
@@ -418,7 +418,7 @@
     if v = array.grep(/foo/) ...
     
     # 也很好 — 演示賦值的目標用途及有正確的優先順序
-    if (v = self.next_value) == "hello" ...
+    if (v = self.next_value) == 'hello' ...
     ```
 * 隨意使用 `||=` 來初始化變數
 
@@ -562,7 +562,7 @@
 * 保持現有的註解是最新的。過時的註解比沒有註解還差。
 > 好的程式碼就像是好的笑話 -- 它不需要解釋<br/>
 > -- Russ Olsen
-* 避免替爛程式碼寫註解。重構程式碼讓它們看起來一目了然。（要嘛就做，要嘛不做 ― 不要只是試試看。）
+* 避免替爛程式碼寫註解。重構程式碼讓它們看起來一目了然。（要嘛就做，要嘛不做 ― 不要只是試試看。-- Yoda）
 
 ## 註釋 (Annotation)
 
@@ -773,9 +773,9 @@
 
     ```Ruby
     begin
-     fail "Oops";
+     fail 'Oops';
     rescue => error
-      raise if error.message != "Oops"
+      raise if error.message != 'Oops'
     end
     ```  
 
@@ -786,7 +786,7 @@
       begin
         fail
       ensure
-        return "very bad idea"
+        return 'very bad idea'
       end
     end
     ```
@@ -859,12 +859,12 @@
     begin
       n / d
     rescue ZeroDivisionError
-      puts "Cannot divide by 0!"
+      puts 'Cannot divide by 0!'
     end
 
     # 好
     if d.zero?
-      puts "Cannot divide by 0!"
+      puts 'Cannot divide by 0!'
     else
       n / d
     end
@@ -923,7 +923,7 @@
 * 在 ensure 區塊中釋放你程式的外部資源。
 
     ```Ruby
-    f = File.open("testfile")
+    f = File.open('testfile')
     begin
       # .. 處理
     rescue
@@ -1009,7 +1009,7 @@
 
     ```Ruby
     # 不好
-    name = "Bozhidar"
+    name = 'Bozhidar'
 
     # 好
     name = 'Bozhidar'
@@ -1173,7 +1173,7 @@
       end
     end
     ```
-* 元程式設計避免使用 `method_missing`。會讓 Backtraces 變得很凌亂；行為沒有列在 `#methods` 裡；拼錯的方法呼叫可能默默的工作（`nukes.luanch_state = false`)。考慮使用 delegation, proxy, 或是 `define_method` 來取代。如果你必須使用 `method_missing`，
+* 元程式設計避免使用 `method_missing`。會讓 Backtraces 變得很凌亂；行為沒有列在 `#methods` 裡；拼錯的方法呼叫可能默默的工作（`nukes.launch_state = false`)。考慮使用 delegation, proxy, 或是 `define_method` 來取代。如果你必須使用 `method_missing`，
   - 確保[也定義了 `respond_to?`](http://devblog.avdi.org/2011/12/07/defining-method_missing-and-respond_to-at-the-same-time/)
   - 僅捕捉字首定義良好的方法，像是 `find_by_*` ― 讓你的程式碼愈肯定(assertive)愈好。
   - 在最後的敘述句(statement)呼叫 `super`
