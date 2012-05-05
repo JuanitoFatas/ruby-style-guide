@@ -395,6 +395,56 @@
       some_arr.size
     end
     ```
+
+* 避免在不需要的情況使用 `self` 。
+
+    ```Ruby
+    # 不好
+    def ready?
+      if self.last_reviewed_at > self.last_updated_at
+        self.worker.update(self.content, self.options)
+        self.status = :in_progress
+      end
+      self.status == :verified
+    end
+
+    # 好
+    def ready?
+      if last_reviewed_at > last_updated_at
+        worker.update(content, options)
+        self.status = :in_progress
+      end
+      status == :verified
+    end
+    ```
+
+* 避免使用帶有區域變數的 shadowing 方法，除非它們彼此相等。
+
+    ```Ruby
+    class Foo
+      attr_accessor :options
+
+      # ok
+      def initialize(options)
+        self.options = options
+        # both options and self.options are equivalent here
+      end
+
+      # 不好
+      def do_something(options = {})
+        unless options[:when] == :later
+          output(self.options[:message])
+        end
+      end
+
+      # 好
+      def do_something(params = {})
+        unless params[:when] == :later
+          output(options[:message])
+        end
+      end
+    end
+
 * 當賦予預設值給方法參數時，使用空格圍繞 `=` 運算元。
 
     ```Ruby

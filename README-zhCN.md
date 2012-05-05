@@ -397,6 +397,56 @@
       some_arr.size
     end
     ```
+
+* 避免在不需要的情况使用 `self` 。
+
+    ```Ruby
+    # 差
+    def ready?
+      if self.last_reviewed_at > self.last_updated_at
+        self.worker.update(self.content, self.options)
+        self.status = :in_progress
+      end
+      self.status == :verified
+    end
+
+    # 好
+    def ready?
+      if last_reviewed_at > last_updated_at
+        worker.update(content, options)
+        self.status = :in_progress
+      end
+      status == :verified
+    end
+    ```
+
+* 避免使用带有局域变量的 shadowing 方法，除非它们彼此相等。
+
+    ```Ruby
+    class Foo
+      attr_accessor :options
+
+      # ok
+      def initialize(options)
+        self.options = options
+        # both options and self.options are equivalent here
+      end
+
+      # 差
+      def do_something(options = {})
+        unless options[:when] == :later
+          output(self.options[:message])
+        end
+      end
+
+      # 好
+      def do_something(params = {})
+        unless params[:when] == :later
+          output(options[:message])
+        end
+      end
+    end
+
 * 当赋予缺省值给方法参数时，使用空格围绕 `=` 操作符。
 
     ```Ruby
