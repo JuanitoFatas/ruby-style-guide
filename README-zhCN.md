@@ -1241,7 +1241,7 @@
     end
     ```
 * 元编程避免使用 `method_missing`。会让 Backtraces 变得很凌乱；行为没有列在 `#methods` 里；拼错的方法呼叫可能默默的工作（`nukes.launch_state = false`)。考虑使用 delegation, proxy, 或是 `define_method` 来取代。如果你必须使用 `method_missing`，
-  - 确保[也定义了`respond_to?`](http://devblog.avdi.org/2011/12/07/defining-method_missing-and-respond_to-at-the-same-time/)
+  - 确保[也定义了`respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
   - 仅捕捉字首定义良好的方法，像是 `find_by_*` ― 让你的代码愈肯定(assertive)愈好。
   - 在最后的叙述句(statement)呼叫 `super`
   - 从 delegate 到 assertive, 不神奇的(non-magical) methods:
