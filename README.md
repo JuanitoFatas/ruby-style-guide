@@ -860,7 +860,7 @@ constructor and comparison operators for you.
     end
 
     # better
-    class Person < Struct.new (:first_name, :last_name)
+    class Person < Struct.new(:first_name, :last_name)
     end
     ````
 
@@ -997,7 +997,7 @@ in *Ruby* now, not in *Python*.
     end
     ```
 
-* Never return form an `ensure` block. If you explicitly return from a
+* Never return from an `ensure` block. If you explicitly return from a
   method inside an `ensure` block, the return will take precedence over
   any exception being raised, and the method will return as if no
   exception had been raised at all. In effect, the exception will be
