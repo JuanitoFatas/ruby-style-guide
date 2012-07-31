@@ -414,7 +414,7 @@
     def ready?
       if last_reviewed_at > last_updated_at
         worker.update(content, options)
-        self.status = :in_progress
+        status = :in_progress
       end
       status == :verified
     end
@@ -484,7 +484,7 @@
 
     # 差
     if v = array.grep(/foo/) ...
-    
+
     # 也很好 — 演示赋值的目标用途及有正确的优先序
     if (v = self.next_value) == 'hello' ...
     ```
@@ -589,7 +589,7 @@
     class Array
       def flatten_once!
         res = []
-      
+
         each do |e|
           [*e].each { |f| res << f }
         end
@@ -838,7 +838,7 @@
 
 ## 异常
 
-* 使用 `fail` 关键字来侦测异常。仅在捕捉到异常时使用 `raise` 来重新抛出异常（因为没有失败，但可以显式地抛出异常） 
+* 使用 `fail` 关键字来侦测异常。仅在捕捉到异常时使用 `raise` 来重新抛出异常（因为没有失败，但可以显式地抛出异常）
 
     ```Ruby
     begin
@@ -846,7 +846,7 @@
     rescue => error
       raise if error.message != 'Oops'
     end
-    ```  
+    ```
 
 * 永远不要从 `ensure` 区块返回。如果你显式地从 `ensure` 区块中的一个方法返回，那么这方法会如同没有异常般的返回。实际上，异常会被默默丢掉。
 
@@ -918,7 +918,7 @@
     end
 
     # bad
-    do_something rescue nil    
+    do_something rescue nil
     ```
 * 不要为了控制流程而使用异常。
 
@@ -937,7 +937,7 @@
       n / d
     end
     ```
-  
+
 * 避免救援 `Exception` 类别。这会把信号困住，并呼叫 `exit`，导致你需要 `kill -9` 进程。
 
     ```Ruby
@@ -1218,9 +1218,9 @@
     ```ruby
     class_eval "def use_relative_model_naming?; true; end", __FILE__, __LINE__
     ```
-    
+
   - 偏好 `define_method` 胜于 `class_eval{ def ... }`
-    
+
 * 当使用 `class_eval` （或其它的`eval`）搭配字串插值时，添加一个注解区块，来演示如果做了插值的样子（我从 Rails 代码学来的一个实践）：
 
     ```ruby
