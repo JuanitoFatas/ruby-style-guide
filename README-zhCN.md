@@ -23,6 +23,11 @@
 
 你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 来产生本指南的一份 PDF 或 HTML 复本。
 
+本指南被翻译成下列语言：
+
+* [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
+* [繁體中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
+
 ## 目录
 
 * [源代码排版](#源代码排版)
@@ -46,7 +51,7 @@
 > -- Jerry Coffin (论缩排)
 
 * 使用 `UTF-8` 作为源文件的编码。
-* 每个缩排层级使用两个**空格**。
+* 每个缩排层级使用两个**空格**。不要使用 Hard Tabs。
 
     ```Ruby
     # 好
@@ -61,7 +66,8 @@
     ```
 * 使用 Unix 风格的行编码(缺省涵盖 BSD/Solaris/Linux/OSX 的用户，Windows 用户要格外小心。)
     * 如果你使用 Git ，你也许会想加入下面这个配置，来保护你的项目被 Windows 的行编码侵入：
-    ```$ git config --global core.autocrlf true```
+
+      $ git config --global core.autocrlf true
 
 * 使用空格来围绕操作符，逗号 `,` 、冒号 `:` 及分号 `;` 之后，围绕在 `{` 和 `}` 之前。
   空格可能对（大部分）Ruby 直译器来说是无关紧要的，但正确的使用是写出可读性高的代码的关键。
@@ -160,6 +166,16 @@
                      body: source.text)
     end
     ```
+* 长的常量数字添加底线来改善可读性
+
+    ```Ruby
+    # 差 - 有几个零？
+    num = 1000000
+
+    # 好 - 更容易被人脑解析。
+    num = 1_000_000
+    ```
+
 * 使用 RDoc 以及它的惯例来撰写 API 文档。不要在注解区块及 `def` 之前放一个空行。
 * 让每一行保持少于 80 个字符。
 * 避免尾随的空白。
@@ -255,7 +271,7 @@
     # 控制流程
     document.saved? or document.save!
     ```
-* 避免多行的 `? : `（三元操作符），使用 `if/unless` 来取代。
+* 避免多行的 `? : `（三元操作符）；使用 `if/unless` 来取代。
 
 * 偏爱 `if/unless` 修饰符当你有单行的主体。另一个好的方法是使用控制流程的 `and/or`。
 
@@ -381,9 +397,9 @@
       name.start_with?('S')
     end.map { |name| name.upcase }
     ```
-    某些人会争论多行串连时，使用 `{...}` 看起来还可以，但他们应该问问自己— 这样代码真的可读吗以及不能把区块内容取出来放到绝妙的方法中吗。
+    某些人会争论多行串连时，使用 `{...}` 看起来还可以，但他们应该问问自己— 这样代码真的可读吗？难道不能把区块内容取出来放到绝妙的方法里吗？
 
-* 避免在不需要的场合时使用 `return` 。
+* 避免在不需要控制流程的场合时使用 `return` 。
 
 
     ```Ruby
@@ -398,7 +414,7 @@
     end
     ```
 
-* 避免在不需要的情况使用 `self` 。
+* 避免在不需要的情况使用 `self` 。（只有在调用一个 self write 访问器时会需要用到。）
 
     ```Ruby
     # 差
@@ -446,6 +462,7 @@
         end
       end
     end
+    ```
 
 * 当赋予缺省值给方法参数时，使用空格围绕 `=` 操作符。
 
@@ -519,7 +536,7 @@
 
 * 总是使用 `-w` 来执行 Ruby 直译器，如果你忘了某个上述的规则，它就会警告你！
 
-* 当你的哈希键是符号时，使用 Ruby 1.9 哈希字面语法。
+* 当哈希的键是符号时，偏好使用 Ruby 1.9 哈希字面语法。
 
     ```Ruby
     # 差
@@ -528,7 +545,7 @@
     # 好
     hash = { one: 1, two: 2 }
     ```
-* 使用新的 lambda 字面语法。
+* Ruby 1.9 偏好使用新的 lambda 字面语法。
 
     ```Ruby
     # 差
@@ -794,7 +811,7 @@
     如同你所看到的，在类别阶级中的所有类别其实都共享一个类别变量。应该通常偏好使用实体变量而不是类别变量。
 
 * 依据方法的目的用途指定适当的可视层级(`private` ,`protected` )。别把所有方法都设为 `public` （方法的缺省值）。我们现在是在写 *Ruby* ，不是 *Python* 。
-* `public`, `protected`, `private` 和方法定义有一样的缩排。在每一个上方留一个空行。
+* `public`, `protected`, `private` 和方法定义有一样的缩排。在上下各留一行来强调方法的特性（公有、保护、私有）。
 
     ```Ruby
     class SomeClass
@@ -803,12 +820,18 @@
       end
 
       private
+
       def private_method
         # ...
       end
-    end
 
-* 使用`def slef.method` 来定义singleton 方法。这让方法更能抵抗重构带来的变化。
+      def another_private_method
+        # ...
+      end
+    end
+    ```
+
+* 使用`def self.method` 来定义singleton 方法。由于类的名称不会重复的关系，这使得代码更容易重构。
 
     ```Ruby
     class TestClass
@@ -880,7 +903,7 @@
     end
     ```
 
-* 透过 *contingency* 方法 (一个由 Avdi Grimm 创造的词)来减少 `begin` 区块的使用。
+* 通过 *contingency* 方法 (一个由 Avdi Grimm 创造的词)来减少 `begin` 区块的使用。
 
     ```Ruby
     # 差
@@ -899,7 +922,7 @@
     # 好
     def with_io_error_handling
        yield
-    rescue
+    rescue IOError
       # handle IOError
     end
 
@@ -920,6 +943,14 @@
     # bad
     do_something rescue nil
     ```
+
+* 避免在 modifier 形式里使用 `rescue` 。
+
+    ```Ruby
+    # 差劲 - 这捕捉了所有的 StandardError 异常。
+    do_something rescue nil
+    ```
+
 * 不要为了控制流程而使用异常。
 
     ```Ruby
@@ -1033,7 +1064,7 @@
     arr[100] = 1 # 现在你有一个很多 nil 的数组
     ```
 * 当处理独一无二的元素时，使用 `Set` 来替代 `Array` 。 `Set` 实现了不重复的无序数值集合。 `Set`是数组直观的内部操作功能与哈希的快速存取的混合体。
-* 使用符号取代字串作为哈希键。
+* 偏好用符号来取代字串作为哈希的键。
 
     ```Ruby
     # 差
@@ -1042,8 +1073,19 @@
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
+* 在处理需要出现的哈希键时，使用`fetch` 。
+
+    ```Ruby
+    heroes = { 蝙蝠侠: 'Bruce Wayne', 超人: 'Clark Kent' }
+    # 差劲- 如果我们打错字的话，我们就无法找到对的英雄了
+    heroes[:蝙蝠侠] # => "Bruce Wayne"
+    heroes[:超女] # => nil
+
+    # 好 - fetch 会抛出一个 KeyError 来体现这个问题
+    heroes.fetch(:supermann)
+
 * 避免使用可变的对象作为键值。
-* 优先使用新的 1.9 字面哈希语法而不是 => (hashrocket) 语法。
+* 当哈希的键为符号时，偏好使用 Ruby 1.9 新的哈希字面语法。
 
     ```Ruby
     # 差
@@ -1052,7 +1094,7 @@
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
-* 信任这个事实， 1.9 的哈希是有序的。
+* 信任这个事实， Ruby 1.9 的哈希是有序的。
 * 在遍历一个集合时，不要改动它。
 
 ## 字串
@@ -1210,6 +1252,8 @@
 
 ## 元编程
 
+* 避免无谓的元编程。
+
 * 写一个函式库时不要在核心类别捣乱（不要替它们加 monkey patch）
 
 * 偏好区块形式的 `class_eval` 胜于字串插值(string-interpolated)的形式。
@@ -1293,7 +1337,6 @@
 * 当 `alias_method` 可以做到时，避免使用 `alias` 。
 * 使用 `OptionParser` 来解析复杂的命令行选项及 `ruby -s` 来处理琐碎的命令行选项。
 * 用函数式的方法编程，在有意义的情况下避免赋值。
-* 避免不需要的元编程。
 * 不要变动参数，除非那是方法的目的。
 * 避免超过三行的区块嵌套。
 * 保持一致性。在理想的世界里，遵循这些准则。

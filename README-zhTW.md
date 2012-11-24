@@ -23,6 +23,11 @@
 
 你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 來產生本指南的一份 PDF 或 HTML 副本。
 
+本指南被翻譯成下列語言：
+
+* [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
+* [繁體中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
+
 ## 目錄
 
 * [原始碼排版](#原始碼排版)
@@ -45,7 +50,7 @@
 > -- Jerry Coffin (論縮排)
 
 * 使用 `UTF-8` 作為原始檔案的編碼。
-* 每個縮排層級使用兩個**空格**。
+* 每個縮排層級使用兩個**空格**。不要使用 Hard Tabs。
 
     ```Ruby
     # 好
@@ -60,7 +65,8 @@
     ```
 * 使用 Unix 風格的行編碼 (預設包含 BSD/Solaris/Linux/OSX 的使用者，Windows 使用者要特別小心。)
     * 如果你使用 Git ，你也許會想加入下面這個配置設定，來保護你的專案被 Windows 的行編碼侵入：
-    	```$ git config --global core.autocrlf true```
+
+      $ git config --global core.autocrlf true
 
 * 使用空格來圍繞運算元，逗點 `,` 、冒號 `:` 及分號 `;` 之後，圍繞 `{` 和 `}` 之前。
   空格可能對（大部分）Ruby 直譯器來說是無關緊要的，但正確的使用是寫出可讀性高的程式碼的關鍵。
@@ -159,6 +165,16 @@
                      body: source.text)
     end
     ```
+* Add underscores to big numeric literals to improve their readability.
+
+    ```Ruby
+    # 差勁 - 到底是有幾個零？
+    num = 1000000
+
+    # 良好 - 容易被人腦解讀。
+    num = 1_000_000
+    ```
+
 * 使用 RDoc 以及它的慣例來撰寫 API 文件。不要在註解區塊及 `def` 之前放一個空行。
 * 讓每一行保持在少於 80 個字元。
 * 避免尾隨的空白（trailing whitesapce）。
@@ -254,7 +270,7 @@
     # 控制流程
     document.saved? or document.save!
     ```
-* 避免多行的 `? : `（三元運算元），使用 `if/unless` 來取代。
+* 避免多行的 `? : `（三元運算元）；使用 `if/unless` 來取代。
 
 * 當你有單行的主體時，偏愛 `if/unless` 修飾符。另一個好的方法是使用控制流程的 `and/or` 。
 
@@ -380,9 +396,9 @@
       name.start_with?('S')
     end.map { |name| name.upcase }
     ```
-    某些人會爭論多行串連時，使用`{...}`看起來還可以，但他們應該問問自己 — 這樣程式碼真的可讀嗎以及不能把區塊內容取出來放到絕妙的方法中嗎。
+    某些人會爭論多行串連時，使用`{...}`看起來還可以，但他們應該問問自己 — 這樣程式碼真的可讀嗎？難道不能把區塊內容取出來放到絕妙的方法裡嗎？
 
-* 避免在不需要的場合時使用 `return` 。
+* 避免在不需要控制流程的場合時使用 `return` 。
 
     ```Ruby
     # 不好
@@ -396,7 +412,7 @@
     end
     ```
 
-* 避免在不需要的情況使用 `self` 。
+* 避免在不需要的情況使用 `self` 。（只有在呼叫一個 self write 存取器時會需要用到。）
 
     ```Ruby
     # 不好
@@ -444,6 +460,7 @@
         end
       end
     end
+    ```
 
 * 當賦予預設值給方法參數時，使用空格圍繞 `=` 運算元。
 
@@ -482,7 +499,7 @@
 
     # 不好
     if v = array.grep(/foo/) ...
-    
+
     # 也很好 — 演示賦值的目標用途及有正確的優先順序
     if (v = self.next_value) == 'hello' ...
     ```
@@ -517,7 +534,7 @@
 
 * 總是使用 `-w` 來執行 Ruby 直譯器，如果你忘了某個上述的規則，它就會警告你！
 
-* 當你的雜湊鍵是符號時，使用 Ruby 1.9 雜湊字面語法。
+* 當雜湊的鍵是符號時，偏好使用 Ruby 1.9 雜湊字面語法。
 
     ```Ruby
     # 不好
@@ -526,7 +543,7 @@
     # 好
     hash = { one: 1, two: 2 }
     ```
-* 使用新的 lambda 字面語法。
+* Ruby 1.9 偏好使用新的 lambda 字面語法。
 
     ```Ruby
     # 不好
@@ -581,13 +598,13 @@
     end
     ```
 
-* 如果可能的話，從危險方法（bang）的角度來定義對應的安全方法（non-bang）。 
+* 如果可能的話，從危險方法（bang）的角度來定義對應的安全方法（non-bang）。
 
     ```Ruby
     class Array
       def flatten_once!
         res = []
-      
+
         each do |e|
           [*e].each { |f| res << f }
         end
@@ -599,7 +616,7 @@
         dup.flatten_once!
       end
     end
-    ```    
+    ```
 
 * 在短的區塊使用 `reduce` 時，把參數命名為 `|a, e|` (累加器，元素)
 * 當定義二元運算元時，把參數命名為 `other` 。
@@ -791,7 +808,7 @@
     如同你所看到的，在類別階級中的所有類別其實都共享一個類別變數。應該通常偏好使用實體變數而不是類別變數。
 
 * 依據方法的目的用途指定適當的可視層級 (`private` ,`protected` )。別把所有方法都設為 `public` （方法的預設值）。我們現在是在寫 *Ruby* ，不是 *Python* 。
-* `public`, `protected`, `private` 和方法定義有一樣的縮排。在每一個上方留一個空行。
+* `public`, `protected`, `private` 和方法定義有一樣的縮排。在上下各留一行來凸顯方法的特性（公有、保護、私有）。
 
     ```Ruby
     class SomeClass
@@ -800,12 +817,18 @@
       end
 
       private
+
       def private_method
         # ...
       end
-    end
 
-* 使用 `def self.method` 來定義 singleton 方法。這讓方法更能抵抗重構帶來的變化。
+      def another_private_method
+        # ...
+      end
+    end
+    ```
+
+* 使用 `def self.method` 來定義 singleton 方法。由於類別名稱不重複的關係，這使得代碼更容易重構。
 
     ```Ruby
     class TestClass
@@ -835,7 +858,7 @@
 
 ## 異常
 
-* 使用 `fail` 關鍵字來偵測異常。仅在捕捉到異常時使用 `raise` 來重新拋出異常（因為沒有失敗，但可以顯式地拋出異常） 
+* 使用 `fail` 關鍵字來偵測異常。仅在捕捉到異常時使用 `raise` 來重新拋出異常（因為沒有失敗，但可以顯式地拋出異常）
 
     ```Ruby
     begin
@@ -843,7 +866,7 @@
     rescue => error
       raise if error.message != 'Oops'
     end
-    ```  
+    ```
 
 * 永遠不要從 `ensure` 區塊返回。如果你顯式地從 `ensure` 區塊中的一個方法返回，那麼這方法會如同沒有異常般的返回。實際上，異常會被默默地丟掉。
 
@@ -918,6 +941,13 @@
     do_something rescue nil
     ```
 
+* 避免在 modifier 形式裡使用 `rescue` 。
+
+    ```Ruby
+    # 差勁 - 這捕捉了所有的 StandardError 異常。
+    do_something rescue nil
+    ```
+
 * 不要為了控制流程而使用異常。
 
     ```Ruby
@@ -935,7 +965,7 @@
       n / d
     end
     ```
-  
+
 * 避免救援 `Exception` 類別。這會把信號困住，並呼叫 `exit`，導致你需要 `kill -9` 進程。
 
     ```Ruby
@@ -985,7 +1015,7 @@
     rescue Exception => e
       # 一些處理
     end
-    ```  
+    ```
 * 在 ensure 區塊中釋放你程式的外部資源。
 
     ```Ruby
@@ -1031,7 +1061,7 @@
     arr[100] = 1 # 現在你有一個很多 nil 的陣列
     ```
 * 當處理獨一無二的元素時，使用 `Set` 來替代 `Array` 。`Set` 實現了不重複的無序數值集合。`Set` 是陣列直觀的內部操作功能與雜湊的快速存取的混合體。
-* 使用符號取代字串作為雜湊鍵。 
+* 偏好用符號取代字串作為雜湊的鍵。
 
     ```Ruby
     # 不好
@@ -1040,8 +1070,20 @@
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
+* 在處理需要出現的雜湊鍵時，使用 `fetch` 。
+
+    ```Ruby
+    heroes = { 蝙蝠俠: 'Bruce Wayne', 超人: 'Clark Kent' }
+    # 差勁 - 如果我們打錯字的話，我們就無法找到對的英雄了
+    heroes[:蝙蝠俠] # => "Bruce Wayne"
+    heroes[:超女] # => nil
+
+    # 棒 - fetch 會拋出一個 KeyError 來體現這個問題
+    heroes.fetch(:supermann)
+    ```
+
 * 避免使用可變的物件作為鍵值。
-* 優先使用新的 1.9 字面雜湊語法而不是 => (hashrocket) 語法。
+* 當你的 hash 鍵為符號時，偏好使用 Ruby 1.9 新的雜湊字面語法。
 
     ```Ruby
     # 不好
@@ -1050,7 +1092,7 @@
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
-* 相信這個事實吧， 1.9 的雜湊是有序的。
+* 相信這個事實吧，Ruby 1.9 的雜湊是有序的。
 * 在遍歷一個集合時，不要改動它。
 
 ## 字串
@@ -1209,18 +1251,20 @@
 
 ## 元程式設計
 
+* 避免無謂的元程式設計。
+
 * 寫一個函式庫時不要在核心類別搗亂（不要替它們加 monkey patch）
 
-* 偏好區塊形式的 `class_eval` 勝於字串插值 (string-interpolated)的形式。 
+* 偏好區塊形式的 `class_eval` 勝於字串插值 (string-interpolated)的形式。
   - 當你使用字串插值形式時，總是提供 `__FILE__` 及 `__LINE__`，使你的 backtrace 看起來有意義：
 
     ```ruby
     class_eval "def use_relative_model_naming?; true; end", __FILE__, __LINE__
     ```
-    
+
   - 偏好 `define_method` 勝於 `class_eval{ def ... }`
-    
-* 當使用 `class_eval` （或其它的 `eval`）搭配字串插值時，添加一個註解區塊，來顯示如果做了插值的樣子（我從 Rails 程式碼學來的一個實踐）： 
+
+* 當使用 `class_eval` （或其它的 `eval`）搭配字串插值時，添加一個註解區塊，來顯示如果做了插值的樣子（我從 Rails 程式碼學來的一個實踐）：
 
     ```ruby
     # 從 activesupport/lib/active_support/core_ext/string/output_safety.rb
@@ -1293,7 +1337,6 @@
 * 當 `alias_method` 可以做到時，避免使用 `alias` 。
 * 使用 `OptionParser` 來解析複雜的命令行選項及 `ruby -s` 來處理瑣碎的命令行選項。
 * 用函數式的方法寫程式，在有意義的情況下避免賦值。
-* 避免不需要的元程式設計。
 * 不要變動參數，除非那是方法的目的。
 * 避免超過三行的巢狀區塊。
 * 保持一致性。在理想的世界裡，遵循這些準則。
