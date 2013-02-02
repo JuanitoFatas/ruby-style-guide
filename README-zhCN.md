@@ -23,6 +23,8 @@
 
 你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 来产生本指南的一份 PDF 或 HTML 复本。
 
+[rubocop](https://github.com/bbatsov/rubocop) 项目会自动检查你的 Ruby 代码是否符合这份 Ruby 风格指南。目前这个项目尚有许多功能缺漏，不足以被正式地使用，欢迎有志之士协助改进。
+
 本指南被翻译成下列语言：
 
 * [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
@@ -521,7 +523,7 @@
     # 好
     enabled = true if enabled.nil?
     ```
-* 避免使用 Perl 风格的特别变量（像是 `$0-9`, `` $` ``, 等等）。它们看起来非常神秘以及不鼓励使用一行的脚本。
+* 避免使用 Perl 风格的特别变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘以及不鼓励使用一行的脚本。
 
 * 避免在方法名与左括号之间放一个空格。
 
@@ -629,6 +631,16 @@
     end
     ```
 * 偏好 `map` 胜于 `collect` ， `find` 胜于 `detect` ， `select` 胜于 `find_all` ， `reduce` 胜于 `inject` 以及 `size` 胜于 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不常见。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
+
+* 调用 `map` 胜于调用 `map` + `flatten` 的组合。
+    
+    ```Ruby
+    # bad
+    all_songs = users.map(&:songs).flatten.uniq
+
+    # good
+    all_songs = users.flat_map(&:songs).uniq
+    ```
 
 ## 注释
 
@@ -861,7 +873,8 @@
 
 ## 异常
 
-* 使用 `fail` 关键字来侦测异常。仅在捕捉到异常时使用 `raise` 来重新抛出异常（因为没有失败，但可以显式地抛出异常）
+* 使用 `fail` 方法來拋出異常。僅在捕捉到異常時使用 `raise` 來重新拋出異常（因為沒有失敗，所以顯式地拋出異常）
+* 使用 `fail` 方法来抛出异常。仅在捕捉到异常时使用 `raise` 来重新抛出异常（因为没有失败，所以显式地抛出异常）
 
     ```Ruby
     begin
@@ -1159,6 +1172,9 @@
     ```
 
 ## 正則表示法
+
+> 有些人，在遇到一个问题时，会认为「我知道，我会使用正规表示法」。现在他们有两个问题了。<br/>
+> -- Jamie Zawinski
 
 * 如果你只需要在字串中简单的搜索文字，不要使用正則表示法：`string['text']`
 * 针对简单的字串查询，你可以直接在字串索引中直接使用正則表示法。

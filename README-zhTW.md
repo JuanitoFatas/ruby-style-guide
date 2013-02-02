@@ -23,10 +23,13 @@
 
 你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 來產生本指南的一份 PDF 或 HTML 副本。
 
+[rubocop](https://github.com/bbatsov/rubocop) 專案會自動檢查你的 Ruby 程式碼是否符合這份 Ruby 風格指南。目前這個專案尚有許多功能缺漏，不足以被正式地使用，歡迎有志之士協助改進。
+
 本指南被翻譯成下列語言：
 
 * [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
 * [繁體中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
+* [法文](https://github.com/porecreat/ruby-style-guide/blob/master/README-frFR.md)
 
 ## 目錄
 
@@ -34,7 +37,7 @@
 * [語法](#語法)
 * [命名](#命名)
 * [註解](#註解)
-* [註釋](#註釋)
+    * [註釋](#註釋)
 * [類別](#類別)
 * [異常](#異常)
 * [集合](#集合)
@@ -519,7 +522,7 @@
     # 好
     enabled = true if enabled.nil?
     ```
-* 避免使用 Perl 風格的特別變數（像是 `$0-9`, `` $` ``, 等等）。它們看起來非常神祕以及不鼓勵使用一行的腳本。
+* 避免使用 Perl 風格的特別變數（像是 `$0-9`, `$`, 等等）。它們看起來非常神祕以及不鼓勵使用一行的腳本。
 
 * 避免在方法名與左括號之間放一個空格。
 
@@ -628,6 +631,16 @@
     ```
 * 偏好 `map` 勝於 `collect` ， `find` 勝於 `detect` ， `select` 勝於 `find_all` ， `reduce` 勝於 `inject` 以及 `size` 勝於 `length` 。這不是一個硬性要求；如果使用別名增加了可讀性，使用它沒關係。這些有押韻的方法名是從 Smalltalk 繼承而來，在別的語言不常見。鼓勵使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起來是一目了然的。
 
+* 使用 `flat_map` 勝於使用 `map` + `flatten` 的組合。
+
+    ```Ruby
+    # bad
+    all_songs = users.map(&:songs).flatten.uniq
+
+    # good
+    all_songs = users.flat_map(&:songs).uniq
+    ```
+
 ## 註解
 
 > 良好的程式碼是最佳的文件。當你要加一個註解時，捫心自問，<br/>
@@ -647,7 +660,7 @@
 > -- Russ Olsen
 * 避免替爛程式碼寫註解。重構程式碼讓它們看起來一目了然。（要嘛就做，要嘛不做 ― 不要只是試試看。-- Yoda）
 
-## 註釋
+### 註釋
 
 * 註釋應該直接寫在相關程式碼那行之後。
 * 註釋關鍵字後方伴隨著一個冒號及空白，接著一個描述問題的記錄。
@@ -858,7 +871,7 @@
 
 ## 異常
 
-* 使用 `fail` 關鍵字來偵測異常。仅在捕捉到異常時使用 `raise` 來重新拋出異常（因為沒有失敗，但可以顯式地拋出異常）
+* 使用 `fail` 方法來拋出異常。僅在捕捉到異常時使用 `raise` 來重新拋出異常（因為沒有失敗，所以顯式地拋出異常）
 
     ```Ruby
     begin
@@ -1158,6 +1171,9 @@
     ```
 
 ## 正規表示法
+
+> 有些人，在遇到一個問題時，會認為「我知道，我會使用正規表示法」。現在他們有兩個問題了。<br/>
+> -- Jamie Zawinski
 
 * 如果你只需要在字串中簡單的搜索文字，不要使用正規表示法：`string['text']`
 * 針對簡單的字串查詢，你可以直接在字串索引中直接使用正規表示法。
