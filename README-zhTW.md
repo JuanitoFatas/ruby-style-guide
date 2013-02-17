@@ -66,10 +66,12 @@
         do_something
     end
     ```
-* 使用 Unix 風格的行編碼 (預設包含 BSD/Solaris/Linux/OSX 的使用者，Windows 使用者要特別小心。)
+* 使用 Unix 風格的行編碼 (BSD/Solaris/Linux/OSX 的使用者不用擔心，Windows 使用者要特別小心。)
     * 如果你使用 Git ，你也許會想加入下面這個配置設定，來保護你的專案被 Windows 的行編碼侵入：
 
+      ```bash
       $ git config --global core.autocrlf true
+      ```
 
 * 使用空格來圍繞運算元，逗點 `,` 、冒號 `:` 及分號 `;` 之後，圍繞 `{` 和 `}` 之前。
   空格可能對（大部分）Ruby 直譯器來說是無關緊要的，但正確的使用是寫出可讀性高的程式碼的關鍵。
