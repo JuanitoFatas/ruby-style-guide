@@ -630,7 +630,7 @@
       end
 
       def flatten_once
-        dup.f​​latten_once!
+        dup.flatten_once!
       end
     end
     ```
