@@ -564,7 +564,7 @@
 
     ```Ruby
     # 差
-    lambda = lambda { |a, b​​| a + b }
+    lambda = lambda { |a, b| a + b }
     lambda.call(1, 2)
 
     # 好
@@ -630,7 +630,7 @@
       end
 
       def flatten_once
-        dup.f​​latten_once!
+        dup.flatten_once!
       end
     end
     ```
@@ -1216,7 +1216,7 @@
     process meaningful_var
     ```
 * 字符类别只有几个你需要关心的特殊字元：`^`, `-`, `\`, `]`，所以你不用逃脱字元 `.` 或在 `[]` 的中括号。
-* 小心使用 `^` 与 `$` ，它们匹配的是一行的开始与结束，​​不是字串的开始与结束。如果你想要匹配整个字串，使用 `\A` 与 `\z`。(译注：`\Z` 实为 `/\n?\z/`，使用 `\z` 才能匹配到有含新行的字串的结束)
+* 小心使用 `^` 与 `$` ，它们匹配的是一行的开始与结束，不是字串的开始与结束。如果你想要匹配整个字串，使用 `\A` 与 `\z`。(译注：`\Z` 实为 `/\n?\z/`，使用 `\z` 才能匹配到有含新行的字串的结束)
 
     ```Ruby
     string = "some injection\nusername"
