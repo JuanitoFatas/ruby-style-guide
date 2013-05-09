@@ -17,7 +17,7 @@
 
 本指南依照相关规则分成数个小节。我尽力在规则后面说明理由（如果省略的话，我相信理由是显而易见的）。
 
-我没有想到所有的规则 &mdash; 他们大致上是基于，我作为一个专业软体工程师的广泛生涯，从 Ruby 社区成员所得到的反馈及建议，和数个高度评价的 Ruby 编程资源，像是 ["Programming Ruby 1.9"](http://pragprog.com/book/ruby3/programming-ruby-1-9) 以及 ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
+我没有想到所有的规则 &mdash; 他们大致上是基于，我作为一个专业软体工程师的广泛生涯，从 Ruby 社区成员所得到的反馈及建议，和数个高度评价的 Ruby 编程资源，像是 ["Programming Ruby 1.9"](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) 以及 ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
 
 本指南仍在完善中 — 某些规则缺乏实例，某些规则没有例子来清楚地演示它们。在最后交付时，将会解决这些议题 — 现在就先把它们记在心理吧。
 
@@ -46,7 +46,7 @@
 * [百分比字面](#-12)
 * [元编程](#-13)
 * [其它](#-14)
-
+* [工具](#-15)
 
 ## 源代码排版
 
@@ -57,22 +57,83 @@
 * 每个缩排层级使用两个**空格**。不要使用 Hard Tabs。
 
     ```Ruby
-    # 好
-    def some_method
-      do_something
-    end
-
     # 差 - 四个空格
     def some_method
         do_something
     end
+
+    # 好
+    def some_method
+      do_something
+    end
     ```
+
 * 使用 Unix 风格的行编码(BSD/Solaris/Linux/OSX 的用户不用担心，Windows 用户要格外小心。)
     * 如果你使用 Git ，你也许会想加入下面这个配置，来保护你的项目被 Windows 的行编码侵入：
 
       ```bash
       $ git config --global core.autocrlf true
       ```
+
+* Don't use `;` to separate statements and expressions. As a
+  corollary - use one expression per line.
+
+    ```Ruby
+    # bad
+    puts 'foobar'; # superfluous semicolon
+
+    puts 'foo'; puts 'bar' # two expression on the same line
+
+    # good
+    puts 'foobar'
+
+    puts 'foo'
+    puts 'bar'
+
+    puts 'foo', 'bar' # this applies to puts in particular
+    ```
+
+* Prefer a single-line format for class definitions with no body.
+
+    ```Ruby
+    # bad
+    class FooError < StandardError
+    end
+
+    # good
+    class FooError < StandardError; end
+    ```
+
+* Avoid single-line methods. Although they are somewhat popular in the
+  wild, there are a few peculiarities about their definition syntax
+  that make their use undesirable. At any rate - there should no more
+  than one expression in a single-line method.
+
+    ```Ruby
+    # bad
+    def too_much; something; something_else; end
+
+    # okish - notice that the first ; is required
+    def no_braces_method; body end
+
+    # okish - notice that the second ; is optional
+    def no_braces_method; body; end
+
+    # okish - valid syntax, but no ; make it kind of hard to read
+    def some_method() body end
+
+    # good
+    def some_method
+      body
+    end
+    ```
+
+    One exception to the rule are empty-body methods.
+
+    ```Ruby
+    # good
+    def no_op; end
+    ```
 
 * 使用空格来围绕操作符，逗号 `,` 、冒号 `:` 及分号 `;` 之后，围绕在 `{` 和 `}` 之前。
   空格可能对（大部分）Ruby 直译器来说是无关紧要的，但正确的使用是写出可读性高的代码的关键。
@@ -83,7 +144,7 @@
     1 > 2 ? true : false; puts 'Hi'
     [1, 2, 3].each { |e| puts e }
     ```
-    唯一的例外是当使用指数操作符时：
+    （针对操作符）唯一的例外是当使用指数操作符时：
 
     ```Ruby
     # 差
@@ -92,6 +153,40 @@
     # 好
     e = M * c**2
     ```
+
+    `{` and `}` deserve a bit of clarification, since they are used
+    for block and hash literals, as well as embedded expressions in
+    strings. For hash literals two styles are considered acceptable.
+
+    ```Ruby
+    # good - space after { and before }
+    { one: 1, two: 2 }
+
+    # good - no space after { and before }
+    {one: 1, two: 2}
+    ```
+
+    The first variant is slightly more readable (and arguably more
+    popular in the Ruby community in general). The second variant has
+    the advantage of adding visual difference between block and hash
+    literals. Whichever one you pick - apply it consistently.
+
+    As far as embedded expressions go, there are also two acceptable
+    options:
+
+    ```Ruby
+    # good - no spaces
+    "string#{expr}"
+
+    # ok - arguably more readable
+    "string#{ expr }"
+    ```
+
+    The first style is extremely more popular and you're generally
+    advised to stick with it. The second, on the other hand, is
+    (arguably) a bit more readable. As with hashes - pick one style
+    and apply it consistently.
+
 * 不要有空格在 `(` 、 `[` 之后，或 `]` 、 `)` 之前。
 
     ```Ruby
@@ -137,6 +232,49 @@
       result
     end
     ```
+
+* Use spaces around the `=` operator when assigning default values to method parameters:
+
+    ```Ruby
+    # bad
+    def some_method(arg1=:default, arg2=nil, arg3=[])
+      # do something...
+    end
+
+    # good
+    def some_method(arg1 = :default, arg2 = nil, arg3 = [])
+      # do something...
+    end
+    ```
+
+    While several Ruby books suggest the first style, the second is much more prominent
+    in practice (and arguably a bit more readable).
+
+* Avoid line continuation (\\) where not required. In practice, avoid using
+  line continuations at all.
+
+    ```Ruby
+    # bad
+    result = 1 - \
+             2
+
+    # good (but still ugly as hell)
+    result = 1 \
+             - 2
+    ```
+
+* When continuing a chained method invocation on another line keep the `.` on the second line.
+
+    ```Ruby
+    # bad - need to consult first line to understand second line
+    one.two.three.
+      four
+
+    # good - it's immediately clear what's going on the second line
+    one.two.three
+      .four
+    ```
+
 * 当一个方法呼叫的参数扩展超过一行时，排列它们。
 
     ```Ruby
@@ -184,8 +322,36 @@
 * 使用 RDoc 以及它的惯例来撰写 API 文档。不要在注解区块及 `def` 之前放一个空行。
 * 将每一行最多限制在 80 个字符。
 * 避免尾随的空白。
+* Don't use block comments. They cannot be preceded by whitespace and are not
+as easy to spot as regular comments.
+
+    ```Ruby
+    # bad
+    == begin
+    comment line
+    another comment line
+    == end
+
+    # good
+    # comment line
+    # another comment line
+    ```
 
 ## 语法
+
+* Use `::` only to reference constants(this includes classes and
+modules). Never use `::` for method invocation.
+
+    ```Ruby
+    # bad
+    SomeClass::some_method
+    some_object::some_method
+
+    # good
+    SomeClass.some_method
+    some_object.some_method
+    SomeModule::SomeClass::SOME_CONST
+    ```
 
 * 使用 `def` 时，当有参数时使用括号。当方法不接受任何参数时，省略括号。
 
@@ -261,9 +427,19 @@
     ```
 * 永远不要使用 `if x: ...` 使用三元操作符来取代。
 
-* 一行的情况使用 `when x then ...`。替代方案的语法 `when x: ...` 在 Ruby 1.9 被移除了。
+* 一行的情况使用 `when x then ...`。替代方案的语法 `when x: ...` 已经在 Ruby 1.9 被移除了。
 
 * 永远不要使用 `when x: ...`。参考前一个规则。
+
+* Use `!` instead of `not`.
+
+    ```Ruby
+    # 差 - 因为操作符有优先级，需要用括号。
+    x = (not something)
+
+    # 好
+    x = !something
+    ```
 
 * 布尔表达式使用 `&&/||`，控制流程使用 `and/or`。 （经验法则：如果你需要使用外部括号，你正在使用错误的操作符。）
 
@@ -386,21 +562,21 @@
     ```Ruby
     names = ['Bozhidar', 'Steve', 'Sarah']
 
-    # 好
-    names.each { |name| puts name }
-
     # 差
     names.each do |name|
       puts name
     end
 
     # 好
-    names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
+    names.each { |name| puts name }
 
     # 差
     names.select do |name|
       name.start_with?('S')
     end.map { |name| name.upcase }
+
+    # 好
+    names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
     ```
     某些人会争论多行串连时，使用 `{...}` 看起来还可以，但他们应该扪心自问— 这样代码真的可读吗？难道不能把区块内容取出来放到小巧的方法里吗？
 
@@ -551,16 +727,7 @@
 
 * 总是使用 `-w` 来执行 Ruby 解释器，如果你忘了某个上述的规则，它就会警告你！
 
-* 当哈希的键是符号时，偏好使用 Ruby 1.9 哈希字面语法。
-
-    ```Ruby
-    # 差
-    hash = { :one => 1, :two => 2 }
-
-    # 好
-    hash = { one: 1, two: 2 }
-    ```
-* Ruby 1.9 偏好使用新的 lambda 字面语法。
+* 使用新的 lambda 字面语法。
 
     ```Ruby
     # 差
@@ -581,16 +748,151 @@
     result = hash.map { |_, v| v + 1 }
     ```
 
+* Use `$stdout/$stderr/$stdin` instead of
+  `STDOUT/STDERR/STDIN`. `STDOUT/STDERR/STDIN` are constants, and
+  while you can actually reassign (possibly to redirect some stream)
+  constants in Ruby, you'll get an interpreter warning if you do so.
+
+* Use `warn` instead of `$stderr.puts`. Apart from being more concise
+and clear, `warn` allows you to suppress warnings if you need to (by
+setting the warn level to 0 via `-W0`).
+
+* Favor the use of `sprintf` over the fairly cryptic `String#%` method.
+
+    ```Ruby
+    # bad
+    '%d %d' % [20, 10]
+    # => '20 10'
+
+    # good
+    sprintf('%d %d', 20, 10)
+    # => '20 10'
+    ```
+
+* Favor the use of `Array#join` over the fairly cryptic `Array#*` with
+  a string argument.
+
+    ```Ruby
+    # bad
+    %w(one two three) * ', '
+    # => 'one, two, three'
+
+    # good
+    %w(one two three).join(', ')
+    # => 'one, two, three'
+    ```
+
+* Use `[*var]` or `Array()` instead of explicit `Array` check, when dealing with a
+  variable you want to treat as an Array, but you're not certain it's
+  an array.
+
+    ```Ruby
+    # bad
+    paths = [paths] unless paths.is_a? Array
+    paths.each { |path| do_something(path) }
+
+    # good
+    [*paths].each { |path| do_something(path) }
+
+    # good (and a bit more readable)
+    Array(paths).each { |path| do_something(path) }
+    ```
+
+* Use ranges instead of complex comparison logic when possible.
+
+    ```Ruby
+    # bad
+    do_something if x >= 1000 && x < 2000
+
+    # good
+    do_something if (1000...2000).include?(x)
+    ```
+
 ## 命名
 
 > 程式设计的真正难题是替事物命名及无效的缓存。 <br/>
 > -- Phil Karlton
 
-* 方法与变量使用蛇底式小写（snake_case）。
+* 标识符用英语命名。
+
+    ```Ruby
+    # 差 - 變數名用帶有拉丁文的保加利亞語寫成。
+    zaplata = 1_000
+
+    # 好
+    salary = 1_000
+    ```
+
+* 符号、方法与变量使用蛇底式小写（snake_case）。
+
+    ```Ruby
+    # 差
+    :'some symbol'
+    :SomeSymbol
+    :someSymbol
+
+    someVar = 5
+
+    def someMethod
+      ...
+    end
+
+    def SomeMethod
+     ...
+    end
+
+    # 好
+    :some_symbol
+
+    def some_method
+      ...
+    end
+    ```
+
 * 类别与模组使用驼峰式大小写（CamelCase）。 （保留类似 HTTP、RFC、XML 这种缩写为大写）
+
+    ```Ruby
+    # 差
+    class Someclass
+      ...
+    end
+
+    class Some_Class
+      ...
+    end
+
+    class SomeXml
+      ...
+    end
+
+    # 好
+    class SomeClass
+      ...
+    end
+
+    class SomeXML
+      ...
+    end
+    ```
+
 * 其他常数使用尖叫蛇底式大写（SCREAMING_SNAKE_CASE）。
+
+    ```Ruby
+    # 差
+    SomeConst = 5
+
+    # 好
+    SOME_CONST = 5
+    ```
+
 * 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (即 `Array#empty?` )
-* 有潜在“危险性”的方法，若此*危险* 方法有安全版本存在时，应以惊叹号结尾（即：改动 `self` 或参数、 `exit!` 等等方法）。
+* 有潜在“危险性”的方法，若此 *危险* 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（即：改动 `self` 或参数、 `exit!` 等等方法）。
+
+* The names of potentially *dangerous* methods (i.e. methods that
+  modify `self` or the arguments, `exit!` (doesn't run the finalizers
+  like `exit` does), etc.) should end with an exclamation mark if
+  there exists a safe version of that *dangerous* method.
+
 
     ```Ruby
     # 不好 - 没有对应的安全方法
@@ -636,16 +938,28 @@
     ```
 
 * 在短的区块使用 `reduce` 时，把参数命名为 `|a, e|` (累加器，元素)
-* 当定义二元操作符时，把参数命名为 `other` 。
+* 在定义二元操作符时，把参数命名为 `other` （`<<` 与 `[]` 是这条规则的例外，因为它们的语义不同）。
 
     ```Ruby
     def +(other)
       # body omitted
     end
     ```
+* When defining binary operators, name the argument `other`(`<<` and
+  `[]` are exceptions to the rule, since their semantics are different).
+
+    ```Ruby
+    def +(other)
+      # body omitted
+    end
+    ```
+
+
 * 偏好 `map` 胜于 `collect` ， `find` 胜于 `detect` ， `select` 胜于 `find_all` ， `reduce` 胜于 `inject` 以及 `size` 胜于 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
 
-* 调用 `map` 胜于调用 `map` + `flatten` 的组合。
+* 使用 `flat_map` 胜于使用 `map` + `flatten` 的组合。
+  这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map` 。
+  `flat_map` 将数组变平坦一个层级，而 `flatten` 会将整个数组变平坦。
 
     ```Ruby
     # bad
@@ -662,12 +976,14 @@
 > -- Steve McConnell
 
 * 编写自我解释含义的代码然后忽略这一节的其它部分。我是认真的！
+* 用英语写注释。
+* 在注释的 `#` 与注释文字之间使用一个空格。
 * 比一个单词长的注释要大写开头并使用标点符号。句号后使用[一个空格](http://en.wikipedia.org/wiki/Sentence_spacing)。
 * 避免冗赘的注释
 
     ```Ruby
     # 差
-    counter += 1 # increments counter by one 
+    counter += 1 # increments counter by one
     ```
 * 保持现有的注释是最新的。过时的注解比没有注解还差。
 > 好代码就像是好的笑话 - 它不需要解释 <br/>
@@ -701,7 +1017,101 @@
 * 使用 `REVIEW` 来标记任何需要审查及确认正常动作的地方。举例来说： `REVIEW: 我们确定用户现在是这么做的吗？ `
 * 如果你觉得恰当的话，可以使用其他定制的注解关键字，但记得把它们文档化在项目的 `README` 或类似的地方。
 
-## 类型
+## 类与模块
+
+* 在类别定义里使用一致的结构。
+
+    ```Ruby
+    class Person
+      # 首先是 extend 与 include
+      extend SomeModule
+      include AnotherModule
+
+      # 接着是常量
+      SOME_CONSTANT = 20
+
+      # 接下来是属性宏
+      attr_reader :name
+
+      # 跟着是其它的宏（如果有的话）
+      validates :name
+
+      # 公开的类别方法接在下一行
+      def self.some_method
+      end
+
+      # 跟着是公开的实例方法
+      def some_method
+      end
+
+      # 受保护及私有的方法，一起放在接近结尾的地方
+      protected
+
+      def some_protected_method
+      end
+
+      private
+
+      def some_private_method
+      end
+    end
+    ```
+
+* 偏好模块，胜过只有类别方法的类。类别应该只在产生实例是合理的时候使用。
+
+    ```Ruby
+    # 差
+    class SomeClass
+      def self.some_method
+        # body omitted
+      end
+
+      def self.some_other_method
+      end
+    end
+
+    # 好
+    module SomeClass
+      module_function
+
+      def some_method
+        # body omitted
+      end
+
+      def some_other_method
+      end
+    end
+    ```
+
+* 当你想将模块的实例方法变成类别方法时，偏爱使用 `module_function` 胜过 `extend self` 。
+
+    ```Ruby
+    # 差
+    module Utilities
+      extend self
+
+      def parse_something(string)
+        # do stuff here
+      end
+
+      def other_utility_method(number, string)
+        # do some more stuff
+      end
+    end
+
+    # 好
+    module Utilities
+      module_function
+
+      def parse_something(string)
+        # do stuff here
+      end
+
+      def other_utility_method(number, string)
+        # do some more stuff
+      end
+    end
+    ```
 
 * 当设计类型层级时，确认它们符合[Liskov 替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。
 * 尽可能让你的类型越[SOLID](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design\))越好。
@@ -717,7 +1127,7 @@
       end
 
       def to_s
-        "#@first_name #@last_name"
+        "#{@first_name #@last_name"}
       end
     end
     ```
@@ -750,6 +1160,7 @@
       end
     end
     ```
+
 * 考虑使用 `Struct.new`，它替你定义了那些琐碎的存取器（accessors），构造器（constructor）以及比较操作符（comparison operators）。
 
     ```Ruby
@@ -764,7 +1175,7 @@
     end
 
     # 更好
-    class Person < Struct.new (:first_name, :last_name)
+    Person = Struct.new(:first_name, :last_name) do
     end
     ````
 * 考虑加入工厂方法以提供附加的有意义的方式来生成一个特定的类实例。
@@ -997,7 +1408,7 @@
 * 避免救援 `Exception` 类别。这会把信号困住，并呼叫 `exit`，导致你需要 `kill -9` 进程。
 
     ```Ruby
-    # 差 
+    # 差
     begin
       # 呼叫 exit 及杀掉信号会被捕捉（除了 kill -9）
       exit
@@ -1072,7 +1483,9 @@
     hash = {}
     ```
 
-* 当你需要使用一个字符串数组时，偏好使用 `%w` 的字面数组语法。
+* Prefer `%w` to the literal array syntax when you need an array of
+words(non-empty strings without spaces and special characters in them).
+Apply this rule only to arrays with two or more elements.
 
     ```Ruby
     # 差
@@ -1081,6 +1494,19 @@
     # 好
     STATES = %w(draft open closed)
     ```
+
+* Prefer `%i` to the literal array syntax when you need an array of
+symbols(and you don't need to maintain Ruby 1.9 compatibility). Apply
+this rule only to arrays with two or more elements.
+
+    ```Ruby
+    # bad
+    STATES = [:draft, :open, :closed]
+
+    # good
+    STATES = %i(draft open closed)
+    ```
+
 * 避免在数组中创造巨大的间隔。
 
 
@@ -1110,7 +1536,7 @@
     heroes.fetch(:超女)
 
 * 避免使用可变的对象作为键值。
-* 当哈希的键为符号时，偏好使用 Ruby 1.9 新的哈希字面语法。
+* 当哈希的键为符号时，使用哈希的字面语法。
 
     ```Ruby
     # 差
@@ -1119,6 +1545,30 @@
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
+
+* Use `fetch` when dealing with hash keys that should be present.
+
+    ```Ruby
+    heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
+    # bad - if we make a mistake we might not spot it right away
+    heroes[:batman] # => "Bruce Wayne"
+    heroes[:supermann] # => nil
+
+    # good - fetch raises a KeyError making the problem obvious
+    heroes.fetch(:supermann)
+    ```
+* Use `fetch` with second argument to set a default value
+
+   ```Ruby
+   batman = { name: 'Bruce Wayne', is_evil: false }
+
+   # bad - if we just use || operator with falsy value we won't get the expected result
+   batman[:is_evil] || true # => true
+
+   # good - fetch work correctly with falsy values
+   batman.fetch(:is_evil, true) # => false
+   ```
+
 * 依赖这个事实， Ruby 1.9 的哈希是有序的。
 * 在遍历一个集合时，不要改动它。
 
@@ -1148,7 +1598,7 @@
     # 好
     name = 'Bozhidar'
     ```
-* 不要使用 `{}` 来围绕被插入字符串的实例变量。
+* 别忘了使用 `{}` 来围绕被插入字符串的实例与全局变量。
 
     ```Ruby
     class Person
@@ -1161,14 +1611,21 @@
 
       # 差 - 有效，但难看
       def to_s
-        "#{@first_name} #{@last_name}"
+        "#@first_name #@last_name"
       end
 
       # 好
       def to_s
-        "#@first_name #@last_name"
+        "#{@first_name} #{@last_name}"
       end
     end
+
+    $global = 0
+    # bad
+    puts "$global = #$global"
+
+    # good
+    puts "$global = #{$global}"
     ```
 * 当你需要建构庞大的数据块（chunk）时，避免使用 `String#+` 。
   使用 `String#<<` 来替代。字符串用`<<`连接能就地改变字符串实例，并且永远比 `String#+` 来得快，`String#+` 创造了一堆新的字符串对象。
@@ -1239,11 +1696,6 @@
 
 ## 百分比字面
 
-* 随意使用 `%w` 。
-
-    ```Ruby
-    STATES = %w(draft open closed)
-    ```
 * 使用 `%()` 给需要插值与嵌入双引号的单行字符串。多行字符串，偏好使用 heredocs 。
 
     ```Ruby
@@ -1343,18 +1795,18 @@
 ## 其它
 
 * `ruby -w` 写安全的代码。
-* 避免使用哈希作为可选参数。这个方法是不是做太多事了？
+* 避免使用哈希作为可选参数。这个方法是不是做太多事了？（对象初始器是本规则的例外）
 * 避免方法长于 10 行代码（LOC）。理想上，大部分的方法会小于5行。空行不算进LOC里。
 * 避免参数列表长于三或四个参数。
-* 如果你真的需要"全局" 方法，把它们加到Kernel并设为私有的。
-* 使用类实例变量代替全局变量。
+* 如果你真的需要“全局”方法，把它们加到 Kernel 并设为私有的。
+* 使用模块变量代替全局变量。
 
     ```Ruby
     # 差
     $foo_bar = 1
 
     # 好
-    class Foo
+    module Foo
       class << self
         attr_accessor :bar
       end
@@ -1370,13 +1822,37 @@
 * 保持一致性。在理想的世界里，遵循这些准则。
 * 使用常识。
 
+## 工具
+
+以下是一些工具，让你自动检查 Ruby 代码是否符合本指南。
+
+### RuboCop
+
+[RuboCop](https://github.com/bbatsov/rubocop) is a Ruby code style
+checker based on this style guide. RuboCop already covers a
+significant portion of the Guide, supports both MRI 1.9 and MRI 2.0
+and has good Emacs integration.
+
+### RubyMine
+
+[RubyMine](http://www.jetbrains.com/ruby/)'s code inspections are
+[partially based](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
+on this guide.
 
 # 贡献
 
 在本指南所写的每个东西都不是定案。这只是我渴望想与同样对 Ruby 编程风格有兴趣的大家一起工作，以致于最终我们可以替整个 Ruby 社区创造一个有益的资源。
 
-欢迎open tickets或push一个带有改进的更新请求。在此提前感谢你的帮助！
+欢迎 open tickets 或 push 一个带有改进的更新请求。在此提前感谢你的帮助！
+
+# 授权
+
+![Creative Commons License](http://i.creativecommons.org/l/by/3.0/88x31.png)
+This work is licensed under a [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/deed.zh)
 
 # 口耳相传
 
 一份社区驱动的风格指南，如果没多少人知道，对一个社区来说就没有多少用处。微博转发这份指南，分享给你的朋友或同事。我们得到的每个评价、建议或意见都可以让这份指南变得更好一点。而我们想要拥有的是最好的指南，不是吗？
+
+共勉之，<br/>
+[Bozhidar](https://twitter.com/bbatsov)

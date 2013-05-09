@@ -1965,9 +1965,10 @@ this rule only to arrays with two or more elements.
 
     ```Ruby
     # bad
-    $foo_bar = 1
 
-    #good
+     = 1
+
+    # good
     module Foo
       class << self
         attr_accessor :bar
