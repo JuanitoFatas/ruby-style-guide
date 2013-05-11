@@ -1544,7 +1544,7 @@ this rule only to arrays with two or more elements.
     # 差
     hash = { :one => 1, :two => 2, :three => 3 }
 
-    # hao;l
+    # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
 
