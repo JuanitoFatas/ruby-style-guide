@@ -229,15 +229,15 @@
     end
     ```
 
-* Use spaces around the `=` operator when assigning default values to method parameters:
+* 当给方法的参数赋默认值时，在 `=` 两边使用空格：
 
     ```Ruby
-    # bad
+    # 差
     def some_method(arg1=:default, arg2=nil, arg3=[])
       # do something...
     end
 
-    # good
+    # 好
     def some_method(arg1 = :default, arg2 = nil, arg3 = [])
       # do something...
     end
@@ -535,6 +535,23 @@ modules). Never use `::` for method invocation.
     do_something until some_condition
     ```
 
+* Use Kernel#loop with break rather than `begin/end/until` or `begin/end/while` for post-loop tests.
+
+   ```Ruby
+   # bad
+   begin
+     puts val
+     val += 1
+   end while val < 0
+
+   # good
+   loop do
+     puts val
+     val += 1
+     break unless val < 0
+   end
+   ```
+
 * 忽略围绕方法参数的括号，如内部 DSL (如：Rake, Rails, RSpec)，Ruby 中带有 "关键字" 状态的方法（如：`attr_reader`, `puts`）以及属性存取方法。所有其他的方法呼叫使用括号围绕参数。
 
     ```Ruby
@@ -794,13 +811,13 @@ setting the warn level to 0 via `-W0`).
     Array(paths).each { |path| do_something(path) }
     ```
 
-* Use ranges instead of complex comparison logic when possible.
+* 如果可能，使用范围来替换复杂的逻辑比较。
 
     ```Ruby
-    # bad
+    # 差
     do_something if x >= 1000 && x < 2000
 
-    # good
+    # 好
     do_something if (1000...2000).include?(x)
     ```
 
@@ -1505,7 +1522,6 @@ this rule only to arrays with two or more elements.
 
 * 避免在数组中创造巨大的间隔。
 
-
     ```Ruby
     arr = []
     arr[100] = 1 # 现在你有一个很多 nil 的数组
@@ -1520,6 +1536,18 @@ this rule only to arrays with two or more elements.
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
+
+* 避免使用可变的对象作为键值。
+* 当哈希的键为符号时，使用哈希的字面语法。
+
+    ```Ruby
+    # 差
+    hash = { :one => 1, :two => 2, :three => 3 }
+
+    # hao;l
+    hash = { one: 1, two: 2, three: 3 }
+    ```
+
 * 在处理应该存在的哈希键时，使用`fetch` 。
 
     ```Ruby
@@ -1530,29 +1558,8 @@ this rule only to arrays with two or more elements.
 
     # 好 - fetch 会抛出一个 KeyError 来使这个问题明显
     heroes.fetch(:超女)
-
-* 避免使用可变的对象作为键值。
-* 当哈希的键为符号时，使用哈希的字面语法。
-
-    ```Ruby
-    # 差
-    hash = { :one => 1, :two => 2, :three => 3 }
-
-    # 好
-    hash = { one: 1, two: 2, three: 3 }
     ```
 
-* Use `fetch` when dealing with hash keys that should be present.
-
-    ```Ruby
-    heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
-    # bad - if we make a mistake we might not spot it right away
-    heroes[:batman] # => "Bruce Wayne"
-    heroes[:supermann] # => nil
-
-    # good - fetch raises a KeyError making the problem obvious
-    heroes.fetch(:supermann)
-    ```
 * Use `fetch` with second argument to set a default value
 
    ```Ruby
@@ -1617,10 +1624,10 @@ this rule only to arrays with two or more elements.
     end
 
     $global = 0
-    # bad
+    # 差
     puts "$global = #$global"
 
-    # good
+    # 好
     puts "$global = #{$global}"
     ```
 * 当你需要建构庞大的数据块（chunk）时，避免使用 `String#+` 。
