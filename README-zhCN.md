@@ -246,27 +246,26 @@
     While several Ruby books suggest the first style, the second is much more prominent
     in practice (and arguably a bit more readable).
 
-* Avoid line continuation (\\) where not required. In practice, avoid using
-  line continuations at all.
+* 避免在不需要的时候使用行继续符 (\\) 。实际编码时，尽力避免使用行继续符。
 
     ```Ruby
-    # bad
+    # 差
     result = 1 - \
              2
 
-    # good (but still ugly as hell)
+    # 好 (但是仍然丑到爆)
     result = 1 \
              - 2
     ```
 
-* When continuing a chained method invocation on another line keep the `.` on the second line.
+* 当一个链式方法调用需要在另一行继续时，将 `.` 放在第二行
 
     ```Ruby
-    # bad - need to consult first line to understand second line
+    # 差 - 为了理解第二行需要去查阅第一行
     one.two.three.
       four
 
-    # good - it's immediately clear what's going on the second line
+    # 好 - 第二行在做什么立刻变得很清晰
     one.two.three
       .four
     ```
@@ -305,7 +304,7 @@
                      body: source.text)
     end
     ```
-* 长的常量数字添加底线来改善可读性
+* 长的常量数字添加下划线来改善可读性
 
     ```Ruby
     # 差 - 有几个零？
@@ -318,32 +317,30 @@
 * 使用 RDoc 以及它的惯例来撰写 API 文档。不要在注解区块及 `def` 之前放一个空行。
 * 将每一行最多限制在 80 个字符。
 * 避免尾随的空白。
-* Don't use block comments. They cannot be preceded by whitespace and are not
-as easy to spot as regular comments.
+* 不要使用区块注释。它们不能由空白引导，并且不如普通注释容易辨认。
 
     ```Ruby
-    # bad
+    # 差
     == begin
     comment line
     another comment line
     == end
 
-    # good
+    # 好
     # comment line
     # another comment line
     ```
 
 ## 语法
 
-* Use `::` only to reference constants(this includes classes and
-modules). Never use `::` for method invocation.
+* 使用 `::` 只能引用常量（包括类和模块）。永远不要使用 `::` 来调用方法。
 
     ```Ruby
-    # bad
+    # 差
     SomeClass::some_method
     some_object::some_method
 
-    # good
+    # 好
     SomeClass.some_method
     some_object.some_method
     SomeModule::SomeClass::SOME_CONST
@@ -427,7 +424,7 @@ modules). Never use `::` for method invocation.
 
 * 永远不要使用 `when x: ...`。参考前一个规则。
 
-* Use `!` instead of `not`.
+* 使用 `!` 替代 `not`.
 
     ```Ruby
     # 差 - 因为操作符有优先级，需要用括号。
