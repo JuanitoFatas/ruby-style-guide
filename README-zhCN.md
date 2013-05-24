@@ -1817,16 +1817,15 @@
 
 ### RuboCop
 
-[RuboCop](https://github.com/bbatsov/rubocop) is a Ruby code style
-checker based on this style guide. RuboCop already covers a
-significant portion of the Guide, supports both MRI 1.9 and MRI 2.0
-and has good Emacs integration.
+[RuboCop](https://github.com/bbatsov/rubocop) 是一个基于此规范的 Ruby 代码风格
+检查工具。 RuboCop 已经包括了此规范的很大一部分，支持 MRI 1.9 和 MRI 2.0，并且
+有良好的 Emacs 集成。
 
 ### RubyMine
 
-[RubyMine](http://www.jetbrains.com/ruby/)'s code inspections are
-[partially based](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
-on this guide.
+[RubyMine](http://www.jetbrains.com/ruby/)的代码检查
+[部分基于](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
+这份规范。
 
 # 贡献
 
