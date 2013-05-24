@@ -1064,7 +1064,7 @@
     # 差
     class SomeClass
       def self.some_method
-        # body omitted
+        # 省略函数体
       end
 
       def self.some_other_method
@@ -1076,7 +1076,7 @@
       module_function
 
       def some_method
-        # body omitted
+        # 省略函数体
       end
 
       def some_other_method
@@ -1092,11 +1092,11 @@
       extend self
 
       def parse_something(string)
-        # do stuff here
+        # 做一些事
       end
 
       def other_utility_method(number, string)
-        # do some more stuff
+        # 做另一些事
       end
     end
 
@@ -1105,11 +1105,11 @@
       module_function
 
       def parse_something(string)
-        # do stuff here
+        # 做一些事
       end
 
       def other_utility_method(number, string)
-        # do some more stuff
+        # 做另一些事
       end
     end
     ```
@@ -1248,7 +1248,7 @@
     如同你所看到的，在类型层级中的所有类其实都共享单独一个类变量。通常情况下应该偏好使用实例变量而不是类变量。
 
 * 依据方法的目的用途指定适当的可见层级(`private` ,`protected` )。别把所有方法都设为 `public` （方法的缺省值）。我们现在是在写 *Ruby* ，不是 *Python* 。
-* 将 `public`, `protected`, `private` 和被应用的方法定义保持一致的缩排。在上下各留一行来强调这个可见性应用于之后的所有方法。）
+* 将 `public`，`protected`，`private` 和被应用的方法定义保持一致的缩排。在上下各留一行来强调这个可见性应用于之后的所有方法。）
 
     ```Ruby
     class SomeClass
@@ -1274,23 +1274,23 @@
     class TestClass
       # 差
       def TestClass.some_method
-        # body omitted
+        # 省略方法体
       end
 
       # 好
       def self.some_other_method
-        # body omitted
+        # 省略方法体
       end
 
       # 也有可能及当你要定义多个
       # singleton时的便利方法
       class << self
         def first_method
-          # body omitted
+          # 省略方法体
         end
 
         def second_method_etc
-          # body omitted
+          # 省略方法体
         end
       end
     end
@@ -1326,17 +1326,17 @@
     # 差
     def foo
       begin
-        # main logic goes here
+        # 此处放主要逻辑
       rescue
-        # failure handling goes here
+        # 错误处理放在此处
       end
     end
 
     # 好
     def foo
-      # main logic goes here
+      # 此处放主要逻辑
     rescue
-      # failure handling goes here
+      # 错误处理放在此处
     end
     ```
 
@@ -1347,20 +1347,20 @@
     begin
       something_that_might_fail
     rescue IOError
-      # handle IOError
+      # 处理 IOError
     end
 
     begin
       something_else_that_might_fail
     rescue IOError
-      # handle IOError
+      # 处理 IOError
     end
 
     # 好
     def with_io_error_handling
        yield
     rescue IOError
-      # handle IOError
+      # 处理 IOError
     end
 
     with_io_error_handling { something_that_might_fail }
