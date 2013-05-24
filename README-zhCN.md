@@ -1484,9 +1484,8 @@
     hash = {}
     ```
 
-* Prefer `%w` to the literal array syntax when you need an array of
-words(non-empty strings without spaces and special characters in them).
-Apply this rule only to arrays with two or more elements.
+* 对字面数组语法，当你需要一个单词（没有空格和特殊字符的非空字符串）的数组时，
+  倾向使用 `%w`。仅当数组只有两个及以上元素时才应用这个规则。
 
     ```Ruby
     # 差
@@ -1496,9 +1495,8 @@ Apply this rule only to arrays with two or more elements.
     STATES = %w(draft open closed)
     ```
 
-* Prefer `%i` to the literal array syntax when you need an array of
-symbols(and you don't need to maintain Ruby 1.9 compatibility). Apply
-this rule only to arrays with two or more elements.
+* 对字面数组语法，当你需要一个符号（并且不需要保持 Ruby 1.9 兼容性）的数组时，
+  倾向使用 `%i`。仅当数组只有两个及以上元素时才应用这个规则。
 
     ```Ruby
     # 差
@@ -1539,24 +1537,24 @@ this rule only to arrays with two or more elements.
 * 在处理应该存在的哈希键时，使用`fetch` 。
 
     ```Ruby
-    heroes = { 蝙蝠侠: 'Bruce Wayne', 超人: 'Clark Kent' }
+    heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
     # 差 - 如果我们打错字的话，我们就无法找到对的英雄了
-    heroes[:蝙蝠侠] # => "Bruce Wayne"
-    heroes[:超女] # => nil
+    heroes[:batman] # => "Bruce Wayne"
+    heroes[:supermen] # => nil
 
     # 好 - fetch 会抛出一个 KeyError 来使这个问题明显
-    heroes.fetch(:超女)
+    heroes.fetch(:supermen)
     ```
 
-* Use `fetch` with second argument to set a default value
+* 在使用 `fetch` 时，使用第二个参数设置默认值
 
    ```Ruby
    batman = { name: 'Bruce Wayne', is_evil: false }
 
-   # 差 - if we just use || operator with falsy value we won't get the expected result
+   # 差 - 如果我们仅仅使用 || 操作符，那么当值为假时，我们不会得到预期的结果
    batman[:is_evil] || true # => true
 
-   # 好 - fetch work correctly with falsy values
+   # 好 - fetch 在遇到假值时依然正确
    batman.fetch(:is_evil, true) # => false
    ```
 
