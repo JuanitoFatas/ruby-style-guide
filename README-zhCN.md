@@ -984,7 +984,7 @@
 
     ```Ruby
     # 差
-    counter += 1 # increments counter by one
+    counter += 1 # 将 counter 加一
     ```
 * 保持现有的注释是最新的。过时的注解比没有注解还差。
 > 好代码就像是好的笑话 - 它不需要解释 <br/>
