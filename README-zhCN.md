@@ -150,38 +150,35 @@
     e = M * c**2
     ```
 
-    `{` and `}` deserve a bit of clarification, since they are used
-    for block and hash literals, as well as embedded expressions in
-    strings. For hash literals two styles are considered acceptable.
+    `{` 和 `}` 需要额外说明，因为他们是用在块（block）、
+    哈希字面量（hash literals），以及嵌入字符串的表达式中。
+    对于哈希字面量来说，两种风格都是可接受的。
 
     ```Ruby
-    # 好 - space after { and before }
+    # 好 - { 之后和 }之前有空格
     { one: 1, two: 2 }
 
-    # 好 - no space after { and before }
+    # 好 - { 之后和 }之前没有空格
     {one: 1, two: 2}
     ```
 
-    The first variant is slightly more readable (and arguably more
-    popular in the Ruby community in general). The second variant has
-    the advantage of adding visual difference between block and hash
-    literals. Whichever one you pick - apply it consistently.
+    第一个种风格稍微更具可读性（而且有争议的是，一般在Ruby社区里更受欢迎）。
+    第二种风格具有可为块和哈希字面量添加可视化的差别的优点。
+    无论你选哪一种都行 - 但是最好保持一致。
 
-    As far as embedded expressions go, there are also two acceptable
-    options:
+    至于嵌入表达式（embedded expressions），这儿也有两个可接受的选择：
 
     ```Ruby
-    # 好 - no spaces
+    # 好 - 没有空格
     "string#{expr}"
 
-    # ok - arguably more readable
+    # 可以 - 更具可读性（有些争议）
     "string#{ expr }"
     ```
 
-    The first style is extremely more popular and you're generally
-    advised to stick with it. The second, on the other hand, is
-    (arguably) a bit more readable. As with hashes - pick one style
-    and apply it consistently.
+    第一种风格极为流行，一般其他人都会建议你坚持这种风格。
+    另一方面来说，第二种风格有些更具可读性（虽然颇具争议）。
+    正如哈系那样 - 选一种风格并且保持一致。
 
 * 不要有空格在 `(` 、 `[` 之后，或 `]` 、 `)` 之前。
 
@@ -234,17 +231,17 @@
     ```Ruby
     # 差
     def some_method(arg1=:default, arg2=nil, arg3=[])
-      # do something...
+      # 做一些任务...
     end
 
     # 好
     def some_method(arg1 = :default, arg2 = nil, arg3 = [])
-      # do something...
+      # 做一些任务...
     end
     ```
 
-    While several Ruby books suggest the first style, the second is much more prominent
-    in practice (and arguably a bit more readable).
+    尽管有好几本 Ruby 的书籍都建议使用第一种风格，但是第二种风格
+    在实践中更为常用（而且颇具争议的是更有可读性）。
 
 * 避免在不需要的时候使用行继续符 (\\) 。实际编码时，尽力避免使用行继续符。
 
@@ -322,13 +319,13 @@
     ```Ruby
     # 差
     == begin
-    comment line
-    another comment line
+    一行注释
+    另一行注释
     == end
 
     # 好
-    # comment line
-    # another comment line
+    # 一行注释
+    # 另一行注释
     ```
 
 ## 语法
