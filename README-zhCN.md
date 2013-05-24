@@ -78,12 +78,12 @@
 * 不要使用`;`来隔开语句和表达式。推论 - 每一行使用一条语句。
 
     ```Ruby
-    # bad
+    # 差
     puts 'foobar'; # 不必要的分号
 
     puts 'foo'; puts 'bar' # 同一行里有两个表达式
 
-    # good
+    # 好
     puts 'foobar'
 
     puts 'foo'
@@ -95,11 +95,11 @@
 * 对于没有成员的类，尽可能使用单行类定义。
 
     ```Ruby
-    # bad
+    # 差
     class FooError < StandardError
     end
 
-    # good
+    # 好
     class FooError < StandardError; end
     ```
 
@@ -127,7 +127,7 @@
     这个规则的一个例外是空方法。
 
     ```Ruby
-    # good
+    # 好
     def no_op; end
     ```
 
@@ -155,10 +155,10 @@
     strings. For hash literals two styles are considered acceptable.
 
     ```Ruby
-    # good - space after { and before }
+    # 好 - space after { and before }
     { one: 1, two: 2 }
 
-    # good - no space after { and before }
+    # 好 - no space after { and before }
     {one: 1, two: 2}
     ```
 
@@ -171,7 +171,7 @@
     options:
 
     ```Ruby
-    # good - no spaces
+    # 好 - no spaces
     "string#{expr}"
 
     # ok - arguably more readable
@@ -513,35 +513,35 @@
 * 当你有单行主体时，偏爱使用 `while/until` 修饰符。
 
     ```Ruby
-    # bad
+    # 差
     while some_condition
       do_something
     end
 
-    # good
+    # 好
     do_something while some_condition
     ```
 
 * 负面条件偏爱 `until` 胜于 `while` 。
 
     ```Ruby
-    # bad
+    # 差
     do_something while !some_condition
 
-    # good
+    # 好
     do_something until some_condition
     ```
 
 * Use Kernel#loop with break rather than `begin/end/until` or `begin/end/while` for post-loop tests.
 
    ```Ruby
-   # bad
+   # 差
    begin
      puts val
      val += 1
    end while val < 0
 
-   # good
+   # 好
    loop do
      puts val
      val += 1
@@ -686,19 +686,19 @@
 * 不要在条件表达式里使用 `=` （赋值）的返回值。
 
     ```Ruby
-    # bad (+ a warning)
+    # 差 (+ a warning)
     if (v = array.grep(/foo/))
       do_something(v)
       ...
     end
 
-    # bad (+ a warning)
+    # 差 (+ a warning)
     if v = array.grep(/foo/)
       do_something(v)
       ...
     end
 
-    # good
+    # 好
     v = array.grep(/foo/)
     if v
       do_something(v)
@@ -770,11 +770,11 @@ setting the warn level to 0 via `-W0`).
 * Favor the use of `sprintf` over the fairly cryptic `String#%` method.
 
     ```Ruby
-    # bad
+    # 差
     '%d %d' % [20, 10]
     # => '20 10'
 
-    # good
+    # 好
     sprintf('%d %d', 20, 10)
     # => '20 10'
     ```
@@ -783,11 +783,11 @@ setting the warn level to 0 via `-W0`).
   a string argument.
 
     ```Ruby
-    # bad
+    # 差
     %w(one two three) * ', '
     # => 'one, two, three'
 
-    # good
+    # 好
     %w(one two three).join(', ')
     # => 'one, two, three'
     ```
@@ -797,14 +797,14 @@ setting the warn level to 0 via `-W0`).
   an array.
 
     ```Ruby
-    # bad
+    # 差
     paths = [paths] unless paths.is_a? Array
     paths.each { |path| do_something(path) }
 
-    # good
+    # 好
     [*paths].each { |path| do_something(path) }
 
-    # good (and a bit more readable)
+    # 好 (and a bit more readable)
     Array(paths).each { |path| do_something(path) }
     ```
 
@@ -972,10 +972,10 @@ setting the warn level to 0 via `-W0`).
   `flat_map` 将数组变平坦一个层级，而 `flatten` 会将整个数组变平坦。
 
     ```Ruby
-    # bad
+    # 差
     all_songs = users.map(&:songs).flatten.uniq
 
-    # good
+    # 好
     all_songs = users.flat_map(&:songs).uniq
     ```
 
@@ -1332,7 +1332,7 @@ setting the warn level to 0 via `-W0`).
 * 尽可能使用隐式的 `begin` 区块。
 
     ```Ruby
-    # bad
+    # 差
     def foo
       begin
         # main logic goes here
@@ -1341,7 +1341,7 @@ setting the warn level to 0 via `-W0`).
       end
     end
 
-    # good
+    # 好
     def foo
       # main logic goes here
     rescue
@@ -1386,7 +1386,7 @@ setting the warn level to 0 via `-W0`).
       # 拯救子句完全没有做事
     end
 
-    # bad
+    # 差
     do_something rescue nil
     ```
 
@@ -1484,11 +1484,11 @@ setting the warn level to 0 via `-W0`).
 * 偏好数组及哈希的字面表示法（除非你需要给构造器传入参数）。
 
     ```Ruby
-    # bad
+    # 差
     arr = Array.new
     hash = Hash.new
 
-    # good
+    # 好
     arr = []
     hash = {}
     ```
@@ -1510,10 +1510,10 @@ symbols(and you don't need to maintain Ruby 1.9 compatibility). Apply
 this rule only to arrays with two or more elements.
 
     ```Ruby
-    # bad
+    # 差
     STATES = [:draft, :open, :closed]
 
-    # good
+    # 好
     STATES = %i(draft open closed)
     ```
 
@@ -1562,10 +1562,10 @@ this rule only to arrays with two or more elements.
    ```Ruby
    batman = { name: 'Bruce Wayne', is_evil: false }
 
-   # bad - if we just use || operator with falsy value we won't get the expected result
+   # 差 - if we just use || operator with falsy value we won't get the expected result
    batman[:is_evil] || true # => true
 
-   # good - fetch work correctly with falsy values
+   # 好 - fetch work correctly with falsy values
    batman.fetch(:is_evil, true) # => false
    ```
 
