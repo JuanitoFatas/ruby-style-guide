@@ -632,7 +632,7 @@
       # ok
       def initialize(options)
         self.options = options
-        # both options and self.options are equivalent here
+        # 此处 options 和 self.options 都是等价的
       end
 
       # 差
@@ -682,13 +682,13 @@
 * 不要在条件表达式里使用 `=` （赋值）的返回值。
 
     ```Ruby
-    # 差 (+ a warning)
+    # 差 (+ 一处警告)
     if (v = array.grep(/foo/))
       do_something(v)
       ...
     end
 
-    # 差 (+ a warning)
+    # 差 (+ 一处警告)
     if v = array.grep(/foo/)
       do_something(v)
       ...
@@ -754,16 +754,15 @@
     result = hash.map { |_, v| v + 1 }
     ```
 
-* Use `$stdout/$stderr/$stdin` instead of
-  `STDOUT/STDERR/STDIN`. `STDOUT/STDERR/STDIN` are constants, and
-  while you can actually reassign (possibly to redirect some stream)
-  constants in Ruby, you'll get an interpreter warning if you do so.
+* 使用 `$stdout/$stderr/$stdin` 而不是
+  `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，而在 Ruby 中，
+  当你实际需要给常量重新复制（可能是重定向到某个流），只要你这样做你就
+  会从解释器得到一个警告。
 
-* Use `warn` instead of `$stderr.puts`. Apart from being more concise
-and clear, `warn` allows you to suppress warnings if you need to (by
-setting the warn level to 0 via `-W0`).
+* 使用 `warn` 而不是 `$stderr.puts`。除了更加清晰简洁，如果你需要的话，
+  `warn` 还允许你压制（suppress）警告（通过`-W0`将警告级别设为0）。
 
-* Favor the use of `sprintf` over the fairly cryptic `String#%` method.
+* 倾向使用 `sprintf` 而不是相当隐晦的 `String#%` 方法.
 
     ```Ruby
     # 差
@@ -775,8 +774,7 @@ setting the warn level to 0 via `-W0`).
     # => '20 10'
     ```
 
-* Favor the use of `Array#join` over the fairly cryptic `Array#*` with
-  a string argument.
+* 倾向使用 `Array#join` 而不是相当隐晦的使用字符串作参数的 `Array#*`。
 
     ```Ruby
     # 差
@@ -788,9 +786,8 @@ setting the warn level to 0 via `-W0`).
     # => 'one, two, three'
     ```
 
-* Use `[*var]` or `Array()` instead of explicit `Array` check, when dealing with a
-  variable you want to treat as an Array, but you're not certain it's
-  an array.
+* 当处理你希望像 Array 那样对待的变量，但是你不确定它是一个数组时，
+  使用 `[*var]` or `Array()` 而不是显式的 `Array` 检查。
 
     ```Ruby
     # 差
@@ -800,7 +797,7 @@ setting the warn level to 0 via `-W0`).
     # 好
     [*paths].each { |path| do_something(path) }
 
-    # 好 (and a bit more readable)
+    # 好（而且更具易读性一点）
     Array(paths).each { |path| do_something(path) }
     ```
 
@@ -822,7 +819,7 @@ setting the warn level to 0 via `-W0`).
 * 标识符用英语命名。
 
     ```Ruby
-    # 差 - 變數名用帶有拉丁文的保加利亞語寫成。
+    # 差 - 变量名用带有拉丁文的保加利亚语写成。
     zaplata = 1_000
 
     # 好
