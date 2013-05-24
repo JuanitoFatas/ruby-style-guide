@@ -852,7 +852,7 @@
     end
     ```
 
-* 类别与模组使用驼峰式大小写（CamelCase）。 （保留类似 HTTP、RFC、XML 这种缩写为大写）
+* 类别与模组使用驼峰式大小写（CamelCase）。（保留类似 HTTP、RFC、XML 这种缩写为大写）
 
     ```Ruby
     # 差
@@ -891,10 +891,8 @@
 * 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (即 `Array#empty?` )
 * 有潜在“危险性”的方法，若此 *危险* 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（即：改动 `self` 或参数、 `exit!` 等等方法）。
 
-* The names of potentially *dangerous* methods (i.e. methods that
-  modify `self` or the arguments, `exit!` (doesn't run the finalizers
-  like `exit` does), etc.) should end with an exclamation mark if
-  there exists a safe version of that *dangerous* method.
+* 如果存在潜在的*危险*方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行
+  finalizers的 `exit!`，等等）的安全版本，那么*危险*方法的名字应该以惊叹号结尾。
 
 
     ```Ruby
