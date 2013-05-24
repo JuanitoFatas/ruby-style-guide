@@ -1723,7 +1723,7 @@
 
 * 避免无谓的元编程。
 
-* 写一个函式库时不要在核心类别捣乱（不要替它们打 monkey patch。）
+* 写一个函数库时不要使核心类混乱（不要使用 monkey patch）。
 
 * 倾向使用区块形式的 `class_eval` 而不是字符串插值(string-interpolated)的形式。
   - 当你使用字符串插值形式时，总是提供 `__FILE__` 及 `__LINE__`，使你的 backtrace 看起来有意义：
@@ -1737,7 +1737,7 @@
 * 当使用 `class_eval` （或其它的`eval`）搭配字符串插值时，添加一个注解区块，来演示如果做了插值的样子（我从 Rails 代码学来的一个实践）：
 
     ```ruby
-    # 从 activesupport/lib/active_support/core_ext/string/output_safety.rb
+    # activesupport/lib/active_support/core_ext/string/output_safety.rb
     UNSAFE_STRING_METHODS.each do |unsafe_method|
       if 'String'.respond_to?(unsafe_method)
         class_eval <<-EOT, __FILE__, __LINE__ + 1
@@ -1757,7 +1757,7 @@
   - 确保[也定义了`respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
   - 仅捕捉字首定义良好的方法，像是 `find_by_*` ― 让你的代码愈肯定(assertive)愈好。
   - 在语句的最后调用 `super`
-  - delegate 到确定的，非魔术方法中:
+  - delegate 到确定的、非魔法方法中:
 
     ```ruby
     # 差
