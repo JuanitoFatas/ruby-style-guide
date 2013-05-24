@@ -347,11 +347,11 @@
 
      ```Ruby
      def some_method
-       # body omitted
+       # 此处省略方法体
      end
 
      def some_method_with_arguments(arg1, arg2)
-       # body omitted
+       # 此处省略方法体
      end
      ```
 
@@ -374,17 +374,16 @@
     ```Ruby
     # 差
     if some_condition then
-      # body omitted
+      # 此处省略语句体
     end
 
     # 好
     if some_condition
-      # body omitted
+      # 此处省略语句体
     end
     ```
 
-* 偏爱三元操作符 `? : ` 胜于 `if/then/else/end` 结构
-* 它更为常见及更精准。
+* 倾向使用三元操作符 `? : ` 而不是 `if/then/else/end` 结构，它更为常见及更精准。
 
     ```Ruby
     # 差
@@ -493,17 +492,17 @@
     ```Ruby
     # 差
     if (x > 10)
-      # body omitted
+      # 此处省略语句体
     end
 
     # 好
     if x > 10
-      # body omitted
+      # 此处省略语句体
     end
 
     # 好
     if (x = self.next_value)
-      # body omitted
+      # 此处省略语句体
     end
     ```
 
@@ -519,7 +518,7 @@
     do_something while some_condition
     ```
 
-* 负面条件偏爱 `until` 胜于 `while` 。
+* 负面条件倾向使用 `until` 而不是 `while` 。
 
     ```Ruby
     # 差
@@ -529,7 +528,7 @@
     do_something until some_condition
     ```
 
-* Use Kernel#loop with break rather than `begin/end/until` or `begin/end/while` for post-loop tests.
+* 为循环后测试使用 Kernel#loop 搭配 break 而不是 `begin/end/until` 或者 `begin/end/while`。
 
    ```Ruby
    # 差
@@ -564,7 +563,7 @@
     array.delete(e)
     ```
 
-* 单行区块喜好 `{...}` 胜于 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 "控制流程" 及 "方法定义" ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
+* 单行区块倾向使用 `{...}` 而不是 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 "控制流程" 及 "方法定义" ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
 
     ```Ruby
     names = ['Bozhidar', 'Steve', 'Sarah']
@@ -962,9 +961,9 @@ setting the warn level to 0 via `-W0`).
     ```
 
 
-* 偏好 `map` 胜于 `collect` ， `find` 胜于 `detect` ， `select` 胜于 `find_all` ， `reduce` 胜于 `inject` 以及 `size` 胜于 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
+* 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
 
-* 使用 `flat_map` 胜于使用 `map` + `flatten` 的组合。
+* 倾向使用 `flat_map` 而不是 `map` + `flatten` 的组合。
   这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map` 。
   `flat_map` 将数组变平坦一个层级，而 `flatten` 会将整个数组变平坦。
 
@@ -1195,7 +1194,7 @@ setting the warn level to 0 via `-W0`).
     end
     ```
 
-* 偏好[Duck Typing](http://en.wikipedia.org/wiki/Duck_typing)胜于继承。
+* 倾向使用[Duck Typing](http://en.wikipedia.org/wiki/Duck_typing)而不是继承。
 
     ```Ruby
     ## 差
@@ -1474,7 +1473,7 @@ setting the warn level to 0 via `-W0`).
       f.close unless f.nil?
     end
     ```
-* 偏爱使用标准库的异常类胜于导入新的异常类。
+* 倾向使用标准库的异常类而不是导入新的异常类。
 
 ## 集合
 
@@ -1733,14 +1732,14 @@ this rule only to arrays with two or more elements.
 
 * 写一个函式库时不要在核心类别捣乱（不要替它们打 monkey patch。）
 
-* 偏好区块形式的 `class_eval` 胜于字符串插值(string-interpolated)的形式。
+* 倾向使用区块形式的 `class_eval` 而不是字符串插值(string-interpolated)的形式。
   - 当你使用字符串插值形式时，总是提供 `__FILE__` 及 `__LINE__`，使你的 backtrace 看起来有意义：
 
     ```ruby
     class_eval "def use_relative_model_naming?; true; end", __FILE__, __LINE__
     ```
 
-  - 偏好 `define_method` 胜于 `class_eval{ def ... }`
+  - 倾向使用 `define_method` 而不是 `class_eval{ def ... }`
 
 * 当使用 `class_eval` （或其它的`eval`）搭配字符串插值时，添加一个注解区块，来演示如果做了插值的样子（我从 Rails 代码学来的一个实践）：
 
