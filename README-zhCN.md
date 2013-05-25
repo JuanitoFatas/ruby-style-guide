@@ -78,12 +78,12 @@
 * 不要使用`;`来隔开语句和表达式。推论 - 每一行使用一条语句。
 
     ```Ruby
-    # bad
+    # 差
     puts 'foobar'; # 不必要的分号
 
     puts 'foo'; puts 'bar' # 同一行里有两个表达式
 
-    # good
+    # 好
     puts 'foobar'
 
     puts 'foo'
@@ -95,11 +95,11 @@
 * 对于没有成员的类，尽可能使用单行类定义。
 
     ```Ruby
-    # bad
+    # 差
     class FooError < StandardError
     end
 
-    # good
+    # 好
     class FooError < StandardError; end
     ```
 
@@ -127,7 +127,7 @@
     这个规则的一个例外是空方法。
 
     ```Ruby
-    # good
+    # 好
     def no_op; end
     ```
 
@@ -150,38 +150,35 @@
     e = M * c**2
     ```
 
-    `{` and `}` deserve a bit of clarification, since they are used
-    for block and hash literals, as well as embedded expressions in
-    strings. For hash literals two styles are considered acceptable.
+    `{` 和 `}` 需要额外说明，因为他们是用在块（block）、
+    哈希字面量（hash literals），以及嵌入字符串的表达式中。
+    对于哈希字面量来说，两种风格都是可接受的。
 
     ```Ruby
-    # good - space after { and before }
+    # 好 - { 之后和 }之前有空格
     { one: 1, two: 2 }
 
-    # good - no space after { and before }
+    # 好 - { 之后和 }之前没有空格
     {one: 1, two: 2}
     ```
 
-    The first variant is slightly more readable (and arguably more
-    popular in the Ruby community in general). The second variant has
-    the advantage of adding visual difference between block and hash
-    literals. Whichever one you pick - apply it consistently.
+    第一个种风格稍微更具可读性（而且有争议的是，一般在Ruby社区里更受欢迎）。
+    第二种风格具有可为块和哈希字面量添加可视化的差别的优点。
+    无论你选哪一种都行 - 但是最好保持一致。
 
-    As far as embedded expressions go, there are also two acceptable
-    options:
+    至于嵌入表达式（embedded expressions），这儿也有两个可接受的选择：
 
     ```Ruby
-    # good - no spaces
+    # 好 - 没有空格
     "string#{expr}"
 
-    # ok - arguably more readable
+    # 可以 - 更具可读性（有些争议）
     "string#{ expr }"
     ```
 
-    The first style is extremely more popular and you're generally
-    advised to stick with it. The second, on the other hand, is
-    (arguably) a bit more readable. As with hashes - pick one style
-    and apply it consistently.
+    第一种风格极为流行，一般其他人都会建议你坚持这种风格。
+    另一方面来说，第二种风格有些更具可读性（虽然颇具争议）。
+    正如哈系那样 - 选一种风格并且保持一致。
 
 * 不要有空格在 `(` 、 `[` 之后，或 `]` 、 `)` 之前。
 
@@ -234,17 +231,17 @@
     ```Ruby
     # 差
     def some_method(arg1=:default, arg2=nil, arg3=[])
-      # do something...
+      # 做一些任务...
     end
 
     # 好
     def some_method(arg1 = :default, arg2 = nil, arg3 = [])
-      # do something...
+      # 做一些任务...
     end
     ```
 
-    While several Ruby books suggest the first style, the second is much more prominent
-    in practice (and arguably a bit more readable).
+    尽管有好几本 Ruby 的书籍都建议使用第一种风格，但是第二种风格
+    在实践中更为常用（而且颇具争议的是更有可读性）。
 
 * 避免在不需要的时候使用行继续符 (\\) 。实际编码时，尽力避免使用行继续符。
 
@@ -322,13 +319,13 @@
     ```Ruby
     # 差
     == begin
-    comment line
-    another comment line
+    一行注释
+    另一行注释
     == end
 
     # 好
-    # comment line
-    # another comment line
+    # 一行注释
+    # 另一行注释
     ```
 
 ## 语法
@@ -350,11 +347,11 @@
 
      ```Ruby
      def some_method
-       # body omitted
+       # 此处省略方法体
      end
 
      def some_method_with_arguments(arg1, arg2)
-       # body omitted
+       # 此处省略方法体
      end
      ```
 
@@ -377,17 +374,16 @@
     ```Ruby
     # 差
     if some_condition then
-      # body omitted
+      # 此处省略语句体
     end
 
     # 好
     if some_condition
-      # body omitted
+      # 此处省略语句体
     end
     ```
 
-* 偏爱三元操作符 `? : ` 胜于 `if/then/else/end` 结构
-* 它更为常见及更精准。
+* 倾向使用三元操作符 `? : ` 而不是 `if/then/else/end` 结构，它更为常见及更精准。
 
     ```Ruby
     # 差
@@ -496,52 +492,52 @@
     ```Ruby
     # 差
     if (x > 10)
-      # body omitted
+      # 此处省略语句体
     end
 
     # 好
     if x > 10
-      # body omitted
+      # 此处省略语句体
     end
 
     # 好
     if (x = self.next_value)
-      # body omitted
+      # 此处省略语句体
     end
     ```
 
 * 当你有单行主体时，偏爱使用 `while/until` 修饰符。
 
     ```Ruby
-    # bad
+    # 差
     while some_condition
       do_something
     end
 
-    # good
+    # 好
     do_something while some_condition
     ```
 
-* 负面条件偏爱 `until` 胜于 `while` 。
+* 负面条件倾向使用 `until` 而不是 `while` 。
 
     ```Ruby
-    # bad
+    # 差
     do_something while !some_condition
 
-    # good
+    # 好
     do_something until some_condition
     ```
 
-* Use Kernel#loop with break rather than `begin/end/until` or `begin/end/while` for post-loop tests.
+* 为循环后测试使用 Kernel#loop 搭配 break 而不是 `begin/end/until` 或者 `begin/end/while`。
 
    ```Ruby
-   # bad
+   # 差
    begin
      puts val
      val += 1
    end while val < 0
 
-   # good
+   # 好
    loop do
      puts val
      val += 1
@@ -567,7 +563,7 @@
     array.delete(e)
     ```
 
-* 单行区块喜好 `{...}` 胜于 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 "控制流程" 及 "方法定义" ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
+* 单行区块倾向使用 `{...}` 而不是 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 "控制流程" 及 "方法定义" ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
 
     ```Ruby
     names = ['Bozhidar', 'Steve', 'Sarah']
@@ -636,7 +632,7 @@
       # ok
       def initialize(options)
         self.options = options
-        # both options and self.options are equivalent here
+        # 此处 options 和 self.options 都是等价的
       end
 
       # 差
@@ -686,19 +682,19 @@
 * 不要在条件表达式里使用 `=` （赋值）的返回值。
 
     ```Ruby
-    # bad (+ a warning)
+    # 差 (+ 一处警告)
     if (v = array.grep(/foo/))
       do_something(v)
       ...
     end
 
-    # bad (+ a warning)
+    # 差 (+ 一处警告)
     if v = array.grep(/foo/)
       do_something(v)
       ...
     end
 
-    # good
+    # 好
     v = array.grep(/foo/)
     if v
       do_something(v)
@@ -758,53 +754,50 @@
     result = hash.map { |_, v| v + 1 }
     ```
 
-* Use `$stdout/$stderr/$stdin` instead of
-  `STDOUT/STDERR/STDIN`. `STDOUT/STDERR/STDIN` are constants, and
-  while you can actually reassign (possibly to redirect some stream)
-  constants in Ruby, you'll get an interpreter warning if you do so.
+* 使用 `$stdout/$stderr/$stdin` 而不是
+  `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，而在 Ruby 中，
+  当你实际需要给常量重新复制（可能是重定向到某个流），只要你这样做你就
+  会从解释器得到一个警告。
 
-* Use `warn` instead of `$stderr.puts`. Apart from being more concise
-and clear, `warn` allows you to suppress warnings if you need to (by
-setting the warn level to 0 via `-W0`).
+* 使用 `warn` 而不是 `$stderr.puts`。除了更加清晰简洁，如果你需要的话，
+  `warn` 还允许你压制（suppress）警告（通过`-W0`将警告级别设为0）。
 
-* Favor the use of `sprintf` over the fairly cryptic `String#%` method.
+* 倾向使用 `sprintf` 而不是相当隐晦的 `String#%` 方法.
 
     ```Ruby
-    # bad
+    # 差
     '%d %d' % [20, 10]
     # => '20 10'
 
-    # good
+    # 好
     sprintf('%d %d', 20, 10)
     # => '20 10'
     ```
 
-* Favor the use of `Array#join` over the fairly cryptic `Array#*` with
-  a string argument.
+* 倾向使用 `Array#join` 而不是相当隐晦的使用字符串作参数的 `Array#*`。
 
     ```Ruby
-    # bad
+    # 差
     %w(one two three) * ', '
     # => 'one, two, three'
 
-    # good
+    # 好
     %w(one two three).join(', ')
     # => 'one, two, three'
     ```
 
-* Use `[*var]` or `Array()` instead of explicit `Array` check, when dealing with a
-  variable you want to treat as an Array, but you're not certain it's
-  an array.
+* 当处理你希望像 Array 那样对待的变量，但是你不确定它是一个数组时，
+  使用 `[*var]` or `Array()` 而不是显式的 `Array` 检查。
 
     ```Ruby
-    # bad
+    # 差
     paths = [paths] unless paths.is_a? Array
     paths.each { |path| do_something(path) }
 
-    # good
+    # 好
     [*paths].each { |path| do_something(path) }
 
-    # good (and a bit more readable)
+    # 好（而且更具易读性一点）
     Array(paths).each { |path| do_something(path) }
     ```
 
@@ -826,7 +819,7 @@ setting the warn level to 0 via `-W0`).
 * 标识符用英语命名。
 
     ```Ruby
-    # 差 - 變數名用帶有拉丁文的保加利亞語寫成。
+    # 差 - 变量名用带有拉丁文的保加利亚语写成。
     zaplata = 1_000
 
     # 好
@@ -859,7 +852,7 @@ setting the warn level to 0 via `-W0`).
     end
     ```
 
-* 类别与模组使用驼峰式大小写（CamelCase）。 （保留类似 HTTP、RFC、XML 这种缩写为大写）
+* 类别与模组使用驼峰式大小写（CamelCase）。（保留类似 HTTP、RFC、XML 这种缩写为大写）
 
     ```Ruby
     # 差
@@ -898,10 +891,8 @@ setting the warn level to 0 via `-W0`).
 * 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (即 `Array#empty?` )
 * 有潜在“危险性”的方法，若此 *危险* 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（即：改动 `self` 或参数、 `exit!` 等等方法）。
 
-* The names of potentially *dangerous* methods (i.e. methods that
-  modify `self` or the arguments, `exit!` (doesn't run the finalizers
-  like `exit` does), etc.) should end with an exclamation mark if
-  there exists a safe version of that *dangerous* method.
+* 如果存在潜在的*危险*方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行
+  finalizers的 `exit!`，等等）的安全版本，那么*危险*方法的名字应该以惊叹号结尾。
 
 
     ```Ruby
@@ -965,17 +956,17 @@ setting the warn level to 0 via `-W0`).
     ```
 
 
-* 偏好 `map` 胜于 `collect` ， `find` 胜于 `detect` ， `select` 胜于 `find_all` ， `reduce` 胜于 `inject` 以及 `size` 胜于 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
+* 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
 
-* 使用 `flat_map` 胜于使用 `map` + `flatten` 的组合。
+* 倾向使用 `flat_map` 而不是 `map` + `flatten` 的组合。
   这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map` 。
   `flat_map` 将数组变平坦一个层级，而 `flatten` 会将整个数组变平坦。
 
     ```Ruby
-    # bad
+    # 差
     all_songs = users.map(&:songs).flatten.uniq
 
-    # good
+    # 好
     all_songs = users.flat_map(&:songs).uniq
     ```
 
@@ -993,7 +984,7 @@ setting the warn level to 0 via `-W0`).
 
     ```Ruby
     # 差
-    counter += 1 # increments counter by one
+    counter += 1 # 将 counter 加一
     ```
 * 保持现有的注释是最新的。过时的注解比没有注解还差。
 > 好代码就像是好的笑话 - 它不需要解释 <br/>
@@ -1067,13 +1058,13 @@ setting the warn level to 0 via `-W0`).
     end
     ```
 
-* 偏好模块，胜过只有类别方法的类。类别应该只在产生实例是合理的时候使用。
+* 倾向使用模块，而不是只有类别方法的类。类别应该只在产生实例是合理的时候使用。
 
     ```Ruby
     # 差
     class SomeClass
       def self.some_method
-        # body omitted
+        # 省略函数体
       end
 
       def self.some_other_method
@@ -1085,7 +1076,7 @@ setting the warn level to 0 via `-W0`).
       module_function
 
       def some_method
-        # body omitted
+        # 省略函数体
       end
 
       def some_other_method
@@ -1101,11 +1092,11 @@ setting the warn level to 0 via `-W0`).
       extend self
 
       def parse_something(string)
-        # do stuff here
+        # 做一些事
       end
 
       def other_utility_method(number, string)
-        # do some more stuff
+        # 做另一些事
       end
     end
 
@@ -1114,11 +1105,11 @@ setting the warn level to 0 via `-W0`).
       module_function
 
       def parse_something(string)
-        # do stuff here
+        # 做一些事
       end
 
       def other_utility_method(number, string)
-        # do some more stuff
+        # 做另一些事
       end
     end
     ```
@@ -1198,7 +1189,7 @@ setting the warn level to 0 via `-W0`).
     end
     ```
 
-* 偏好[Duck Typing](http://en.wikipedia.org/wiki/Duck_typing)胜于继承。
+* 倾向使用[Duck Typing](http://en.wikipedia.org/wiki/Duck_typing)而不是继承。
 
     ```Ruby
     ## 差
@@ -1254,10 +1245,10 @@ setting the warn level to 0 via `-W0`).
     Parent.print_class_var # => will print "child"
     ```
 
-    如同你所看到的，在类型层级中的所有类其实都共享单独一个类变量。通常情况下应该偏好使用实例变量而不是类变量。
+    如同你所看到的，在类型层级中的所有类其实都共享单独一个类变量。通常情况下应该倾向使用实例变量而不是类变量。
 
 * 依据方法的目的用途指定适当的可见层级(`private` ,`protected` )。别把所有方法都设为 `public` （方法的缺省值）。我们现在是在写 *Ruby* ，不是 *Python* 。
-* 将 `public`, `protected`, `private` 和被应用的方法定义保持一致的缩排。在上下各留一行来强调这个可见性应用于之后的所有方法。）
+* 将 `public`，`protected`，`private` 和被应用的方法定义保持一致的缩排。在上下各留一行来强调这个可见性应用于之后的所有方法。）
 
     ```Ruby
     class SomeClass
@@ -1283,23 +1274,23 @@ setting the warn level to 0 via `-W0`).
     class TestClass
       # 差
       def TestClass.some_method
-        # body omitted
+        # 省略方法体
       end
 
       # 好
       def self.some_other_method
-        # body omitted
+        # 省略方法体
       end
 
       # 也有可能及当你要定义多个
       # singleton时的便利方法
       class << self
         def first_method
-          # body omitted
+          # 省略方法体
         end
 
         def second_method_etc
-          # body omitted
+          # 省略方法体
         end
       end
     end
@@ -1332,20 +1323,20 @@ setting the warn level to 0 via `-W0`).
 * 尽可能使用隐式的 `begin` 区块。
 
     ```Ruby
-    # bad
+    # 差
     def foo
       begin
-        # main logic goes here
+        # 此处放主要逻辑
       rescue
-        # failure handling goes here
+        # 错误处理放在此处
       end
     end
 
-    # good
+    # 好
     def foo
-      # main logic goes here
+      # 此处放主要逻辑
     rescue
-      # failure handling goes here
+      # 错误处理放在此处
     end
     ```
 
@@ -1356,20 +1347,20 @@ setting the warn level to 0 via `-W0`).
     begin
       something_that_might_fail
     rescue IOError
-      # handle IOError
+      # 处理 IOError
     end
 
     begin
       something_else_that_might_fail
     rescue IOError
-      # handle IOError
+      # 处理 IOError
     end
 
     # 好
     def with_io_error_handling
        yield
     rescue IOError
-      # handle IOError
+      # 处理 IOError
     end
 
     with_io_error_handling { something_that_might_fail }
@@ -1386,7 +1377,7 @@ setting the warn level to 0 via `-W0`).
       # 拯救子句完全没有做事
     end
 
-    # bad
+    # 差
     do_something rescue nil
     ```
 
@@ -1477,25 +1468,24 @@ setting the warn level to 0 via `-W0`).
       f.close unless f.nil?
     end
     ```
-* 偏爱使用标准库的异常类胜于导入新的异常类。
+* 倾向使用标准库的异常类而不是导入新的异常类。
 
 ## 集合
 
-* 偏好数组及哈希的字面表示法（除非你需要给构造器传入参数）。
+* 倾向数组及哈希的字面表示法（除非你需要给构造器传入参数）。
 
     ```Ruby
-    # bad
+    # 差
     arr = Array.new
     hash = Hash.new
 
-    # good
+    # 好
     arr = []
     hash = {}
     ```
 
-* Prefer `%w` to the literal array syntax when you need an array of
-words(non-empty strings without spaces and special characters in them).
-Apply this rule only to arrays with two or more elements.
+* 对字面数组语法，当你需要一个单词（没有空格和特殊字符的非空字符串）的数组时，
+  倾向使用 `%w`。仅当数组只有两个及以上元素时才应用这个规则。
 
     ```Ruby
     # 差
@@ -1505,15 +1495,14 @@ Apply this rule only to arrays with two or more elements.
     STATES = %w(draft open closed)
     ```
 
-* Prefer `%i` to the literal array syntax when you need an array of
-symbols(and you don't need to maintain Ruby 1.9 compatibility). Apply
-this rule only to arrays with two or more elements.
+* 对字面数组语法，当你需要一个符号（并且不需要保持 Ruby 1.9 兼容性）的数组时，
+  倾向使用 `%i`。仅当数组只有两个及以上元素时才应用这个规则。
 
     ```Ruby
-    # bad
+    # 差
     STATES = [:draft, :open, :closed]
 
-    # good
+    # 好
     STATES = %i(draft open closed)
     ```
 
@@ -1524,7 +1513,7 @@ this rule only to arrays with two or more elements.
     arr[100] = 1 # 现在你有一个很多 nil 的数组
     ```
 * 当处理独一无二的元素时，使用 `Set` 来替代 `Array` 。 `Set` 实现了不重复的无序数值集合。 `Set`是数组直观的内部操作功能与哈希的快速存取的混合体。
-* 偏好用符号来取代字符串作为哈希的键。
+* 倾向用符号来取代字符串作为哈希的键。
 
     ```Ruby
     # 差
@@ -1548,24 +1537,24 @@ this rule only to arrays with two or more elements.
 * 在处理应该存在的哈希键时，使用`fetch` 。
 
     ```Ruby
-    heroes = { 蝙蝠侠: 'Bruce Wayne', 超人: 'Clark Kent' }
+    heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
     # 差 - 如果我们打错字的话，我们就无法找到对的英雄了
-    heroes[:蝙蝠侠] # => "Bruce Wayne"
-    heroes[:超女] # => nil
+    heroes[:batman] # => "Bruce Wayne"
+    heroes[:supermen] # => nil
 
     # 好 - fetch 会抛出一个 KeyError 来使这个问题明显
-    heroes.fetch(:超女)
+    heroes.fetch(:supermen)
     ```
 
-* Use `fetch` with second argument to set a default value
+* 在使用 `fetch` 时，使用第二个参数设置默认值
 
    ```Ruby
    batman = { name: 'Bruce Wayne', is_evil: false }
 
-   # bad - if we just use || operator with falsy value we won't get the expected result
+   # 差 - 如果我们仅仅使用 || 操作符，那么当值为假时，我们不会得到预期的结果
    batman[:is_evil] || true # => true
 
-   # good - fetch work correctly with falsy values
+   # 好 - fetch 在遇到假值时依然正确
    batman.fetch(:is_evil, true) # => false
    ```
 
@@ -1574,7 +1563,7 @@ this rule only to arrays with two or more elements.
 
 ## 字符串
 
-* 偏好字符串插值（interpolation），而不是字符串连接（concatenation）。
+* 倾向使用字符串插值（interpolation），而不是字符串连接（concatenation）。
 
     ```Ruby
     # 差
@@ -1589,7 +1578,7 @@ this rule only to arrays with two or more elements.
     "#{ user.last_name }, #{ user.first_name }"
     ```
 
-* 当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，偏好单引号的字符串。
+* 当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，倾向使用单引号的字符串。
 
     ```Ruby
     # 差
@@ -1672,13 +1661,13 @@ this rule only to arrays with two or more elements.
     ...
     process meaningful_var
     ```
-* 字符类别只有几个你需要关心的特殊字元：`^`, `-`, `\`, `]`，所以你不用逃脱字元 `.` 或在 `[]` 的中括号。
+* 字符类别只有几个你需要关心的特殊字符：`^`, `-`, `\`, `]`，所以你不用转义字`.` 或 `[]` 的中括号。
 * 小心使用 `^` 与 `$` ，它们匹配的是一行的开始与结束，不是字符串的开始与结束。如果你想要匹配整个字符串，使用 `\A` 与 `\z`。(译注：`\Z` 实为 `/\n?\z/`，使用 `\z` 才能匹配到有含新行的字符串的结束)
 
     ```Ruby
     string = "some injection\nusername"
-    string[/^username$/] # matches
-    string[/\Ausername\z/] # don't match
+    string[/^username$/] # 匹配
+    string[/\Ausername\z/] # 不匹配
     ```
 * 针对复杂的正则表达式，使用 `x` 修饰符。这让它们的可读性更高并且你可以加入有用的注释。只是要小心忽略的空白。
 
@@ -1696,7 +1685,7 @@ this rule only to arrays with two or more elements.
 
 ## 百分比字面
 
-* 使用 `%()` 给需要插值与嵌入双引号的单行字符串。多行字符串，偏好使用 heredocs 。
+* 使用 `%()` 给需要插值与嵌入双引号的单行字符串。多行字符串，倾向使用 heredocs 。
 
     ```Ruby
     # 差（不需要插值）
@@ -1728,27 +1717,27 @@ this rule only to arrays with two or more elements.
     %r(^/blog/2011/(.*)$)
     ```
 * 避免 `%q`, `%Q`, `%x`, `%s` 以及 `%W`。
-* 偏好 `()` 作为所有 `%` 字面的分隔符。
+* 倾向使用 `()` 作为所有 `%` 字面的分隔符。
 
 ## 元编程
 
 * 避免无谓的元编程。
 
-* 写一个函式库时不要在核心类别捣乱（不要替它们打 monkey patch。）
+* 写一个函数库时不要使核心类混乱（不要使用 monkey patch）。
 
-* 偏好区块形式的 `class_eval` 胜于字符串插值(string-interpolated)的形式。
+* 倾向使用区块形式的 `class_eval` 而不是字符串插值(string-interpolated)的形式。
   - 当你使用字符串插值形式时，总是提供 `__FILE__` 及 `__LINE__`，使你的 backtrace 看起来有意义：
 
     ```ruby
     class_eval "def use_relative_model_naming?; true; end", __FILE__, __LINE__
     ```
 
-  - 偏好 `define_method` 胜于 `class_eval{ def ... }`
+  - 倾向使用 `define_method` 而不是 `class_eval{ def ... }`
 
 * 当使用 `class_eval` （或其它的`eval`）搭配字符串插值时，添加一个注解区块，来演示如果做了插值的样子（我从 Rails 代码学来的一个实践）：
 
     ```ruby
-    # 从 activesupport/lib/active_support/core_ext/string/output_safety.rb
+    # activesupport/lib/active_support/core_ext/string/output_safety.rb
     UNSAFE_STRING_METHODS.each do |unsafe_method|
       if 'String'.respond_to?(unsafe_method)
         class_eval <<-EOT, __FILE__, __LINE__ + 1
@@ -1768,7 +1757,7 @@ this rule only to arrays with two or more elements.
   - 确保[也定义了`respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
   - 仅捕捉字首定义良好的方法，像是 `find_by_*` ― 让你的代码愈肯定(assertive)愈好。
   - 在语句的最后调用 `super`
-  - delegate 到确定的，非魔术方法中:
+  - delegate 到确定的、非魔法方法中:
 
     ```ruby
     # 差
@@ -1828,16 +1817,15 @@ this rule only to arrays with two or more elements.
 
 ### RuboCop
 
-[RuboCop](https://github.com/bbatsov/rubocop) is a Ruby code style
-checker based on this style guide. RuboCop already covers a
-significant portion of the Guide, supports both MRI 1.9 and MRI 2.0
-and has good Emacs integration.
+[RuboCop](https://github.com/bbatsov/rubocop) 是一个基于此规范的 Ruby 代码风格
+检查工具。 RuboCop 已经包括了此规范的很大一部分，支持 MRI 1.9 和 MRI 2.0，并且
+有良好的 Emacs 集成。
 
 ### RubyMine
 
-[RubyMine](http://www.jetbrains.com/ruby/)'s code inspections are
-[partially based](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
-on this guide.
+[RubyMine](http://www.jetbrains.com/ruby/)的代码检查
+[部分基于](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
+这份规范。
 
 # 贡献
 
