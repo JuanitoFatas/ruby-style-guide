@@ -240,8 +240,7 @@
     end
     ```
 
-    尽管有好几本 Ruby 的书籍都建议使用第一种风格，但是第二种风格
-    在实践中更为常用（而且颇具争议的是更有可读性）。
+    虽然几本 Ruby 书建议用第一个风格，不过第二个风格在实践中更为常见（并可争议地可读性更高一点）。
 
 * 避免在不需要的时候使用行继续符 (\\) 。实际编码时，尽力避免使用行继续符。
 
@@ -623,7 +622,7 @@
     end
     ```
 
-* 避免使用带有局域变量的 shadowing 方法，除非它们彼此相等。
+* 避免使用带有局部变量的 shadowing 方法，除非它们彼此相等。
 
     ```Ruby
     class Foo
@@ -651,44 +650,16 @@
     end
     ```
 
-* 当赋予缺省值给方法参数时，使用空格围绕 `=` 操作符。
-
-    ```Ruby
-    # 差
-    def some_method(arg1=:default, arg2=nil, arg3=[])
-      # 做些什么...
-    end
-
-    # 好
-    def some_method(arg1 = :default, arg2 = nil, arg3 = [])
-      # 做些什么...
-    end
-    ```
-
-    然而几本 Ruby 书建议第一个风格，第二个风格在实践中更为常见（并可争议地可读性更高一点）。
-
-* 避免在不需要的场合使用续行 `\` 。在实践中，尽量避免使用续行。
-
-    ```Ruby
-    # 差
-    result = 1 - \
-             2
-
-    # 好 (但仍丑的跟地狱一样）
-    result = 1 \
-             - 2
-    ```
-
 * 不要在条件表达式里使用 `=` （赋值）的返回值。
 
     ```Ruby
-    # 差 (+ 一处警告)
+    # 差 (还会有个警告)
     if (v = array.grep(/foo/))
       do_something(v)
       ...
     end
 
-    # 差 (+ 一处警告)
+    # 差 (还会有个警告)
     if v = array.grep(/foo/)
       do_something(v)
       ...
@@ -720,7 +691,7 @@
     ```
 * 避免使用 Perl 风格的特殊变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘而不鼓励使用，除非用于单行脚本。
 
-* 避免在方法名与左括号之间放一个空格。
+* 永远不要在方法名与左括号之间放一个空格。
 
     ```Ruby
     # 差
@@ -729,6 +700,7 @@
     # 好
     f(3 + 2) + 1
     ```
+
 * 如果方法的第一个参数由左括号开始的，则此方法调用应该使用括号。举个例子，如 `f((3+2) + 1)`。
 
 * 总是使用 `-w` 来执行 Ruby 解释器，如果你忘了某个上述的规则，它就会警告你！
@@ -888,8 +860,8 @@
     SOME_CONST = 5
     ```
 
-* 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (即 `Array#empty?` )
-* 有潜在“危险性”的方法，若此 *危险* 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（即：改动 `self` 或参数、 `exit!` 等等方法）。
+* 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (例如： `Array#empty?` )
+* 有潜在 *危险性* 的方法，若此 *危险* 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（例如：改动 `self` 或参数、 `exit!` 等等方法）。
 
 * 如果存在潜在的*危险*方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行
   finalizers的 `exit!`，等等）的安全版本，那么*危险*方法的名字应该以惊叹号结尾。
@@ -946,15 +918,6 @@
       # body omitted
     end
     ```
-* When defining binary operators, name the argument `other`(`<<` and
-  `[]` are exceptions to the rule, since their semantics are different).
-
-    ```Ruby
-    def +(other)
-      # body omitted
-    end
-    ```
-
 
 * 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
 
@@ -984,7 +947,7 @@
 
     ```Ruby
     # 差
-    counter += 1 # 将 counter 加一
+    counter += 1 # 计数器加一
     ```
 * 保持现有的注释是最新的。过时的注解比没有注解还差。
 > 好代码就像是好的笑话 - 它不需要解释 <br/>
@@ -1817,15 +1780,13 @@
 
 ### RuboCop
 
-[RuboCop](https://github.com/bbatsov/rubocop) 是一个基于此规范的 Ruby 代码风格
-检查工具。 RuboCop 已经包括了此规范的很大一部分，支持 MRI 1.9 和 MRI 2.0，并且
-有良好的 Emacs 集成。
+[RuboCop](https://github.com/bbatsov/rubocop) 是一个基于本指南的 Ruby 代码风格检查工具。 RuboCop 涵盖了本指南相当大的部分，支持 MRI 1.9 和 MRI 2.0，而且与 Emacs 整合良好。
 
 ### RubyMine
 
-[RubyMine](http://www.jetbrains.com/ruby/)的代码检查
+[RubyMine](http://www.jetbrains.com/ruby/) 的代码检查是
 [部分基于](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
-这份规范。
+本指南的。
 
 # 贡献
 
