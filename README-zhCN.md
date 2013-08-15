@@ -274,15 +274,6 @@
       Mailer.deliver(to: 'bob@example.com', from: 'us@example.com', subject: 'Important message', body: source.text)
     end
 
-    # 差（一般的缩排）
-    def send_mail(source)
-      Mailer.deliver(
-        to: 'bob@example.com',
-        from: 'us@example.com',
-        subject: 'Important message',
-        body: source.text)
-    end
-
     # 差（两倍缩排）
     def send_mail(source)
       Mailer.deliver(
@@ -299,7 +290,16 @@
                      subject: 'Important message',
                      body: source.text)
     end
-    ```
+	
+    # 好（普通缩排）
+    def send_mail(source)
+      Mailer.deliver(
+        to: 'bob@example.com',
+        from: 'us@example.com',
+        subject: 'Important message',
+        body: source.text)
+    end
+	```
 * 长的常量数字添加下划线来改善可读性
 
     ```Ruby
