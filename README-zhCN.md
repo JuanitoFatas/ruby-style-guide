@@ -456,7 +456,7 @@
     ```
 * 避免多行的 `? : `（三元操作符）；使用 `if/unless` 来取代。
 
-* 偏爱 `if/unless` 修饰符当你有单行的主体。另一个好的方法是使用控制流程的 `and/or`。
+* 单行主体用 `if/unless` 修饰符。另一个好的方法是使用 `&&/||` 控制流程。
 
     ```Ruby
     # 差
@@ -471,7 +471,7 @@
     some_condition and do_something
     ```
 
-* 否定条件偏爱 `unless` 优于 `if`（或是控制流程 `or`）。
+*  否定判断时，`unless`（或控制流程的 `||`） 优于 `if`。
 
     ```Ruby
     # 差
@@ -483,7 +483,7 @@
     # 另一个好方法
     some_condition or do_something
     ```
-* 永远不要使用 `unless` 搭配 `else` 。将它们改写成肯定条件。
+* 永远不要使用 `unless` 和`else` 组合 。将它们改写成肯定条件。
 
     ```Ruby
     # 差
