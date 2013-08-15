@@ -519,7 +519,7 @@
     end
     ```
 
-* 当你有单行主体时，偏爱使用 `while/until` 修饰符。
+* 当你有单行主体时，尽量使用 `while/until` 修饰符。
 
     ```Ruby
     # 差
@@ -531,7 +531,7 @@
     do_something while some_condition
     ```
 
-* 负面条件倾向使用 `until` 而不是 `while` 。
+* 否定条件判断尽量使用 `until` 而不是 `while` 。
 
     ```Ruby
     # 差
@@ -541,7 +541,7 @@
     do_something until some_condition
     ```
 
-* 为循环后测试使用 Kernel#loop 搭配 break 而不是 `begin/end/until` 或者 `begin/end/while`。
+* 循环后条件判断使用 Kernel#loop 和 break， 而不是 `begin/end/until` 或者 `begin/end/while`。
 
    ```Ruby
    # 差
