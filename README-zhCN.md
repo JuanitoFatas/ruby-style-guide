@@ -500,7 +500,7 @@
       puts 'failure'
     end
     ```
-* 不要使用括号围绕 `if/unless/while` 的条件式，除非这条件包含了一个赋值（见下面使用 `=` （一个赋值）的返回值）。
+* 不要使用括号围绕 `if/unless/while` 的条件式。
 
     ```Ruby
     # 差
