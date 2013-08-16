@@ -757,6 +757,17 @@
 	end
 
     ```
+	
+* 用 Proc 而不是 Proc.new 。
+
+	```Ruby
+	# bad
+	p = Proc.new { |n| puts n }
+
+	# good
+	p = proc { |n| puts n }
+	```
+	
 * 未使用的区块参数使用 `_` 。
 
     ```Ruby
