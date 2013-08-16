@@ -827,7 +827,7 @@
     Array(paths).each { |path| do_something(path) }
     ```
 
-* 如果可能，使用范围来替换复杂的逻辑比较。
+* 尽量使用范围或 Comparable#between? 来替换复杂的逻辑比较。
 
     ```Ruby
     # 差
@@ -835,6 +835,10 @@
 
     # 好
     do_something if (1000...2000).include?(x)
+	
+	# 好
+	do_something if x.between?(1000, 2000)
+	
     ```
 
 ## 命名
