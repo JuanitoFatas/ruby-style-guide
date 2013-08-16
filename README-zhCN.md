@@ -841,6 +841,53 @@
 	
     ```
 
+* 尽量用判断方法而不是使用 == 。比较数字除外。
+
+	````Ruby
+	# bad
+	if x % 2 == 0
+	end
+
+	if x % 2 == 1
+	end
+
+	if x == nil
+	end
+
+	# good
+	if x.even?
+	end
+
+	if x.odd?
+	end
+
+	if x.nil?
+	end
+
+	if x.zero?
+	end
+
+	if x == 0
+	end
+	```
+	
+* 避免使用  BEGIN 区块。
+
+* 使用 Kernel#at_exit。永远不要用 END 区块。
+
+	````Ruby
+	# bad
+
+	END { puts 'Goodbye!' }
+
+	# good
+
+	at_exit { puts 'Goodbye!' }
+	···
+	
+* 避免使用 flip-flops。
+
+
 ## 命名
 
 > 程式设计的真正难题是替事物命名及使缓存失效。 <br/>
