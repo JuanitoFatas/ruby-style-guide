@@ -883,7 +883,8 @@
 	# good
 
 	at_exit { puts 'Goodbye!' }
-	···
+	
+	```
 	
 * 避免使用 flip-flops。
 
@@ -927,6 +928,7 @@
     def some_method
       ...
     end
+	
     ```
 
 * 类别与模组使用驼峰式大小写（CamelCase）。（保留类似 HTTP、RFC、XML 这种缩写为大写）
