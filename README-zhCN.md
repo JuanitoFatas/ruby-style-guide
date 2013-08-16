@@ -1,31 +1,31 @@
 # 序幕
 
-> 是风格区分了好和伟大。 <br/>
-> -- Bozhidar Batsov
+> 榜样很重要 <br />
+> --  墨菲警官  / 《机器战警》
 
-作为 Ruby 开发者，有一件总是令我烦心的事 &mdash; Python 开发者有一份好的编程风格参考指南([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。而我们确信风格很重要。我也相信这些好家伙们，像我们这些 Ruby 开发者，应该可以自己写一份这个梦寐以求的文档。
+作为 Ruby 开发者，有件事总是令我烦心 &mdash; Python 开发者有一份好的编程风格参考指南([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像Ruby这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
 
-这份指南开始是作为我们公司内部 Ruby 编程指南(由我所写的)。进行到某个部分时，我决定要把我的成果贡献给广大的 Ruby 社区，而且这个世界需要从另一个公司内部的一点帮助。然而这个世界也可以从由社区制定及策动的一系列 Ruby 编程惯例、实践及风格中受益。
+这份指南开始是作为我们公司内部的 Ruby 编程指南(在下所写的)。后来，我决定要把成果贡献给广大的 Ruby 社区，况且这个世界再多一份公司司内部文件又有何意义。然而由社区制定及策动的一系列 Ruby 编程惯例、实践及风格，确能让世界收益。
 
-在开始写这份指南时，我收到世界上很多优秀 Ruby 社区用户们的反馈。感谢所有的建议及帮助！我们同心协力创造一个能够让每一个 Ruby 开发者受益的资源。
+从编写这份指南开始，我收到了优秀 Ruby 社区的很多用户反馈。感谢所有的建议及帮助！同心协力，我们能创造出让每一个 Ruby 开发者受益的资源。
 
-顺道一提，如果你对 Rails 感兴趣，你可以看看这份互补的 [Ruby on Rails 3 风格指南](https://github.com/bbatsov/rails-style-guide)。
+顺道一提，如果你对 Rails 感兴趣，你可以看看这份 [Ruby on Rails 3 风格指南](https://github.com/bbatsov/rails-style-guide) 作为补充。
 
 # Ruby 风格指南
 
-这份 Ruby 风格指南向你推荐现实世界中的最佳实践，Ruby 程序员如何写出可被别的 Ruby 程序员维护的代码。一份风格指南反映出现实世界中的用法，并带有一个理想，避免已经公认是危险的事物不被人继续使用 –– 不管看起来是多么的好。
+这份 Ruby 风格指南向你推荐实际使用中的最佳实践，Ruby 程序员如何写出可被别的 Ruby 程序员维护的代码。我们只说实际使用中的用法。指南再好，但里面说的过于理想化结果大家拒绝使用或者可能根本没人用，又有何意义。
 
-本指南依照相关规则分成数个小节。我尽力在规则后面说明理由（如果省略的话，我相信理由是显而易见的）。
+本指南依照相关规则分成数个小节。我尽力在规则后面说明理由（如果省略了说明，那是因为其理由显而易见）。
 
-我没有想到所有的规则 &mdash; 他们大致上是基于，我作为一个专业软体工程师的广泛生涯，从 Ruby 社区成员所得到的反馈及建议，和数个高度评价的 Ruby 编程资源，像是 ["Programming Ruby 1.9"](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) 以及 ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
+规则不是我凭空想出来的 &mdash; 绝大部分来自我作为从业多年的职业软件工程师的经验，从 Ruby 社区成员得到的反馈及建议，和几个评价甚高的 Ruby 编程资源，像 ["Programming Ruby 1.9"](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) 以及 ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
 
-本指南仍在完善中 — 某些规则缺乏实例，某些规则没有例子来清楚地演示它们。在最后交付时，将会解决这些议题 — 现在就先把它们记在心理吧。
+本指南仍在完善中 — 某些规则缺乏实例，某些例子也不够清楚。到时候都会解决的 — 放心吧。
 
-你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 来产生本指南的一份 PDF 或 HTML 复本。
+你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 生成本指南的 PDF 或 HTML 版本。
 
-[rubocop](https://github.com/bbatsov/rubocop) 项目会自动检查你的 Ruby 代码是否符合这份 Ruby 风格指南。目前这个项目尚有许多功能缺漏，不足以被正式地使用，欢迎有志之士协助改进。
+[rubocop](https://github.com/bbatsov/rubocop) 项目会自动检查你的 Ruby 代码是否符合这份 Ruby 风格指南。
 
-本指南被翻译成下列语言：
+本指南有以下翻译版本：
 
 * [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
 * [繁體中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
@@ -50,7 +50,7 @@
 
 ## 源代码排版
 
-> 所有风格都又丑又难读，自己的除外。几乎人人都这样想。把 “自己的除外”拿掉，他们或许是对的...
+> 所有风格都又丑又难读，自己的除外。几乎人人都这样想。把 “自己的除外”拿掉，他们或许是对的... <br/>
 > -- Jerry Coffin (论缩排)
 
 * 使用 `UTF-8` 作为源文件的编码。
@@ -103,7 +103,7 @@
     class FooError < StandardError; end
     ```
 
-* 避免使用单行方法。尽管还是有些人喜欢这么用的。但是单行定义很容易出错，因为它在语法上有些古怪。无论如何 - 一个单行方法里的表达式不应该多于 1 个。
+* 定义方法时避免单行写法。尽管还是有些人喜欢这么用的。但是单行定义很容易出错，因为它在语法上有些古怪。无论如何 - 一个单行方法里的表达式不应该多于 1 个。
 
     ```Ruby
     # 差
@@ -519,7 +519,7 @@
     end
     ```
 
-* 当你有单行主体时，偏爱使用 `while/until` 修饰符。
+* 当你有单行主体时，尽量使用 `while/until` 修饰符。
 
     ```Ruby
     # 差
@@ -531,7 +531,7 @@
     do_something while some_condition
     ```
 
-* 负面条件倾向使用 `until` 而不是 `while` 。
+* 否定条件判断尽量使用 `until` 而不是 `while` 。
 
     ```Ruby
     # 差
@@ -541,7 +541,7 @@
     do_something until some_condition
     ```
 
-* 为循环后测试使用 Kernel#loop 搭配 break 而不是 `begin/end/until` 或者 `begin/end/while`。
+* 循环后条件判断使用 Kernel#loop 和 break， 而不是 `begin/end/until` 或者 `begin/end/while`。
 
    ```Ruby
    # 差
@@ -574,6 +574,8 @@
 
     x = Math.sin(y)
     array.delete(e)
+	
+	bowling.score.should == 0
     ```
 
 * 单行区块倾向使用 `{...}` 而不是 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 "控制流程" 及 "方法定义" ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
@@ -673,7 +675,7 @@
       ...
     end
 
-    # 差 (还会有个警告)
+    # 差 (MRI仍会抱怨, 但RuboCop不会)
     if v = array.grep(/foo/)
       do_something(v)
       ...
@@ -702,8 +704,20 @@
 
     # 好
     enabled = true if enabled.nil?
+	
+* 除了在 case 语句中， 不要将 === 当关联操作符用(ruby中叫case equality operator)。因为在 case 语句外使代码令人费解。
+
+	# bad
+	Array === something
+	(1..100) === 7
+	/something/ === some_string
+
+	# good
+	something.is_a?(Array)
+	(1..100).include?(7)
+	some_string =~ /something/
     ```
-* 避免使用 Perl 风格的特殊变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘而不鼓励使用，除非用于单行脚本。
+* 避免使用 Perl 风格的特殊变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。
 
 * 永远不要在方法名与左括号之间放一个空格。
 
@@ -719,17 +733,41 @@
 
 * 总是使用 `-w` 来执行 Ruby 解释器，如果你忘了某个上述的规则，它就会警告你！
 
-* 使用新的 lambda 字面语法。
+* 用新的lambda字面语法定义单行区块，用lambda方法的定义多行区块。
 
     ```Ruby
     # 差
     lambda = lambda { |a, b| a + b }
     lambda.call(1, 2)
+	
 
-    # 好
-    lambda = ->(a, b) { a + b }
-    lambda.(1, 2)
+	# 正确，但看着怪怪的
+	l = ->(a, b) do
+	  tmp = a * 7
+	  tmp * b / 50
+	end
+
+	# 好
+	l = ->(a, b) { a + b }
+	l.call(1, 2)
+
+	l = lambda do |a, b|
+	  tmp = a * 7
+	  tmp * b / 50
+	end
+
     ```
+	
+* 用 Proc 而不是 Proc.new 。
+
+	```Ruby
+	# bad
+	p = Proc.new { |n| puts n }
+
+	# good
+	p = proc { |n| puts n }
+	```
+	
 * 未使用的区块参数使用 `_` 。
 
     ```Ruby
@@ -741,14 +779,13 @@
     ```
 
 * 使用 `$stdout/$stderr/$stdin` 而不是
-  `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，而在 Ruby 中，
-  当你实际需要给常量重新复制（可能是重定向到某个流），只要你这样做你就
-  会从解释器得到一个警告。
+  `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新复制的（可能是重定向到某个流），但
+  解释器会警告。
 
 * 使用 `warn` 而不是 `$stderr.puts`。除了更加清晰简洁，如果你需要的话，
   `warn` 还允许你压制（suppress）警告（通过`-W0`将警告级别设为0）。
 
-* 倾向使用 `sprintf` 而不是相当隐晦的 `String#%` 方法.
+* 倾向使用 `sprintf` 和它的别名 `format` 而不是相当隐晦的 `String#%` 方法.
 
     ```Ruby
     # 差
@@ -758,6 +795,9 @@
     # 好
     sprintf('%d %d', 20, 10)
     # => '20 10'
+	
+	format('%d %d', 20, 10)
+	# => '20 10'
     ```
 
 * 倾向使用 `Array#join` 而不是相当隐晦的使用字符串作参数的 `Array#*`。
@@ -787,7 +827,7 @@
     Array(paths).each { |path| do_something(path) }
     ```
 
-* 如果可能，使用范围来替换复杂的逻辑比较。
+* 尽量使用范围或 Comparable#between? 来替换复杂的逻辑比较。
 
     ```Ruby
     # 差
@@ -795,7 +835,59 @@
 
     # 好
     do_something if (1000...2000).include?(x)
+	
+	# 好
+	do_something if x.between?(1000, 2000)
+	
     ```
+
+* 尽量用判断方法而不是使用 == 。比较数字除外。
+
+	````Ruby
+	# bad
+	if x % 2 == 0
+	end
+
+	if x % 2 == 1
+	end
+
+	if x == nil
+	end
+
+	# good
+	if x.even?
+	end
+
+	if x.odd?
+	end
+
+	if x.nil?
+	end
+
+	if x.zero?
+	end
+
+	if x == 0
+	end
+	```
+	
+* 避免使用  BEGIN 区块。
+
+* 使用 Kernel#at_exit。永远不要用 END 区块。
+
+	````Ruby
+	# bad
+
+	END { puts 'Goodbye!' }
+
+	# good
+
+	at_exit { puts 'Goodbye!' }
+	
+	```
+	
+* 避免使用 flip-flops。
+
 
 ## 命名
 
@@ -836,6 +928,7 @@
     def some_method
       ...
     end
+	
     ```
 
 * 类别与模组使用驼峰式大小写（CamelCase）。（保留类似 HTTP、RFC、XML 这种缩写为大写）
@@ -875,11 +968,10 @@
     ```
 
 * 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (例如： `Array#empty?` )
-* 有潜在 *危险性* 的方法，若此 *危险* 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（例如：改动 `self` 或参数、 `exit!` 等等方法）。
 
-* 如果存在潜在的*危险*方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行
-  finalizers的 `exit!`，等等）的安全版本，那么*危险*方法的名字应该以惊叹号结尾。
+* 有潜在 *危险性* 的方法，若此 *危险* 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（例如：改动 `self` 或参数、 `exit!` （不会向 `exit` 那样运行 finalizers）,等等方法）。
 
+* 如果存在潜在的*危险*方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行 finalizers的 `exit!`，等等）的安全版本，那么*危险*方法的名字应该以惊叹号结尾。
 
     ```Ruby
     # 不好 - 没有对应的安全方法
@@ -925,6 +1017,7 @@
     ```
 
 * 在短的区块使用 `reduce` 时，把参数命名为 `|a, e|` (累加器，元素)
+
 * 在定义二元操作符时，把参数命名为 `other` （`<<` 与 `[]` 是这条规则的例外，因为它们的语义不同）。
 
     ```Ruby
@@ -950,22 +1043,24 @@
 ## 注释
 
 > 良好的代码是最佳的文档。当你要加一个注释时，扪心自问，<br/>
-> "如何改善代码让它不需要注释？" 改善代码然后文档化它们以使之更清楚。<br/>
+> "如何改善代码让它不需要注释？" 改善代码，在写相应文档使之更清楚。<br/>
 > -- Steve McConnell
 
-* 编写自我解释含义的代码然后忽略这一节的其它部分。我是认真的！
+* 编写让人一目了然的代码然后忽略这一节的其它部分。我是认真的！
 * 用英语写注释。
-* 在注释的 `#` 与注释文字之间使用一个空格。
-* 比一个单词长的注释要大写开头并使用标点符号。句号后使用[一个空格](http://en.wikipedia.org/wiki/Sentence_spacing)。
-* 避免冗赘的注释
+* `#` 与注释文字之间使用一个空格。
+* 注释超过一个单词了，应句首大写并使用标点符号。句号后使用[一个空格](http://en.wikipedia.org/wiki/Sentence_spacing)。
+* 避免肤浅的注释
 
     ```Ruby
     # 差
     counter += 1 # 计数器加一
     ```
-* 保持现有的注释是最新的。过时的注解比没有注解还差。
+* 即使更新注释的。过时的注解比没有注解还差。
+
 > 好代码就像是好的笑话 - 它不需要解释 <br/>
 > -- Russ Olsen
+
 * 避免替烂代码写注释。重构代码让它们看起来一目了然。 （要嘛就做，要嘛不做― 不要只是试试看。-- Yoda）
 
 ### 注解
@@ -992,8 +1087,8 @@
 * 使用 `FIXME` 来标记一个需要修复的会引起错误的代码。
 * 使用 `OPTIMIZE` 来标记可能影响性能的缓慢或效率低下的代码。
 * 使用 `HACK` 来标记代码异味，其中包含了可疑的编码实践以及应该需要重构。
-* 使用 `REVIEW` 来标记任何需要审查及确认正常动作的地方。举例来说： `REVIEW: 我们确定用户现在是这么做的吗？ `
-* 如果你觉得恰当的话，可以使用其他定制的注解关键字，但记得把它们文档化在项目的 `README` 或类似的地方。
+* 使用 `REVIEW` 来标记任何需要审查来确认其意图是对的。举例来说： `REVIEW: 我们确定用户现在是这么做的吗？ `
+* 如果你觉得恰当的话，可以使用其他定制的注解关键字，但记得记录在项目的 `README` 或类似文档中。
 
 ## 类与模块
 
@@ -1461,8 +1556,7 @@
     hash = {}
     ```
 
-* 对字面数组语法，当你需要一个单词（没有空格和特殊字符的非空字符串）的数组时，
-  倾向使用 `%w`。仅当数组只有两个及以上元素时才应用这个规则。
+* 创建元素为单词（没有空格和特殊符号）的数组时，用 `%w` 而不是 [] 方法。仅当数组有两个及以上元素时才应用这个规则。
 
     ```Ruby
     # 差
@@ -1489,8 +1583,9 @@
     arr = []
     arr[100] = 1 # 现在你有一个很多 nil 的数组
     ```
-* 当处理独一无二的元素时，使用 `Set` 来替代 `Array` 。 `Set` 实现了不重复的无序数值集合。 `Set`是数组直观的内部操作功能与哈希的快速存取的混合体。
-* 倾向用符号来取代字符串作为哈希的键。
+* 当处理独一无二的元素时，使用 `Set` 来替代 `Array` 。 `Set` 实现了不重复的无序数值集合。 `Set`有像数组类那样直观的方法，还可像哈希中那样快速查找元素。
+
+* 尽量用符号来取代字符串作为哈希的键。
 
     ```Ruby
     # 差
@@ -1534,13 +1629,25 @@
    # 好 - fetch 在遇到假值时依然正确
    batman.fetch(:is_evil, true) # => false
    ```
+   
+* 尽量用 fetch 加区块而不是直接设定默认值
+
+   ```Ruby
+   batman = { name: 'Bruce Wayne' }
+
+   # 差 - 默认值是立即求值
+   batman.fetch(:powers, get_batman_powers) # get_batman_powers需要复杂的计算
+
+   # 好 - 区块是惰性求职，只有当 KeyError 异常时才执行
+   batman.fetch(:powers) { get_batman_powers }
+   ```
 
 * 依赖这个事实， Ruby 1.9 的哈希是有序的。
 * 在遍历一个集合时，不要改动它。
 
 ## 字符串
 
-* 倾向使用字符串插值（interpolation），而不是字符串连接（concatenation）。
+* 尽量使用字符串插值（interpolation），而不是字符串连接（concatenation）。
 
     ```Ruby
     # 差
@@ -1555,7 +1662,7 @@
     "#{ user.last_name }, #{ user.first_name }"
     ```
 
-* 当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，倾向使用单引号的字符串。
+* 当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，尽量使用单引号的字符串。
 
     ```Ruby
     # 差
@@ -1564,6 +1671,15 @@
     # 好
     name = 'Bozhidar'
     ```
+	
+* 必要用 `?x`. 从Ruby 1.9 开始， ?x 和 'x' 是等价的（只包括一个字符的字符串）。
+
+	# bad
+	char = ?c
+
+	# good
+	char = 'c'
+	
 * 别忘了使用 `{}` 来围绕被插入字符串的实例与全局变量。
 
     ```Ruby
@@ -1608,7 +1724,7 @@
 
 ## 正则表达式
 
-> 有些人在面对问题时，不经大脑便认为，「我知道，这里该用正则表达式」。现在问题反倒变成两个了。<br/>
+> 有些人在面对问题时，不经大脑便认为，「我知道，这里该用正则表达式」。现在他要面对两个问题了。<br/>
 > -- Jamie Zawinski
 
 * 如果你只需要在字符串中简单的搜索文字，不要使用正则表达式：`string['text']`
