@@ -704,6 +704,18 @@
 
     # 好
     enabled = true if enabled.nil?
+	
+* 除了在 case 语句中， 不要将 === 当关联操作符用(ruby中叫case equality operator)。因为在 case 语句外使代码令人费解。
+
+	# bad
+	Array === something
+	(1..100) === 7
+	/something/ === some_string
+
+	# good
+	something.is_a?(Array)
+	(1..100).include?(7)
+	some_string =~ /something/
     ```
 * 避免使用 Perl 风格的特殊变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。
 
