@@ -779,9 +779,8 @@
     ```
 
 * 使用 `$stdout/$stderr/$stdin` 而不是
-  `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，而在 Ruby 中，
-  当你实际需要给常量重新复制（可能是重定向到某个流），只要你这样做你就
-  会从解释器得到一个警告。
+  `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新复制的（可能是重定向到某个流），但
+  解释器会警告。
 
 * 使用 `warn` 而不是 `$stderr.puts`。除了更加清晰简洁，如果你需要的话，
   `warn` 还允许你压制（suppress）警告（通过`-W0`将警告级别设为0）。
