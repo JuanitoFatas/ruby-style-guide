@@ -1629,6 +1629,18 @@
    # 好 - fetch 在遇到假值时依然正确
    batman.fetch(:is_evil, true) # => false
    ```
+   
+* 尽量用 fetch 加区块而不是直接设定默认值
+
+   ```Ruby
+   batman = { name: 'Bruce Wayne' }
+
+   # 差 - 默认值是迫切求值
+   batman.fetch(:powers, get_batman_powers) # get_batman_powers需要复杂的计算
+
+   # 好 - 区块是惰性求职，只有当 KeyError 异常时才执行
+   batman.fetch(:powers) { get_batman_powers }
+   ```
 
 * 依赖这个事实， Ruby 1.9 的哈希是有序的。
 * 在遍历一个集合时，不要改动它。
