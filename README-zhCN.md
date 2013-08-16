@@ -727,10 +727,23 @@
     # 差
     lambda = lambda { |a, b| a + b }
     lambda.call(1, 2)
+	
 
-    # 好
-    lambda = ->(a, b) { a + b }
-    lambda.(1, 2)
+	# 正确，但看着怪怪的
+	l = ->(a, b) do
+	  tmp = a * 7
+	  tmp * b / 50
+	end
+
+	# 好
+	l = ->(a, b) { a + b }
+	l.call(1, 2)
+
+	l = lambda do |a, b|
+	  tmp = a * 7
+	  tmp * b / 50
+	end
+
     ```
 * 未使用的区块参数使用 `_` 。
 
