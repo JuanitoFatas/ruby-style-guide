@@ -1635,7 +1635,7 @@
    ```Ruby
    batman = { name: 'Bruce Wayne' }
 
-   # 差 - 默认值是迫切求值
+   # 差 - 默认值是立即求值
    batman.fetch(:powers, get_batman_powers) # get_batman_powers需要复杂的计算
 
    # 好 - 区块是惰性求职，只有当 KeyError 异常时才执行
@@ -1647,7 +1647,7 @@
 
 ## 字符串
 
-* 倾向使用字符串插值（interpolation），而不是字符串连接（concatenation）。
+* 尽量使用字符串插值（interpolation），而不是字符串连接（concatenation）。
 
     ```Ruby
     # 差
