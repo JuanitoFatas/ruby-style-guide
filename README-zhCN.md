@@ -1813,11 +1813,11 @@
     }x
     ```
 
-* 针对复杂的替换，`sub` 或 `gsub` 可以与区块或哈希来使用。
+* 针对复杂的替换，`sub` 或 `gsub` 可以与区块或哈希结合使用。
 
 ## 百分比字面
 
-* 使用 `%()` 给需要插值与嵌入双引号的单行字符串。多行字符串，倾向使用 heredocs 。
+* 需要插值与嵌入双引号的单行字符串使用 `%()` （是%Q的简写）给。多行字符串，最好用 heredocs 。
 
     ```Ruby
     # 差（不需要插值）
@@ -1835,6 +1835,22 @@
     # 好（需要插值、有双引号以及单行）
     %(<tr><td class="name">#{name}</td>)
     ```
+
+* 没有 `'` 和 `"` 的字符串不要使用 `%q` 。除非需要差值，否则普通字符串可读性更好。
+
+    ```Ruby
+    # bad
+    name = %q(Bruce Wayne)
+    time = %q(8 o'clock)
+    question = %q("What did you say?")
+
+    # good
+    name = 'Bruce Wayne'
+    time = "8 o'clock"
+    question = '"What did you say?"'
+    ```
+
+
 * 正则表达式要匹配多于一个的 `/` 字元时，使用 `%r`。
 
     ```Ruby
