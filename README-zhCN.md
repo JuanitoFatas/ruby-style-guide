@@ -1839,19 +1839,19 @@
 * 没有 `'` 和 `"` 的字符串不要使用 `%q` 。除非需要差值，否则普通字符串可读性更好。
 
     ```Ruby
-    # bad
+    # 差
     name = %q(Bruce Wayne)
     time = %q(8 o'clock)
     question = %q("What did you say?")
 
-    # good
+    # 好
     name = 'Bruce Wayne'
     time = "8 o'clock"
     question = '"What did you say?"'
     ```
 
 
-* 正则表达式要匹配多于一个的 `/` 字元时，使用 `%r`。
+* 只有正则表达式要匹配多于一个的 `/` 字元时，使用 `%r`。
 
     ```Ruby
     # 差
@@ -1864,8 +1864,34 @@
     # 好
     %r(^/blog/2011/(.*)$)
     ```
-* 避免 `%q`, `%Q`, `%x`, `%s` 以及 `%W`。
-* 倾向使用 `()` 作为所有 `%` 字面的分隔符。
+
+
+
+* 除非调用的命令中用到了反引号（这种情况不常见），否则不要用 `%x` 。
+
+    ```Ruby
+    # 差
+    date = %x(date)
+
+    # 好
+    date = `date`
+    echo = %x(echo `date`)
+    ```
+
+* 不要用 `%s` 。社区倾向使用
+  `:"some string"` 来创建含有空白的符号。
+
+* 用`%`表示字面量时使用 `()`， `%r`除外。因为 `(` 在正则中比较常用。
+
+    ```Ruby
+    # 差
+    %w[one two three]
+    %q{"Test's king!", John said.}
+
+    # 好
+    %w(one tho three)
+    %q("Test's king!", John said.)
+    ```
 
 ## 元编程
 
