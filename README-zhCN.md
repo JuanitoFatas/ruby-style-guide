@@ -1719,7 +1719,7 @@
     puts "$global = #{$global}"
     ```
 * 当你需要建构庞大的数据块（chunk）时，避免使用 `String#+` 。
-  使用 `String#<<` 来替代。字符串用`<<`连接能就地改变字符串实例，并且永远比 `String#+` 来得快，`String#+` 创造了一堆新的字符串对象。
+  使用 `String#<<` 来替代。`<<`就地改变字符串实例，因此比 `String#+` 来得快。`String#+` 创造了一堆新的字符串对象。
 
     ```Ruby
     # 好也比较快
@@ -1731,6 +1731,17 @@
     end
     ```
 
+* heredocs 中的多行文字会保留前缀空白。因此最好如何缩进的规划。
+
+    ```Ruby
+    code = <<-END.gsub(/^\s+\|/, '')
+      |def test
+      |  some_method
+      |  other_method
+      |end
+    END
+    #=> "def\n  some_method\n  \nother_method\nend"
+    ```
 ## 正则表达式
 
 > 有些人在面对问题时，不经大脑便认为，「我知道，这里该用正则表达式」。现在他要面对两个问题了。<br/>
