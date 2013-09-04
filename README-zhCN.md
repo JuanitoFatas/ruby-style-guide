@@ -290,7 +290,7 @@
                      subject: 'Important message',
                      body: source.text)
     end
-	
+
     # 好（普通缩排）
     def send_mail(source)
       Mailer.deliver(
@@ -366,13 +366,13 @@
 
     # 好
     arr.each { |elem| puts elem }
-	
+
 	# each 创建了新scope
 	> (1..3).each {|i| i }
 	 => 1..3
 	> i
 	NameError: undefined local variable or method `i' for main:Object
-	
+
 	# for 没有创建新scope，内部变量i可以在外部看见！可怕啊！
 	> for i in (1..3)
 	>   i
@@ -443,7 +443,7 @@
     x = !something
     ```
 
-* 用 `&&/||`，别用 `and/or`。 
+* 用 `&&/||`，别用 `and/or`。
 
     ```Ruby
     # 布尔表达式
@@ -574,7 +574,7 @@
 
     x = Math.sin(y)
     array.delete(e)
-	
+
 	bowling.score.should == 0
     ```
 
@@ -704,7 +704,7 @@
 
     # 好
     enabled = true if enabled.nil?
-	
+
 * 除了在 case 语句中， 不要将 === 当关联操作符用(ruby中叫case equality operator)。因为在 case 语句外使代码令人费解。
 
 	# bad
@@ -717,7 +717,16 @@
 	(1..100).include?(7)
 	some_string =~ /something/
     ```
-* 避免使用 Perl 风格的特殊变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。
+* 避免使用 Perl 风格的特殊变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。使用'English'库提供的友好别名。
+
+    ```
+    # bad
+    $:.unshift File.dirname(__FILE__)
+
+    # good
+    require 'English'
+    $LOAD_PATH.unshift File.dirname(__FILE__)
+    ```
 
 * 永远不要在方法名与左括号之间放一个空格。
 
@@ -739,7 +748,7 @@
     # 差
     lambda = lambda { |a, b| a + b }
     lambda.call(1, 2)
-	
+
 
 	# 正确，但看着怪怪的
 	l = ->(a, b) do
@@ -757,7 +766,7 @@
 	end
 
     ```
-	
+
 * 用 Proc 而不是 Proc.new 。
 
 	```Ruby
@@ -767,7 +776,7 @@
 	# good
 	p = proc { |n| puts n }
 	```
-	
+
 * 未使用的区块参数使用 `_` 。
 
     ```Ruby
@@ -795,7 +804,7 @@
     # 好
     sprintf('%d %d', 20, 10)
     # => '20 10'
-	
+
 	format('%d %d', 20, 10)
 	# => '20 10'
     ```
@@ -835,10 +844,10 @@
 
     # 好
     do_something if (1000...2000).include?(x)
-	
+
 	# 好
 	do_something if x.between?(1000, 2000)
-	
+
     ```
 
 * 尽量用判断方法而不是使用 == 。比较数字除外。
@@ -870,7 +879,7 @@
 	if x == 0
 	end
 	```
-	
+
 * 避免使用  BEGIN 区块。
 
 * 使用 Kernel#at_exit。永远不要用 END 区块。
@@ -883,9 +892,9 @@
 	# good
 
 	at_exit { puts 'Goodbye!' }
-	
+
 	```
-	
+
 * 避免使用 flip-flops。
 
 
@@ -928,7 +937,7 @@
     def some_method
       ...
     end
-	
+
     ```
 
 * 类别与模组使用驼峰式大小写（CamelCase）。（保留类似 HTTP、RFC、XML 这种缩写为大写）
@@ -1629,7 +1638,7 @@
    # 好 - fetch 在遇到假值时依然正确
    batman.fetch(:is_evil, true) # => false
    ```
-   
+
 * 尽量用 fetch 加区块而不是直接设定默认值
 
    ```Ruby
@@ -1671,7 +1680,7 @@
     # 好
     name = 'Bozhidar'
     ```
-	
+
 * 必要用 `?x`. 从Ruby 1.9 开始， ?x 和 'x' 是等价的（只包括一个字符的字符串）。
 
 	# bad
@@ -1679,7 +1688,7 @@
 
 	# good
 	char = 'c'
-	
+
 * 别忘了使用 `{}` 来围绕被插入字符串的实例与全局变量。
 
     ```Ruby
