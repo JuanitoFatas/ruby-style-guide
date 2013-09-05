@@ -1614,6 +1614,17 @@
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
+* 用`Hash#key?`。不用`Hash#has_key?`。用`Hash#value?`。不用`Hash#has_value?`。松本提到过已经不推荐使用较长的形式了。
+
+    ```Ruby
+    # 差
+    hash.has_key?(:test)
+    hash.has_value?(value)
+
+    # 好
+    hash.key?(:test)
+    hash.value?(value)
+    ```
 
 * 在处理应该存在的哈希键时，使用`fetch` 。
 
