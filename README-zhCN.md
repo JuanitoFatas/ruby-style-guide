@@ -452,7 +452,7 @@
     end
 
     # 控制流程
-    document.saved? or document.save!
+    document.saved? || document.save!
     ```
 * 避免多行的 `? : `（三元操作符）；使用 `if/unless` 来取代。
 
