@@ -468,7 +468,7 @@
     do_something if some_condition
 
     # 另一个好方法
-    some_condition and do_something
+    some_condition && do_something
     ```
 
 *  否定判断时，`unless`（或控制流程的 `||`） 优于 `if`。
