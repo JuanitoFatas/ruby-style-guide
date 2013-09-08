@@ -7,9 +7,9 @@ One thing has always bothered me as Ruby developer - Python developers
 have a great programming style reference
 ([PEP-8](http://www.python.org/dev/peps/pep-0008/)) and we never got
 an official guide, documenting Ruby coding style and best
-practices. And I do believe that style matters. I also believe that
-such fine fellows, like us Ruby developers, should be quite capable to
-produce this coveted document.
+practices. And I do believe that style matters. I also believe that a
+great hacker community, such as Ruby has, should be quite capable of
+producing this coveted document.
 
 This guide started its life as our internal company Ruby coding guidelines
 (written by yours truly). At some point I decided that the work I was
@@ -109,7 +109,9 @@ Translations of the guide are available in the following languages:
     configuration setting to protect your project from Windows line
     endings creeping in:
 
-        $ git config --global core.autocrlf true
+    ```bash
+    $ git config --global core.autocrlf true
+    ```
 
 * Don't use `;` to separate statements and expressions. As a
   corollary - use one expression per line.
@@ -297,7 +299,7 @@ Translations of the guide are available in the following languages:
     in practice (and arguably a bit more readable).
 
 * Avoid line continuation `\` where not required. In practice, avoid using
-  line continuations at all.
+  line continuations for anything but string concatenation.
 
     ```Ruby
     # bad
@@ -307,6 +309,9 @@ Translations of the guide are available in the following languages:
     # good (but still ugly as hell)
     result = 1 \
              - 2
+
+    long_string = 'First part of the long string' \
+                  ' and second part of the long string'
     ```
 
 * When continuing a chained method invocation on another line keep the `.` on the second line.
@@ -392,7 +397,8 @@ as easy to spot as regular comments.
 ## Syntax
 
 * Use `::` only to reference constants(this includes classes and
-modules). Never use `::` for method invocation.
+modules) and constructors (like `Array()` or `Nokogiri::HTML()`).
+Never use `::` for regular method invocation.
 
     ```Ruby
     # bad
@@ -403,6 +409,7 @@ modules). Never use `::` for method invocation.
     SomeClass.some_method
     some_object.some_method
     SomeModule::SomeClass::SOME_CONST
+    SomeModule::SomeClass()
     ```
 
 * Use `def` with parentheses when there are arguments. Omit the
@@ -444,8 +451,14 @@ modules). Never use `::` for method invocation.
       puts elem
     end
 
+    # note that elem is accessible outside of the for loop
+    elem #=> 3
+
     # good
     arr.each { |elem| puts elem }
+
+    # elem is not accessible outside each's block
+    elem #=> NameError: undefined local variable or method `elem'
     ```
 
 * Never use `then` for multi-line `if/unless`.
@@ -880,9 +893,19 @@ would happen if the current value happened to be `false`.)
     some_string =~ /something/
     ```
 
-* Avoid using Perl-style special variables (like `$0-9`, `$`,
+* Avoid using Perl-style special variables (like `$:`, `$;`,
   etc. ). They are quite cryptic and their use in anything but
-  one-liner scripts is discouraged.
+  one-liner scripts is discouraged. Use the human-friendly
+  aliases provided by the `English` library.
+
+    ```
+    # bad
+    $:.unshift File.dirname(__FILE__)
+
+    # good
+    require 'English'
+    $LOAD_PATH.unshift File.dirname(__FILE__)
+    ```
 
 * Never put a space between a method name and the opening parenthesis.
 
@@ -935,6 +958,22 @@ you if you forget either of the rules above!
     p = proc { |n| puts n }
     ```
 
+* Prefer `proc.call()` over `proc[]` or `proc.()` for both lambdas and procs.
+
+    ```Ruby
+    # bad - looks similar to Enumeration access
+    l = ->(v) { puts v }
+    l[1]
+
+    # also bad - uncommon syntax
+    l = ->(v) { puts v }
+    l.(1)
+
+    # good
+    l = ->(v) { puts v }
+    l.call(1)
+    ```
+
 * Use `_` for unused block parameters.
 
     ```Ruby
@@ -966,7 +1005,15 @@ setting the warn level to 0 via `-W0`).
     sprintf('%d %d', 20, 10)
     # => '20 10'
 
+    # good
+    sprintf('%{first} %{second}', first: 20, second: 10)
+    # => '20 10'
+
     format('%d %d', 20, 10)
+    # => '20 10'
+
+    # good
+    format('%{first} %{second}', first: 20, second: 10)
     # => '20 10'
     ```
 
@@ -1012,6 +1059,37 @@ setting the warn level to 0 via `-W0`).
     do_something if x.between?(1000, 2000)
     ```
 
+* Favor the use of predicate methods to explicit comparisons with
+  `==`. Numeric comparisons are OK.
+
+    ```Ruby
+    # bad
+    if x % 2 == 0
+    end
+
+    if x % 2 == 1
+    end
+
+    if x == nil
+    end
+
+    # good
+    if x.even?
+    end
+
+    if x.odd?
+    end
+
+    if x.nil?
+    end
+
+    if x.zero?
+    end
+
+    if x == 0
+    end
+    ```
+
 * Avoid the use of `BEGIN` blocks.
 
 * Never use `END` blocks. Use `Kernel#at_exit` instead.
@@ -1028,6 +1106,32 @@ setting the warn level to 0 via `-W0`).
 
 * Avoid the use of flip-flops.
 
+* Avoid use of nested conditionals for flow of control.
+  Prefer a guard clause when you can assert invalid data. A guard clause is a conditional
+  statement at the top of a function that bails out as soon as it can.
+
+    ```Ruby
+    # bad
+      def compute_thing(thing)
+        if thing[:foo]
+          update_with_bar(thing)
+          if thing[:foo][:bar]
+            partial_compute(thing)
+          else
+            re_compute(thing)
+          end
+        end
+      end
+
+    # good
+      def compute_thing(thing)
+        return unless thing[:foo]
+        update_with_bar(thing[:foo])
+        return re_compute(thing) unless thing[:foo][:bar]
+        partial_compute(thing)
+      end
+    ```
+
 ## Naming
 
 > The only real difficulties in programming are cache invalidation and
@@ -1037,7 +1141,10 @@ setting the warn level to 0 via `-W0`).
 * Name identifiers in English.
 
     ```Ruby
-    # bad - variable name written in Bulgarian with latin characters
+    # bad - identifier using non-ascii characters
+    заплата = 1_000
+
+    # bad - identifier is a Bulgarian word, written with Latin letters (instead of Cyrillic)
     zaplata = 1_000
 
     # good
@@ -1191,6 +1298,18 @@ setting the warn level to 0 via `-W0`).
     all_songs = users.flat_map(&:songs).uniq
     ```
 
+* Use `reverse_each` instead of `reverse.each`. `reverse_each` doesn't
+  do a new array allocation and that's a good thing.
+
+
+    ```Ruby
+    # bad
+    array.reverse.each { ... }
+
+    # good
+    array.reverse_each { ... }
+    ```
+
 ## Comments
 
 > Good code is its own best documentation. As you're about to add a
@@ -1209,7 +1328,7 @@ setting the warn level to 0 via `-W0`).
 
     ```Ruby
     # bad
-    counter += 1 # increments counter by one
+    counter += 1 # Increments counter by one.
     ```
 
 * Keep existing comments up-to-date. An outdated comment is worse than no comment
@@ -1845,6 +1964,21 @@ this rule only to arrays with two or more elements.
     hash = { one: 1, two: 2, three: 3 }
     ```
 
+* Use `Hash#key?` instead of `Hash#has_key?` and `Hash#value?` instead
+  of `Hash#has_value?`. As noted
+  [here](http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/43765)
+  by Matz, the longer forms are considered deprecated.
+
+    ```Ruby
+    # bad
+    hash.has_key?(:test)
+    hash.has_value?(value)
+
+    # good
+    hash.key?(:test)
+    hash.value?(value)
+    ```
+
 * Use `fetch` when dealing with hash keys that should be present.
 
     ```Ruby
@@ -1856,7 +1990,8 @@ this rule only to arrays with two or more elements.
     # good - fetch raises a KeyError making the problem obvious
     heroes.fetch(:supermann)
     ```
-* Use `fetch` with second argument to use a default value
+
+* Use `fetch` with second argument to use a default value.
 
    ```Ruby
    batman = { name: 'Bruce Wayne', is_evil: false }
@@ -1866,6 +2001,19 @@ this rule only to arrays with two or more elements.
 
    # good - fetch work correctly with falsy values
    batman.fetch(:is_evil, true) # => false
+   ```
+
+* Prefer the use of the block instead of the default value in `fetch`.
+
+   ```Ruby
+   batman = { name: 'Bruce Wayne' }
+
+   # bad - if we use the default value, we eager evaluate it
+   # so it can slow the program down if done multiple times
+   batman.fetch(:powers, get_batman_powers) # get_batman_powers is an expensive call
+
+   # good - blocks are lazy evaluated, so only triggered in case of KeyError exception
+   batman.fetch(:powers) { get_batman_powers }
    ```
 
 * Rely on the fact that as of Ruby 1.9 hashes are ordered.
@@ -1995,14 +2143,29 @@ this rule only to arrays with two or more elements.
     /(?:first|second)/ # good
     ```
 
-* Avoid using $1-9 as it can be hard to track what they contain. Named groups
+* Don't use the cryptic Perl-legacy variables denoting last regexp group matches
+  (`$1`, `$2`, etc). Use `Regexp.last_match[n]` instead.
+
+    ```Ruby
+    /(regexp)/ =~ string
+    ...
+
+    # bad
+    process $1
+
+    # good
+    process Regexp.last_match[1]
+    ```
+
+
+* Avoid using numbered groups as it can be hard to track what they contain. Named groups
   can be used instead.
 
     ```Ruby
     # bad
     /(regexp)/ =~ string
     ...
-    process $1
+    process Regexp.last_match[1]
 
     # good
     /(?<meaningful_var>regexp)/ =~ string
@@ -2106,9 +2269,10 @@ this rule only to arrays with two or more elements.
   `:"some string"` is the preferred way to created a symbol with
   spaces in it.
 
-* Prefer `()` as delimiters for all `%` literals, except `%r`. Given
-  the nature of regexp in many scenarios a less command character than
-  `(` might be a better choice for a delimiter.
+* Prefer `()` as delimiters for all `%` literals, except `%r`. Since
+  braces often appear inside regular expressions in many scenarios a
+  less common character like `{` might be a better choice for a
+  delimiter, depending on the regexp's content.
 
     ```Ruby
     # bad
@@ -2214,6 +2378,7 @@ this rule only to arrays with two or more elements.
 * Avoid `alias` when `alias_method` will do.
 * Use `OptionParser` for parsing complex command line options and
 `ruby -s` for trivial command line options.
+* Prefer `Time.now` over `Time.new` when retrieving the current system time.
 * Code in a functional way, avoiding mutation when that makes sense.
 * Do not mutate arguments unless that is the purpose of the method.
 * Avoid more than three levels of block nesting.
