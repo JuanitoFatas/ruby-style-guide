@@ -1,9 +1,9 @@
 # 序幕
 
 > 榜样很重要 <br />
-> --  墨菲警官  / 《机器战警》
+> ── 墨菲警官  / 《机器战警》
 
-作为 Ruby 开发者，有件事总是令我烦心 &mdash; Python 开发者有一份好的编程风格参考指南([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像Ruby这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
+身为 Ruby 开发者，有件事总是令我烦心 ── Python 开发者有一份好的编程风格参考指南([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像Ruby这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
 
 这份指南开始是作为我们公司内部的 Ruby 编程指南(在下所写的)。后来，我决定要把成果贡献给广大的 Ruby 社区，况且这个世界再多一份公司司内部文件又有何意义。然而由社区制定及策动的一系列 Ruby 编程惯例、实践及风格，确能让世界收益。
 
@@ -705,21 +705,23 @@
     # 好
     enabled = true if enabled.nil?
 
-* 除了在 case 语句中， 不要将 === 当关联操作符用(ruby中叫case equality operator)。因为在 case 语句外使代码令人费解。
+* 避免使用 `case` 语句的 `===` 操作符（case equality operator）。从名称可知，这是 `case` 台面下所用的操作符，在 `ca
 
-	# bad
-	Array === something
-	(1..100) === 7
-	/something/ === some_string
+    ```Ruby
+    # bad
+    Array === something
+    (1..100) === 7
+    /something/ === some_string
 
-	# good
-	something.is_a?(Array)
-	(1..100).include?(7)
-	some_string =~ /something/
+    # good
+    something.is_a?(Array)
+    (1..100).include?(7)
+    some_string =~ /something/
     ```
+
 * 避免使用 Perl 风格的特殊变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。使用'English'库提供的友好别名。
 
-    ```
+    ```Ruby
     # bad
     $:.unshift File.dirname(__FILE__)
 
@@ -2008,13 +2010,11 @@
 
 ### RubyMine
 
-[RubyMine](http://www.jetbrains.com/ruby/) 的代码检查是
-[部分基于](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
-本指南的。
+[RubyMine](http://www.jetbrains.com/ruby/) 的代码检查是[部分基于](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)本指南的。
 
 # 贡献
 
-在本指南所写的每个东西都不是定案。这只是我渴望想与同样对 Ruby 编程风格有兴趣的大家一起工作，以致于最终我们可以替整个 Ruby 社区创造一个有益的资源。
+在本指南所写的每条规则都不是定案。这只是我渴望想与同样对 Ruby 编程风格有兴趣的大家一起工作，以致于最终我们可以替整个 Ruby 社区创造一个有益的资源。
 
 欢迎 open tickets 或 push 一个带有改进的更新请求。在此提前感谢你的帮助！
 
