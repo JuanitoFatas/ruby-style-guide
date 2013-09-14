@@ -1613,7 +1613,7 @@
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
-* 用`Hash#key?`。不用`Hash#has_key?`。用`Hash#value?`。不用`Hash#has_value?`。松本提到过已经不推荐使用较长的形式了。
+* 用 `Hash#key?`。不用 `Hash#has_key?`。用 `Hash#value?`。不用 `Hash#has_value?`。松本提到过已经不推荐使用较长的形式了。
 
     ```Ruby
     # 差
@@ -1625,7 +1625,7 @@
     hash.value?(value)
     ```
 
-* 在处理应该存在的哈希键时，使用`fetch` 。
+* 在处理应该存在的哈希键时，使用 `fetch`。
 
     ```Ruby
     heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
@@ -1649,7 +1649,7 @@
    batman.fetch(:is_evil, true) # => false
    ```
 
-* 尽量用 fetch 加区块而不是直接设定默认值
+* 尽量用 `fetch` 加区块而不是直接设定默认值
 
    ```Ruby
    batman = { name: 'Bruce Wayne' }
@@ -1756,10 +1756,11 @@
     END
     #=> "def\n  some_method\n  \nother_method\nend"
     ```
+
 ## 正则表达式
 
 > 有些人在面对问题时，不经大脑便认为，「我知道，这里该用正则表达式」。现在他要面对两个问题了。<br/>
-> -- Jamie Zawinski
+> ── Jamie Zawinski
 
 * 如果你只需要在字符串中简单的搜索文字，不要使用正则表达式：`string['text']`
 
@@ -1789,8 +1790,6 @@
     # 好
     process Regexp.last_match[1]
     ```
-
-
 
 * 避免使用 `$1-9` 命名分组。因为它们明白他们代表的一丝。使用命名群组来替代。
 
