@@ -723,6 +723,29 @@ Never use `::` for regular method invocation.
     bowling.score.should == 0
     ```
 
+* Omit the outer braces around an implicit options hash.
+
+    ```Ruby
+    # bad
+    user.set({ name: 'John', age: 45, permissions: { read: true } })
+
+    # good
+    User.set(name: 'John', age: 45, permissions: { read: true })
+    ```
+
+* Omit both the outer braces and parentheses for methods that are
+  part of an internal DSL.
+
+    ```Ruby
+    class Person < ActiveRecord::Base
+      # bad
+      validates(:name, { presence: true, length: { within: 1..10 } })
+
+      # good
+      validates :name, presence: true, length: { within: 1..10 }
+    end
+    ```
+
 * Omit parentheses for method calls with no arguments.
 
     ```Ruby
@@ -1979,7 +2002,7 @@ this rule only to arrays with two or more elements.
     hash.value?(value)
     ```
 
-* Use `fetch` when dealing with hash keys that should be present.
+* Use `Hash#fetch` when dealing with hash keys that should be present.
 
     ```Ruby
     heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
@@ -1991,7 +2014,7 @@ this rule only to arrays with two or more elements.
     heroes.fetch(:supermann)
     ```
 
-* Use `fetch` with second argument to use a default value.
+* Introduce default values for hash keys via `Hash#fetch` as opposed to using custom logic.
 
    ```Ruby
    batman = { name: 'Bruce Wayne', is_evil: false }
@@ -2003,7 +2026,7 @@ this rule only to arrays with two or more elements.
    batman.fetch(:is_evil, true) # => false
    ```
 
-* Prefer the use of the block instead of the default value in `fetch`.
+* Prefer the use of the block instead of the default value in `Hash#fetch`.
 
    ```Ruby
    batman = { name: 'Bruce Wayne' }
