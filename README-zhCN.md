@@ -705,7 +705,7 @@
     # 好
     enabled = true if enabled.nil?
 
-* 避免使用 `case` 语句的 `===` 操作符（case equality operator）。从名称可知，这是 `case` 台面下所用的操作符，在 `ca
+* 避免使用 `case` 语句的 `===` 操作符（case equality operator）。从名称可知，这是 `case` 台面下所用的操作符，在 `case` 语句外的场合使用，会产生难以理解的代码。
 
     ```Ruby
     # bad
