@@ -3,13 +3,13 @@
 > 榜样很重要 <br />
 > ── 墨菲警官  / 《机器战警》
 
-身为 Ruby 开发者，有件事总是令我烦心 ── Python 开发者有一份好的编程风格参考指南([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像Ruby这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
+身为 Ruby 开发者，有件事总是令我烦心 ── Python 开发者有一份好的编程风格参考指南([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像 Ruby 这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
 
 这份指南开始是作为我们公司内部的 Ruby 编程指南(在下所写的)。后来，我决定要把成果贡献给广大的 Ruby 社区，况且这个世界再多一份公司司内部文件又有何意义。然而由社区制定及策动的一系列 Ruby 编程惯例、实践及风格，确能让世界收益。
 
 从编写这份指南开始，我收到了优秀 Ruby 社区的很多用户反馈。感谢所有的建议及帮助！同心协力，我们能创造出让每一个 Ruby 开发者受益的资源。
 
-顺道一提，如果你对 Rails 感兴趣，你可以看看这份 [Ruby on Rails 3 风格指南](https://github.com/bbatsov/rails-style-guide) 作为补充。
+顺道一提，如果你对 Rails 感兴趣，你可以看看这份 [Ruby on Rails 3 风格指南](https://github.com/bbatsov/rails-style-guide)作为补充。
 
 # Ruby 风格指南
 
@@ -719,7 +719,7 @@
     some_string =~ /something/
     ```
 
-* 避免使用 Perl 风格的特殊变量（像是 `$0-9`, `$`, 等等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。使用'English'库提供的友好别名。
+* 避免使用 Perl 风格的特殊变量（像是 `$:`、`$;`等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。使用 `English` 库提供的友好别名。
 
     ```Ruby
     # bad
@@ -744,32 +744,30 @@
 
 * 总是使用 `-w` 来执行 Ruby 解释器，如果你忘了某个上述的规则，它就会警告你！
 
-* 用新的lambda字面语法定义单行区块，用lambda方法的定义多行区块。
+* 用新的 lambda 字面语法定义单行区块，用 lambda 方法的定义多行区块。
 
     ```Ruby
     # 差
     lambda = lambda { |a, b| a + b }
     lambda.call(1, 2)
 
+    # 正确，但看着怪怪的
+    l = ->(a, b) do
+    tmp = a * 7
+    tmp * b / 50
+    end
 
-	# 正确，但看着怪怪的
-	l = ->(a, b) do
-	  tmp = a * 7
-	  tmp * b / 50
-	end
+    # 好
+    l = ->(a, b) { a + b }
+    l.call(1, 2)
 
-	# 好
-	l = ->(a, b) { a + b }
-	l.call(1, 2)
-
-	l = lambda do |a, b|
-	  tmp = a * 7
-	  tmp * b / 50
-	end
-
+    l = lambda do |a, b|
+    tmp = a * 7
+    tmp * b / 50
+    end
     ```
 
-* 用 Proc 而不是 Proc.new 。
+* 用 `proc` 而不是 `Proc.new`。
 
 	```Ruby
 	# bad
@@ -789,12 +787,10 @@
     result = hash.map { |_, v| v + 1 }
     ```
 
-* 使用 `$stdout/$stderr/$stdin` 而不是
-  `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新复制的（可能是重定向到某个流），但
-  解释器会警告。
+* 使用 `$stdout/$stderr/$stdin` 而不是 `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新复制的（可能是重定向到某个流），但解释器会警告。
 
 * 使用 `warn` 而不是 `$stderr.puts`。除了更加清晰简洁，如果你需要的话，
-  `warn` 还允许你压制（suppress）警告（通过`-W0`将警告级别设为0）。
+  `warn` 还允许你压制（suppress）警告（通过 `-W0` 将警告级别设为 0）。
 
 * 倾向使用 `sprintf` 和它的别名 `format` 而不是相当隐晦的 `String#%` 方法.
 
@@ -1696,13 +1692,15 @@
     name = 'Bozhidar'
     ```
 
-* 不要用 `?x`. 从Ruby 1.9 开始， ?x 和 'x' 是等价的（只包括一个字符的字符串）。
+* 不要用 `?x`。从 Ruby 1.9 开始， `?x` 和 `'x'` 是等价的（只包括一个字符的字符串）。
 
-	# bad
-	char = ?c
+    ```Ruby
+    # bad
+    char = ?c
 
-	# good
-	char = 'c'
+    # good
+    char = 'c'
+    ```
 
 * 别忘了使用 `{}` 来围绕被插入字符串的实例与全局变量。
 
@@ -1733,6 +1731,7 @@
     # 好
     puts "$global = #{$global}"
     ```
+
 * 当你需要建构庞大的数据块（chunk）时，避免使用 `String#+` 。
   使用 `String#<<` 来替代。`<<`就地改变字符串实例，因此比 `String#+` 来得快。`String#+` 创造了一堆新的字符串对象。
 
