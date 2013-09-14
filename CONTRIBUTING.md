@@ -18,6 +18,8 @@ Yes:
 
 ## 中文請用中文的標點符號。
 
+`.`、`,` 不是中文的句號跟逗號。
+
 ## 請不要更改原文或添加原文裡沒有的內容。
 
 欲添加新內容請至[上游](https://github.com/bbatsov/ruby-style-guide)提交。
@@ -33,6 +35,16 @@ Ruby2.0的`prepend`方法。
 Yes:
 
 Ruby 2.0 的 `prepend` 方法。
+
+## 跟代碼有關的都要用行內代碼包起來
+
+No:
+
+'x'
+
+Yes:
+
+`'x'`
 
 ## 避免一個 Pull Request 裡面包含多個提交。
 
