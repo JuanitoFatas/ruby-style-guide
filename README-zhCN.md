@@ -216,10 +216,11 @@
       song.play
     end
     ```
-* When assigning the result of a conditional expression to a variable, preserve the usual alignment of its branches.
+
+* 当赋值一个条件表达式的结果给一个变量时，保持分支的缩排在同一层。
 
     ```Ruby
-    # bad - pretty convoluted
+    # 差 - 非常复杂
     kind = case year
     when 1850..1889 then 'Blues'
     when 1890..1909 then 'Ragtime'
@@ -235,7 +236,7 @@
       calc_something_else
     end
 
-    # good - it's apparent what's going on
+    # 好 - 结构很清晰
     kind = case year
            when 1850..1889 then 'Blues'
            when 1890..1909 then 'Ragtime'
@@ -251,7 +252,7 @@
                calc_something_else
              end
 
-    # good (and a bit more width efficient)
+    # 好 ( 更宽敞有效 )
     kind =
       case year
       when 1850..1889 then 'Blues'
@@ -329,11 +330,7 @@
       .four
     ```
 
-* 方法参数过长时，将它对齐排列在多行。
-* Align the parameters of a method call if they span more than one
-  line. When aligning parameters is not appropriate due to line-length
-  constraints, single indent for the lines after the first is also
-  acceptable.
+* 方法参数过长时，将它对齐排列在多行。当对齐的参数由于线宽不适合对齐时, 简单的在第一行之后缩进也是可以接受的
 
     ```Ruby
     # 初始（行太长了）
@@ -367,6 +364,7 @@
         body: source.text)
     end
 	```
+
 * 大数字添加下划线来改善可读性
 
     ```Ruby
@@ -396,11 +394,7 @@
 
 ## 语法
 
-* 使用 `::` 引用常量（包括类和模块）。永远不要使用 `::` 来调用方法。
-
-* Use `::` only to reference constants(this includes classes and
-modules) and constructors (like `Array()` or `Nokogiri::HTML()`).
-Never use `::` for regular method invocation.
+* 使用 `::` 引用常量（包括类和模块）和构造器 (比如`Array()` 或者 `Nokogiri::HTML()`)。永远不要使用 `::` 来调用方法。
 
     ```Ruby
     # 差
@@ -439,7 +433,7 @@ Never use `::` for regular method invocation.
      ```
 
 
-* 永远不要使用 `for` ，除非你很清楚为什么。大部分情况应该使用迭代器。 `for` 是由 `each` 实现的。所以你绕弯了，而且 `for` 没有包含一个新的作用域(`each`有 ），因此它区块中定义的变量将会被外部所看到。
+* 永远不要使用 `for` ，除非你很清楚为什么。大部分情况应该使用迭代器。`for` 是由 `each` 实现的。所以你绕弯了，而且 `for` 没有包含一个新的作用域(`each`有 ），因此它区块中定义的变量将会被外部所看到。
 
     ```Ruby
     arr = [1, 2, 3]
@@ -626,10 +620,10 @@ Never use `::` for regular method invocation.
     end
     ```
 
-* Never use `while/until condition do` for multi-line `while/until`.
+* 在多行 `while/until` 中不要使用 `while/until condition do` 。
 
     ```Ruby
-    # bad
+    # 差
     while x > 5 do
       # 此处省略语句体
     end
@@ -638,7 +632,7 @@ Never use `::` for regular method invocation.
       # 此处省略语句体
     end
 
-    # good
+    # 好
     while x > 5
       # 此处省略语句体
     end
@@ -706,30 +700,30 @@ Never use `::` for regular method invocation.
 
 	  bowling.score.should == 0
     ```
-* Omit the outer braces around an implicit options hash.
+
+* 忽略可选哈希参数的外部花括号
 
     ```Ruby
-    # bad
+    # 差
     user.set({ name: 'John', age: 45, permissions: { read: true } })
 
-    # good
+    # 好
     User.set(name: 'John', age: 45, permissions: { read: true })
     ```
 
-* Omit both the outer braces and parentheses for methods that are
-  part of an internal DSL.
+* 如果方法是内部 DSL 的一部分, 那么忽略外层的花括号和圆括号
 
     ```Ruby
     class Person < ActiveRecord::Base
-      # bad
+      # 差
       validates(:name, { presence: true, length: { within: 1..10 } })
 
-      # good
+      # 好
       validates :name, presence: true, length: { within: 1..10 }
     end
     ```
 
-* Omit parentheses for method calls with no arguments.
+* 忽略圆括号如果方法调用不需要参数
 
     ```Ruby
     # bad
@@ -833,11 +827,7 @@ Never use `::` for regular method invocation.
     end
     ```
 
-* 不要在条件表达式里使用 `=` （赋值）的返回值。
-* Don't use the return value of `=` (an assignment) in conditional
-  expressions unless the assignment is wrapped in parentheses. This is
-  a fairly popular idiom among Rubyists that's sometimes referred to as
-  *safe assignment in condition*.
+* 不要在条件表达式里使用 `=` （赋值）的返回值除非条件表达式在圆括号内被赋值。这是一个想当流行的 ruby 方言有时被称为 *safe assignment in condition*
 
     ```Ruby
     # 差 (还会有个警告)
@@ -879,12 +869,12 @@ Never use `::` for regular method invocation.
 * 避免使用 `case` 语句的 `===` 操作符（case equality operator）。从名称可知，这是 `case` 台面下所用的操作符，在 `case` 语句外的场合使用，会产生难以理解的代码。
 
     ```Ruby
-    # bad
+    # 差
     Array === something
     (1..100) === 7
     /something/ === some_string
 
-    # good
+    # 好
     something.is_a?(Array)
     (1..100).include?(7)
     some_string =~ /something/
@@ -948,18 +938,18 @@ Never use `::` for regular method invocation.
 	  p = proc { |n| puts n }
 	  ```
 
-* Prefer `proc.call()` over `proc[]` or `proc.()` for both lambdas and procs.
+* 用 `proc.call()` 而不是 `proc[]` 或 `proc.()`
 
     ```Ruby
-    # bad - looks similar to Enumeration access
+    # 差 - 看上去像枚举访问
     l = ->(v) { puts v }
     l[1]
 
-    # also bad - uncommon syntax
+    # 也不好 - 不常用的语法
     l = ->(v) { puts v }
     l.(1)
 
-    # good
+    # 好
     l = ->(v) { puts v }
     l.call(1)
     ```
@@ -1078,11 +1068,11 @@ Never use `::` for regular method invocation.
 * 使用 `Kernel#at_exit` 。永远不要用 `END` 区块。
 
 	  ````Ruby
-	  # bad
+	  # 差
   
 	  END { puts 'Goodbye!' }
   
-	  # good
+	  # 好
   
 	  at_exit { puts 'Goodbye!' }
   
@@ -1090,12 +1080,12 @@ Never use `::` for regular method invocation.
 
 * 避免使用 flip-flops 。
 
-* Avoid use of nested conditionals for flow of control.
-  Prefer a guard clause when you can assert invalid data. A guard clause is a conditional
-  statement at the top of a function that bails out as soon as it can.
+* 避免使用嵌套的条件来控制流程。
+  使用一个防御从句当你可能断言不合法的数据。一个防御从句是一个在函数顶部的条件声明,这样就能尽快的跳出函数如果数据不合法。
+
 
     ```Ruby
-    # bad
+    # 差
       def compute_thing(thing)
         if thing[:foo]
           update_with_bar(thing)
@@ -1107,7 +1097,7 @@ Never use `::` for regular method invocation.
         end
       end
 
-    # good
+    # 好
       def compute_thing(thing)
         return unless thing[:foo]
         update_with_bar(thing[:foo])
