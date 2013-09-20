@@ -99,8 +99,11 @@
     class FooError < StandardError
     end
 
-    # 好
+    # 勉强可以
     class FooError < StandardError; end
+
+    # 好
+    FooError = Class.new(StandardError)
     ```
 
 * 定义方法时避免单行写法。尽管还是有些人喜欢这么用的。但是单行定义很容易出错，因为它在语法上有些古怪。无论如何 - 一个单行方法里的表达式不应该多于 1 个。
@@ -189,6 +192,19 @@
 * 把 `when` 跟 `case` 缩排在同一层。我知道很多人不同意这一点，但这是 "The Ruby Programming Language" 及 "Programming Ruby" 所使用的风格。
 
     ```Ruby
+    # 差
+    case
+      when song.name == 'Misty'
+        puts 'Not again!'
+      when song.duration > 120
+        puts 'Too long!'
+      when Time.now.hour > 21
+        puts "It's too late"
+      else
+        song.play
+    end
+
+    # 好
     case
     when song.name == 'Misty'
       puts 'Not again!'
@@ -199,7 +215,27 @@
     else
       song.play
     end
+    ```
+* When assigning the result of a conditional expression to a variable, preserve the usual alignment of its branches.
 
+    ```Ruby
+    # bad - pretty convoluted
+    kind = case year
+    when 1850..1889 then 'Blues'
+    when 1890..1909 then 'Ragtime'
+    when 1910..1929 then 'New Orleans Jazz'
+    when 1930..1939 then 'Swing'
+    when 1940..1950 then 'Bebop'
+    else 'Jazz'
+    end
+
+    result = if some_cond
+      calc_something
+    else
+      calc_something_else
+    end
+
+    # good - it's apparent what's going on
     kind = case year
            when 1850..1889 then 'Blues'
            when 1890..1909 then 'Ragtime'
@@ -208,6 +244,30 @@
            when 1940..1950 then 'Bebop'
            else 'Jazz'
            end
+
+    result = if some_cond
+               calc_something
+             else
+               calc_something_else
+             end
+
+    # good (and a bit more width efficient)
+    kind =
+      case year
+      when 1850..1889 then 'Blues'
+      when 1890..1909 then 'Ragtime'
+      when 1910..1929 then 'New Orleans Jazz'
+      when 1930..1939 then 'Swing'
+      when 1940..1950 then 'Bebop'
+      else 'Jazz'
+      end
+
+    result =
+      if some_cond
+        calc_something
+      else
+        calc_something_else
+      end
     ```
 
 * 在 `def` 之间使用空行，并且把方法分成合乎逻辑的段落。
@@ -242,7 +302,7 @@
 
     虽然几本 Ruby 书建议用第一个风格，不过第二个风格在实践中更为常见（并可争议地可读性更高一点）。
 
-* 避免在不需要的时候使用行继续符 (\\) 。实际编码时，尽力避免使用行继续符。
+* 避免在不需要的时候使用行继续符 `\` 。实际编码时，除非用于连接字符串,否则避免在任何情况下使用行继续符。
 
     ```Ruby
     # 差
@@ -252,6 +312,9 @@
     # 好 (但是仍然丑到爆)
     result = 1 \
              - 2
+
+    long_string = 'First part of the long string' \
+                  ' and second part of the long string'
     ```
 
 * 当一个链式方法调用需要在另一行继续时，将 `.` 放在第二行
@@ -267,6 +330,10 @@
     ```
 
 * 方法参数过长时，将它对齐排列在多行。
+* Align the parameters of a method call if they span more than one
+  line. When aligning parameters is not appropriate due to line-length
+  constraints, single indent for the lines after the first is also
+  acceptable.
 
     ```Ruby
     # 初始（行太长了）
@@ -331,6 +398,10 @@
 
 * 使用 `::` 引用常量（包括类和模块）。永远不要使用 `::` 来调用方法。
 
+* Use `::` only to reference constants(this includes classes and
+modules) and constructors (like `Array()` or `Nokogiri::HTML()`).
+Never use `::` for regular method invocation.
+
     ```Ruby
     # 差
     SomeClass::some_method
@@ -340,19 +411,33 @@
     SomeClass.some_method
     some_object.some_method
     SomeModule::SomeClass::SOME_CONST
+    SomeModule::SomeClass()
     ```
 
 * 使用 `def` 时，有参数时使用括号。方法不接受参数时，省略括号。
 
      ```Ruby
+     # 差
+     def some_method()
+       # 此处省略方法体
+     end
+
+     # 好
      def some_method
        # 此处省略方法体
      end
 
+     # 差
+     def some_method_with_arguments arg1, arg2
+       # 此处省略方法体
+     end
+
+     # 好
      def some_method_with_arguments(arg1, arg2)
        # 此处省略方法体
      end
      ```
+
 
 * 永远不要使用 `for` ，除非你很清楚为什么。大部分情况应该使用迭代器。 `for` 是由 `each` 实现的。所以你绕弯了，而且 `for` 没有包含一个新的作用域(`each`有 ），因此它区块中定义的变量将会被外部所看到。
 
@@ -364,22 +449,14 @@
       puts elem
     end
 
+    # 注意 elem 会被外部所看到
+    elem #=> 3
+
     # 好
     arr.each { |elem| puts elem }
 
-	# each 创建了新scope
-	> (1..3).each {|i| i }
-	 => 1..3
-	> i
-	NameError: undefined local variable or method `i' for main:Object
-
-	# for 没有创建新scope，内部变量i可以在外部看见！可怕啊！
-	> for i in (1..3)
-	>   i
-	>   end
-	 => 1..3
-	> i
-	 => 3
+    # elem 不会被外部所看到
+    elem #=> NameError: undefined local variable or method `elem'
     ```
 
 * 永远不要在多行的 `if/unless` 中使用 `then`
@@ -393,6 +470,23 @@
     # 好
     if some_condition
       # 此处省略语句体
+    end
+    ```
+
+* 总是在多行的 `if/unless` 中把条件语句放在同一行
+
+    ```Ruby
+    # 差
+    if
+      some_condition
+      do_something
+      do_something_else
+    end
+
+    # 好
+    if some_condition
+      do_something
+      do_something_else
     end
     ```
 
@@ -445,7 +539,19 @@
 
 * 用 `&&/||`，别用 `and/or`。
 
+* `and` 和 `or` 这两个关键字被禁止使用了。 总是使用 `&&` 和 `||` 来取代。
+
     ```Ruby
+    # 差
+    # 布尔表达式
+    if some_condition and some_other_condition
+      do_something
+    end
+
+    # 控制流程
+    document.saved? or document.save!
+
+    # 好
     # 布尔表达式
     if some_condition && some_other_condition
       do_something
@@ -454,6 +560,7 @@
     # 控制流程
     document.saved? || document.save!
     ```
+
 * 避免多行的 `? : `（三元操作符）；使用 `if/unless` 来取代。
 
 * 单行主体用 `if/unless` 修饰符。另一个好的方法是使用 `&&/||` 控制流程。
@@ -471,19 +578,23 @@
     some_condition && do_something
     ```
 
-*  否定判断时，`unless`（或控制流程的 `||`） 优于 `if`。
+*  否定判断时，`unless`（或控制流程的 `||`） 优于 `if` ( 或使用 `||` 控制流程 )。
 
     ```Ruby
     # 差
     do_something if !some_condition
 
+    # 差
+    do_something if not some_condition
+
     # 好
     do_something unless some_condition
 
     # 另一个好方法
-    some_condition or do_something
+    some_condition || do_something
     ```
-* 永远不要使用 `unless` 和`else` 组合 。将它们改写成肯定条件。
+
+* 永远不要使用 `unless` 和 `else` 组合 。将它们改写成肯定条件。
 
     ```Ruby
     # 差
@@ -500,6 +611,7 @@
       puts 'failure'
     end
     ```
+
 * 不要使用括号围绕 `if/unless/while` 的条件式。
 
     ```Ruby
@@ -512,9 +624,26 @@
     if x > 10
       # 此处省略语句体
     end
+    ```
 
-    # 好
-    if (x = self.next_value)
+* Never use `while/until condition do` for multi-line `while/until`.
+
+    ```Ruby
+    # bad
+    while x > 5 do
+      # 此处省略语句体
+    end
+
+    until x > 5 do
+      # 此处省略语句体
+    end
+
+    # good
+    while x > 5
+      # 此处省略语句体
+    end
+
+    until x > 5
       # 此处省略语句体
     end
     ```
@@ -575,7 +704,45 @@
     x = Math.sin(y)
     array.delete(e)
 
-	bowling.score.should == 0
+	  bowling.score.should == 0
+    ```
+* Omit the outer braces around an implicit options hash.
+
+    ```Ruby
+    # bad
+    user.set({ name: 'John', age: 45, permissions: { read: true } })
+
+    # good
+    User.set(name: 'John', age: 45, permissions: { read: true })
+    ```
+
+* Omit both the outer braces and parentheses for methods that are
+  part of an internal DSL.
+
+    ```Ruby
+    class Person < ActiveRecord::Base
+      # bad
+      validates(:name, { presence: true, length: { within: 1..10 } })
+
+      # good
+      validates :name, presence: true, length: { within: 1..10 }
+    end
+    ```
+
+* Omit parentheses for method calls with no arguments.
+
+    ```Ruby
+    # bad
+    Kernel.exit!()
+    2.even?()
+    fork()
+    'test'.upcase()
+
+    # good
+    Kernel.exit!
+    2.even?
+    fork
+    'test'.upcase
     ```
 
 * 单行区块倾向使用 `{...}` 而不是 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 "控制流程" 及 "方法定义" ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
@@ -599,10 +766,10 @@
     # 好
     names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
     ```
+
     某些人会争论多行串连时，使用 `{...}` 看起来还可以，但他们应该扪心自问— 这样代码真的可读吗？难道不能把区块内容取出来放到小巧的方法里吗？
 
 * 避免在不需要控制流程的场合时使用 `return` 。
-
 
     ```Ruby
     # 差
@@ -644,7 +811,7 @@
     class Foo
       attr_accessor :options
 
-      # ok
+      # 勉强可以
       def initialize(options)
         self.options = options
         # 此处 options 和 self.options 都是等价的
@@ -667,6 +834,10 @@
     ```
 
 * 不要在条件表达式里使用 `=` （赋值）的返回值。
+* Don't use the return value of `=` (an assignment) in conditional
+  expressions unless the assignment is wrapped in parentheses. This is
+  a fairly popular idiom among Rubyists that's sometimes referred to as
+  *safe assignment in condition*.
 
     ```Ruby
     # 差 (还会有个警告)
@@ -762,20 +933,36 @@
     l.call(1, 2)
 
     l = lambda do |a, b|
-    tmp = a * 7
-    tmp * b / 50
+      tmp = a * 7
+      tmp * b / 50
     end
     ```
 
 * 用 `proc` 而不是 `Proc.new`。
 
-	```Ruby
-	# bad
-	p = Proc.new { |n| puts n }
+	  ```Ruby
+	  # bad
+	  p = Proc.new { |n| puts n }
+  
+	  # good
+	  p = proc { |n| puts n }
+	  ```
 
-	# good
-	p = proc { |n| puts n }
-	```
+* Prefer `proc.call()` over `proc[]` or `proc.()` for both lambdas and procs.
+
+    ```Ruby
+    # bad - looks similar to Enumeration access
+    l = ->(v) { puts v }
+    l[1]
+
+    # also bad - uncommon syntax
+    l = ->(v) { puts v }
+    l.(1)
+
+    # good
+    l = ->(v) { puts v }
+    l.call(1)
+    ```
 
 * 未使用的区块参数使用 `_` 。
 
@@ -803,8 +990,16 @@
     sprintf('%d %d', 20, 10)
     # => '20 10'
 
-	format('%d %d', 20, 10)
-	# => '20 10'
+    # 好
+    sprintf('%{first} %{second}', first: 20, second: 10)
+    # => '20 10'
+
+    format('%d %d', 20, 10)
+    # => '20 10'
+
+    # 好
+    format('%{first} %{second}', first: 20, second: 10)
+    # => '20 10'
     ```
 
 * 倾向使用 `Array#join` 而不是相当隐晦的使用字符串作参数的 `Array#*`。
@@ -843,58 +1038,83 @@
     # 好
     do_something if (1000...2000).include?(x)
 
-	# 好
-	do_something if x.between?(1000, 2000)
+	  # 好
+	  do_something if x.between?(1000, 2000)
 
     ```
 
 * 尽量用判断方法而不是使用 == 。比较数字除外。
 
-	````Ruby
-	# bad
-	if x % 2 == 0
-	end
+    ````Ruby
+    # 差
+    if x % 2 == 0
+    end
 
-	if x % 2 == 1
-	end
+    if x % 2 == 1
+    end
 
-	if x == nil
-	end
+    if x == nil
+    end
 
-	# good
-	if x.even?
-	end
+    # 好
+    if x.even?
+    end
 
-	if x.odd?
-	end
+    if x.odd?
+    end
 
-	if x.nil?
-	end
+    if x.nil?
+    end
 
-	if x.zero?
-	end
+    if x.zero?
+    end
 
-	if x == 0
-	end
-	```
+    if x == 0
+    end
+	  ```
 
-* 避免使用  BEGIN 区块。
+* 避免使用 `BEGIN` 区块。
 
-* 使用 Kernel#at_exit。永远不要用 END 区块。
+* 使用 `Kernel#at_exit` 。永远不要用 `END` 区块。
 
-	````Ruby
-	# bad
+	  ````Ruby
+	  # bad
+  
+	  END { puts 'Goodbye!' }
+  
+	  # good
+  
+	  at_exit { puts 'Goodbye!' }
+  
+	  ```
 
-	END { puts 'Goodbye!' }
+* 避免使用 flip-flops 。
 
-	# good
+* Avoid use of nested conditionals for flow of control.
+  Prefer a guard clause when you can assert invalid data. A guard clause is a conditional
+  statement at the top of a function that bails out as soon as it can.
 
-	at_exit { puts 'Goodbye!' }
+    ```Ruby
+    # bad
+      def compute_thing(thing)
+        if thing[:foo]
+          update_with_bar(thing)
+          if thing[:foo][:bar]
+            partial_compute(thing)
+          else
+            re_compute(thing)
+          end
+        end
+      end
 
-	```
-
-* 避免使用 flip-flops。
-
+    # good
+      def compute_thing(thing)
+        return unless thing[:foo]
+        update_with_bar(thing[:foo])
+        return re_compute(thing) unless thing[:foo][:bar]
+        partial_compute(thing)
+      end
+    ```
 
 ## 命名
 
