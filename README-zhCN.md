@@ -71,9 +71,9 @@
 * 使用 Unix 风格的换行符(BSD/Solaris/Linux/OSX 的用户不用担心，Windows 用户要格外小心。)
     * 如果你使用 Git ，可用下面这个配置，来保护你的项目不被 Windows 的换行符干扰：
 
-      ```bash
-      $ git config --global core.autocrlf true
-      ```
+    ```bash
+    $ git config --global core.autocrlf true
+    ```
 
 * 不使用`;`隔开语句和表达式。推论 - 一行一条语句。
 
@@ -410,27 +410,24 @@
 
 * 使用 `def` 时，有参数时使用括号。方法不接受参数时，省略括号。
 
-     ```Ruby
-     # 差
-     def some_method()
-       # 此处省略方法体
-     end
-
-     # 好
-     def some_method
-       # 此处省略方法体
-     end
-
-     # 差
-     def some_method_with_arguments arg1, arg2
-       # 此处省略方法体
-     end
-
-     # 好
-     def some_method_with_arguments(arg1, arg2)
-       # 此处省略方法体
-     end
-     ```
+    ```Ruby
+    # 差
+    def some_method()
+      # 此处省略方法体
+    
+    # 好
+    def some_method
+      # 此处省略方法体
+    
+    # 差
+    def some_method_with_arguments arg1, arg2
+      # 此处省略方法体
+    
+    # 好
+    def some_method_with_arguments(arg1, arg2)
+      # 此处省略方法体
+    end
+    ```
 
 
 * 永远不要使用 `for` ，除非你很清楚为什么。大部分情况应该使用迭代器。`for` 是由 `each` 实现的。所以你绕弯了，而且 `for` 没有包含一个新的作用域(`each`有 ），因此它区块中定义的变量将会被外部所看到。
@@ -698,7 +695,7 @@
     x = Math.sin(y)
     array.delete(e)
 
-	  bowling.score.should == 0
+    bowling.score.should == 0
     ```
 
 * 忽略可选哈希参数的外部花括号
@@ -930,13 +927,12 @@
 
 * 用 `proc` 而不是 `Proc.new`。
 
-	  ```Ruby
-	  # bad
-	  p = Proc.new { |n| puts n }
-  
-	  # good
-	  p = proc { |n| puts n }
-	  ```
+    ```Ruby
+    # bad
+    p = Proc.new { |n| puts n     
+    # good
+    p = proc { |n| puts n }
+    ```
 
 * 用 `proc.call()` 而不是 `proc[]` 或 `proc.()`
 
@@ -1029,7 +1025,7 @@
     do_something if (1000...2000).include?(x)
 
 	  # 好
-	  do_something if x.between?(1000, 2000)
+    do_something if x.between?(1000, 2000)
 
     ```
 
@@ -1068,13 +1064,13 @@
 * 使用 `Kernel#at_exit` 。永远不要用 `END` 区块。
 
 	  ````Ruby
-	  # 差
+    # 差
   
-	  END { puts 'Goodbye!' }
+    END { puts 'Goodbye!' }
   
-	  # 好
+    # 好
   
-	  at_exit { puts 'Goodbye!' }
+    at_exit { puts 'Goodbye!' }
   
 	  ```
 
