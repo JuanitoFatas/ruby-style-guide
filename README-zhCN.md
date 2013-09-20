@@ -54,7 +54,7 @@
 > -- Jerry Coffin (论缩排)
 
 * 使用 `UTF-8` 作为源文件的编码。
-* 每个缩排层级使用两个 ** 空格 **。不要使用硬 tab。
+* 每个缩排层级使用两个**空格**。不要使用硬 tab。
 
     ```Ruby
     # 差 - 四个空格
@@ -68,7 +68,7 @@
     end
     ```
 
-* 使用 Unix 风格的换行符 (BSD/Solaris/Linux/OSX 的用户不用担心，Windows 用户要格外小心。)
+* 使用 Unix 风格的换行符（BSD/Solaris/Linux/OSX 的用户不用担心，Windows 用户要格外小心。）
     * 如果你使用 Git ，可用下面这个配置，来保护你的项目不被 Windows 的换行符干扰：
 
     ```bash
@@ -414,15 +414,15 @@
     # 差
     def some_method()
       # 此处省略方法体
-    
+
     # 好
     def some_method
       # 此处省略方法体
-    
+
     # 差
     def some_method_with_arguments arg1, arg2
       # 此处省略方法体
-    
+
     # 好
     def some_method_with_arguments(arg1, arg2)
       # 此处省略方法体
@@ -929,7 +929,7 @@
 
     ```Ruby
     # bad
-    p = Proc.new { |n| puts n     
+    p = Proc.new { |n| puts n
     # good
     p = proc { |n| puts n }
     ```
@@ -1065,13 +1065,13 @@
 
 	  ````Ruby
     # 差
-  
+
     END { puts 'Goodbye!' }
-  
+
     # 好
-  
+
     at_exit { puts 'Goodbye!' }
-  
+
 	  ```
 
 * 避免使用 flip-flops 。
