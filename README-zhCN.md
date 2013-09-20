@@ -17,9 +17,9 @@
 
 本指南依照相关规则分成数个小节。我尽力在规则后面说明理由（如果省略了说明，那是因为其理由显而易见）。
 
-规则不是我凭空想出来的 &mdash; 绝大部分来自我作为从业多年的职业软件工程师的经验，从 Ruby 社区成员得到的反馈及建议，和几个评价甚高的 Ruby 编程资源，像 ["Programming Ruby 1.9"](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) 以及 ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
+规则不是我凭空想出来的 ─ 绝大部分来自我作为从业多年的职业软件工程师的经验，从 Ruby 社区成员得到的反馈及建议，和几个评价甚高的 Ruby 编程资源，像 ["Programming Ruby 1.9"](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) 以及 ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
 
-本指南仍在完善中 — 某些规则缺乏实例，某些例子也不够清楚。到时候都会解决的 — 放心吧。
+本指南仍在完善中 ─ 某些规则缺乏实例，某些例子也不够清楚。到时候都会解决的 — 放心吧。
 
 你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 生成本指南的 PDF 或 HTML 版本。
 
@@ -51,10 +51,10 @@
 ## 源代码排版
 
 > 所有风格都又丑又难读，自己的除外。几乎人人都这样想。把 “自己的除外”拿掉，他们或许是对的... <br/>
-> -- Jerry Coffin (论缩排)
+> ── Jerry Coffin (论缩排)
 
 * 使用 `UTF-8` 作为源文件的编码。
-* 每个缩排层级使用两个**空格**。不要使用硬 tab。
+* 每个缩排层级使用两个 **空格**。不要使用硬 tab。
 
     ```Ruby
     # 差 - 四个空格
