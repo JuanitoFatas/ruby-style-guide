@@ -3,13 +3,13 @@
 > 榜样很重要 <br />
 > ── 墨菲警官  / 《机器战警》
 
-身为 Ruby 开发者，有件事总是令我烦心 ── Python 开发者有一份好的编程风格参考指南([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像 Ruby 这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
+身为 Ruby 开发者，有件事总是令我烦心 ── Python 开发者有一份好的编程风格参考指南 ([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像 Ruby 这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
 
-这份指南开始是作为我们公司内部的 Ruby 编程指南(在下所写的)。后来，我决定要把成果贡献给广大的 Ruby 社区，况且这个世界再多一份公司司内部文件又有何意义。然而由社区制定及策动的一系列 Ruby 编程惯例、实践及风格，确能让世界收益。
+这份指南开始是作为我们公司内部的 Ruby 编程指南 (在下所写的)。后来，我决定要把成果贡献给广大的 Ruby 社区，况且这个世界再多一份公司司内部文件又有何意义。然而由社区制定及策动的一系列 Ruby 编程惯例、实践及风格，确能让世界收益。
 
 从编写这份指南开始，我收到了优秀 Ruby 社区的很多用户反馈。感谢所有的建议及帮助！同心协力，我们能创造出让每一个 Ruby 开发者受益的资源。
 
-顺道一提，如果你对 Rails 感兴趣，你可以看看这份 [Ruby on Rails 3 风格指南](https://github.com/bbatsov/rails-style-guide)作为补充。
+顺道一提，如果你对 Rails 感兴趣，你可以看看这份 [Ruby on Rails 3 风格指南](https://github.com/bbatsov/rails-style-guide) 作为补充。
 
 # Ruby 风格指南
 
@@ -54,7 +54,7 @@
 > -- Jerry Coffin (论缩排)
 
 * 使用 `UTF-8` 作为源文件的编码。
-* 每个缩排层级使用两个 **空格**。不要使用硬tab。
+* 每个缩排层级使用两个 ** 空格 **。不要使用硬 tab。
 
     ```Ruby
     # 差 - 四个空格
@@ -68,14 +68,14 @@
     end
     ```
 
-* 使用 Unix 风格的换行符(BSD/Solaris/Linux/OSX 的用户不用担心，Windows 用户要格外小心。)
+* 使用 Unix 风格的换行符 (BSD/Solaris/Linux/OSX 的用户不用担心，Windows 用户要格外小心。)
     * 如果你使用 Git ，可用下面这个配置，来保护你的项目不被 Windows 的换行符干扰：
 
     ```bash
     $ git config --global core.autocrlf true
     ```
 
-* 不使用`;`隔开语句和表达式。推论 - 一行一条语句。
+* 不使用 `;` 隔开语句和表达式。推论 - 一行一条语句。
 
     ```Ruby
     # 差
@@ -89,7 +89,7 @@
     puts 'foo'
     puts 'bar'
 
-    puts 'foo', 'bar' # 仅对puts试用
+    puts 'foo', 'bar' # 仅对 puts 试用
     ```
 
 * 对于没有成员的类，尽可能使用单行类定义。
@@ -134,7 +134,7 @@
     def no_op; end
     ```
 
-* 操作符前后的空格。在逗号 `,` 、冒号 `:` 及分号 `;` 之后，在 `{`前后，在`}`之前。
+* 操作符前后的空格。在逗号 `,` 、冒号 `:` 及分号 `;` 之后，在 `{` 前后，在 `}` 之前。
   Ruby 解释器（大部分情况下）忽略空格。但要写出可读性高的代码，正确试用空格是关键。
 
     ```Ruby
@@ -165,7 +165,7 @@
     {one: 1, two: 2}
     ```
 
-    第一个种风格稍微更具可读性（而且有争议的是，一般在Ruby社区里更受欢迎）。
+    第一个种风格稍微更具可读性（而且有争议的是，一般在 Ruby 社区里更受欢迎）。
     第二种风格具有可为块和哈希字面量添加可视化的差别的优点。
     无论你选哪一种都行 - 但是最好保持一致。
 
@@ -303,7 +303,7 @@
 
     虽然几本 Ruby 书建议用第一个风格，不过第二个风格在实践中更为常见（并可争议地可读性更高一点）。
 
-* 避免在不需要的时候使用行继续符 `\` 。实际编码时，除非用于连接字符串,否则避免在任何情况下使用行继续符。
+* 避免在不需要的时候使用行继续符 `\` 。实际编码时，除非用于连接字符串, 否则避免在任何情况下使用行继续符。
 
     ```Ruby
     # 差
@@ -378,7 +378,7 @@
 * 使用 RDoc 以及它的惯例来撰写 API 文档。注解区块及 `def` 不要用空行隔开。
 * 每一行限制在 80 个字符内。
 * 避免行尾空格。
-* 不要使用区块注释。它们不能由空白引导（=begin必须顶头开始），并且不如普通注释容易辨认。
+* 不要使用区块注释。它们不能由空白引导（=begin 必须顶头开始），并且不如普通注释容易辨认。
 
     ```Ruby
     # 差
@@ -394,7 +394,7 @@
 
 ## 语法
 
-* 使用 `::` 引用常量（包括类和模块）和构造器 (比如`Array()` 或者 `Nokogiri::HTML()`)。永远不要使用 `::` 来调用方法。
+* 使用 `::` 引用常量（包括类和模块）和构造器 (比如 `Array()` 或者 `Nokogiri::HTML()`)。永远不要使用 `::` 来调用方法。
 
     ```Ruby
     # 差
@@ -430,7 +430,7 @@
     ```
 
 
-* 永远不要使用 `for` ，除非你很清楚为什么。大部分情况应该使用迭代器。`for` 是由 `each` 实现的。所以你绕弯了，而且 `for` 没有包含一个新的作用域(`each`有 ），因此它区块中定义的变量将会被外部所看到。
+* 永远不要使用 `for` ，除非你很清楚为什么。大部分情况应该使用迭代器。`for` 是由 `each` 实现的。所以你绕弯了，而且 `for` 没有包含一个新的作用域 (`each` 有 ），因此它区块中定义的变量将会被外部所看到。
 
     ```Ruby
     arr = [1, 2, 3]
@@ -678,7 +678,7 @@
    end
    ```
 
-* 忽略围绕方法参数的括号，如内部 DSL (如：Rake, Rails, RSpec)，Ruby 中带有 "关键字" 状态的方法（如：`attr_reader`, `puts`）以及属性存取方法。所有其他的方法呼叫使用括号围绕参数。
+* 忽略围绕方法参数的括号，如内部 DSL (如：Rake, Rails, RSpec)，Ruby 中带有 " 关键字 " 状态的方法（如：`attr_reader`, `puts`）以及属性存取方法。所有其他的方法呼叫使用括号围绕参数。
 
     ```Ruby
     class Person
@@ -736,7 +736,7 @@
     'test'.upcase
     ```
 
-* 单行区块倾向使用 `{...}` 而不是 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 "控制流程" 及 "方法定义" ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
+* 单行区块倾向使用 `{...}` 而不是 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 " 控制流程 " 及 " 方法定义 " ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
 
     ```Ruby
     names = ['Bozhidar', 'Steve', 'Sarah']
@@ -833,7 +833,7 @@
       ...
     end
 
-    # 差 (MRI仍会抱怨, 但RuboCop不会)
+    # 差 (MRI 仍会抱怨, 但 RuboCop 不会)
     if v = array.grep(/foo/)
       do_something(v)
       ...
@@ -877,7 +877,7 @@
     some_string =~ /something/
     ```
 
-* 避免使用 Perl 风格的特殊变量（像是 `$:`、`$;`等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。使用 `English` 库提供的友好别名。
+* 避免使用 Perl 风格的特殊变量（像是 `$:`、`$;` 等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。使用 `English` 库提供的友好别名。
 
     ```Ruby
     # bad
@@ -1077,7 +1077,7 @@
 * 避免使用 flip-flops 。
 
 * 避免使用嵌套的条件来控制流程。
-  使用一个防御从句当你可能断言不合法的数据。一个防御从句是一个在函数顶部的条件声明,这样就能尽快的跳出函数如果数据不合法。
+  使用一个防御从句当你可能断言不合法的数据。一个防御从句是一个在函数顶部的条件声明, 这样就能尽快的跳出函数如果数据不合法。
 
 
     ```Ruby
@@ -1182,9 +1182,9 @@
 
 * 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (例如： `Array#empty?` )
 
-* 有潜在 *危险性* 的方法，若此 *危险* 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（例如：改动 `self` 或参数、 `exit!` （不会向 `exit` 那样运行 finalizers）,等等方法）。
+* 有潜在 * 危险性 * 的方法，若此 * 危险 * 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（例如：改动 `self` 或参数、 `exit!` （不会向 `exit` 那样运行 finalizers）, 等等方法）。
 
-* 如果存在潜在的*危险*方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行 finalizers的 `exit!`，等等）的安全版本，那么*危险*方法的名字应该以惊叹号结尾。
+* 如果存在潜在的 * 危险 * 方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行 finalizers 的 `exit!`，等等）的安全版本，那么 * 危险 * 方法的名字应该以惊叹号结尾。
 
     ```Ruby
     # 不好 - 没有对应的安全方法
@@ -1256,13 +1256,13 @@
 ## 注释
 
 > 良好的代码是最佳的文档。当你要加一个注释时，扪心自问，<br/>
-> "如何改善代码让它不需要注释？" 改善代码，再写相应文档使之更清楚。<br/>
+> " 如何改善代码让它不需要注释？" 改善代码，再写相应文档使之更清楚。<br/>
 > -- Steve McConnell
 
 * 编写让人一目了然的代码然后忽略这一节的其它部分。我是认真的！
 * 用英语写注释。
 * `#` 与注释文字之间使用一个空格。
-* 注释超过一个单词了，应句首大写并使用标点符号。句号后使用[一个空格](http://en.wikipedia.org/wiki/Sentence_spacing)。
+* 注释超过一个单词了，应句首大写并使用标点符号。句号后使用 [一个空格](http://en.wikipedia.org/wiki/Sentence_spacing)。
 * 避免肤浅的注释
 
     ```Ruby
@@ -1284,7 +1284,7 @@
 
     ```Ruby
     def bar
-      # FIXME: 这在v3.2.1 版本之后会异常崩溃，或许与
+      # FIXME: 这在 v3.2.1 版本之后会异常崩溃，或许与
       #   BarBazUtil 的版本更新有关
       baz(:quux)
     end
@@ -1400,8 +1400,8 @@
     end
     ```
 
-* 当设计类型层级时，确认它们符合[Liskov 替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。
-* 尽可能让你的类型越[SOLID](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design\))越好。
+* 当设计类型层级时，确认它们符合 [Liskov 替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。
+* 尽可能让你的类型越 [SOLID](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design\)) 越好。
 * 永远替类型提供一个适当的 `to_s` 方法给来表示领域模型。
 
     ```Ruby
@@ -1475,7 +1475,7 @@
     end
     ```
 
-* 倾向使用[Duck Typing](http://en.wikipedia.org/wiki/Duck_typing)而不是继承。
+* 倾向使用 [Duck Typing](http://en.wikipedia.org/wiki/Duck_typing) 而不是继承。
 
     ```Ruby
     ## 差
@@ -1513,7 +1513,7 @@
     end
     ```
 
-* 由于类变量在继承中产生的 "讨厌的" 行为，避免使用类变量( `@@` )。
+* 由于类变量在继承中产生的 " 讨厌的 " 行为，避免使用类变量 ( `@@` )。
 
     ```Ruby
     class Parent
@@ -1533,7 +1533,7 @@
 
     如同你所看到的，在类型层级中的所有类其实都共享单独一个类变量。通常情况下应该倾向使用实例变量而不是类变量。
 
-* 依据方法的目的用途指定适当的可见层级(`private` ,`protected` )。别把所有方法都设为 `public` （方法的缺省值）。我们现在是在写 *Ruby* ，不是 *Python* 。
+* 依据方法的目的用途指定适当的可见层级 (`private` ,`protected` )。别把所有方法都设为 `public` （方法的缺省值）。我们现在是在写 *Ruby* ，不是 *Python* 。
 * 将 `public`，`protected`，`private` 和被应用的方法定义保持一致的缩排。在上下各留一行来强调这个可见性应用于之后的所有方法。）
 
     ```Ruby
@@ -1554,7 +1554,7 @@
     end
     ```
 
-* 使用`def self.method` 来定义 singleton 方法。由于类的名称不会重复的关系，这使得代码更容易重构。
+* 使用 `def self.method` 来定义 singleton 方法。由于类的名称不会重复的关系，这使得代码更容易重构。
 
     ```Ruby
     class TestClass
@@ -1569,7 +1569,7 @@
       end
 
       # 也有可能及当你要定义多个
-      # singleton时的便利方法
+      # singleton 时的便利方法
       class << self
         def first_method
           # 省略方法体
@@ -1626,7 +1626,7 @@
     end
     ```
 
-* 通过 *contingency* 方法 (一个由 Avdi Grimm 创造的词)来减少 `begin` 区块的使用。
+* 通过 *contingency* 方法 (一个由 Avdi Grimm 创造的词) 来减少 `begin` 区块的使用。
 
     ```Ruby
     # 差
@@ -1706,8 +1706,8 @@
 
     # 好
     begin
-      # 一个不明确的rescue子句捕捉的是StandardError，
-      #   而不是许多编程者所设想的Exception。
+      # 一个不明确的 rescue 子句捕捉的是 StandardError，
+      #   而不是许多编程者所设想的 Exception。
     rescue => e
       # 异常处理
     end
@@ -1796,7 +1796,7 @@
     arr = []
     arr[100] = 1 # 现在你有一个很多 nil 的数组
     ```
-* 当处理的元素没有重复时，使用 `Set` 来替代 `Array` 。 `Set` 实现了无序、无重复值的集合。 `Set`的方法同数组类一样直观，还可像哈希中那样快速查找元素。
+* 当处理的元素没有重复时，使用 `Set` 来替代 `Array` 。 `Set` 实现了无序、无重复值的集合。 `Set` 的方法同数组类一样直观，还可像哈希中那样快速查找元素。
 
 * 尽量用符号来取代字符串作为哈希的键。
 
@@ -1861,7 +1861,7 @@
    batman = { name: 'Bruce Wayne' }
 
    # 差 - 默认值是立即求值
-   batman.fetch(:powers, get_batman_powers) # get_batman_powers需要复杂的计算
+   batman.fetch(:powers, get_batman_powers) # get_batman_powers 需要复杂的计算
 
    # 好 - 区块是惰性求职，只有当 KeyError 异常时才执行
    batman.fetch(:powers) { get_batman_powers }
@@ -1939,7 +1939,7 @@
     ```
 
 * 当你需要建构庞大的数据块（chunk）时，避免使用 `String#+` 。
-  使用 `String#<<` 来替代。`<<`就地改变字符串实例，因此比 `String#+` 来得快。`String#+` 创造了一堆新的字符串对象。
+  使用 `String#<<` 来替代。`<<` 就地改变字符串实例，因此比 `String#+` 来得快。`String#+` 创造了一堆新的字符串对象。
 
     ```Ruby
     # 好也比较快
@@ -2011,7 +2011,7 @@
     process meaningful_var
     ```
 
-* 字符类别只有几个你需要关心的特殊字符：`^`, `-`, `\`, `]`，所以你不用转义字`.` 或 `[]` 的中括号。
+* 字符类别只有几个你需要关心的特殊字符：`^`, `-`, `\`, `]`，所以你不用转义字 `.` 或 `[]` 的中括号。
 
 * 小心使用 `^` 与 `$` ，它们匹配的是一行的开始与结束，不是字符串的开始与结束。如果你想要匹配整个字符串，使用 `\A` 与 `\z`。(译注：`\Z` 实为 `/\n?\z/`，使用 `\z` 才能匹配到有含新行的字符串的结束)
 
@@ -2036,12 +2036,12 @@
 
 ## 百分比字面
 
-* 需要插值与嵌入双引号的单行字符串使用 `%()` （是%Q的简写）给。多行字符串，最好用 heredocs 。
+* 需要插值与嵌入双引号的单行字符串使用 `%()` （是 %Q 的简写）给。多行字符串，最好用 heredocs 。
 
     ```Ruby
     # 差（不需要插值）
     %(<div class="text">Some text</div>)
-    # 应该使用'<div class="text">Some text</div>'
+    # 应该使用 '<div class="text">Some text</div>'
 
     # 差（没有双引号）
     %(This is #{quality} style)
@@ -2100,7 +2100,7 @@
 * 不要用 `%s` 。社区倾向使用
   `:"some string"` 来创建含有空白的符号。
 
-* 用`%`表示字面量时使用 `()`， `%r`除外。因为 `(` 在正则中比较常用。
+* 用 `%` 表示字面量时使用 `()`， `%r` 除外。因为 `(` 在正则中比较常用。
 
     ```Ruby
     # 差
@@ -2118,7 +2118,7 @@
 
 * 写一个函数库时不要使核心类混乱（不要使用 monkey patch）。
 
-* 倾向使用区块形式的 `class_eval` 而不是字符串插值(string-interpolated)的形式。
+* 倾向使用区块形式的 `class_eval` 而不是字符串插值 (string-interpolated) 的形式。
   - 当你使用字符串插值形式时，总是提供 `__FILE__` 及 `__LINE__`，使你的 backtrace 看起来有意义：
 
     ```ruby
@@ -2127,7 +2127,7 @@
 
   - 倾向使用 `define_method` 而不是 `class_eval{ def ... }`
 
-* 当使用 `class_eval` （或其它的`eval`）搭配字符串插值时，添加一个注解区块，来演示如果做了插值的样子（我从 Rails 代码学来的一个实践）：
+* 当使用 `class_eval` （或其它的 `eval`）搭配字符串插值时，添加一个注解区块，来演示如果做了插值的样子（我从 Rails 代码学来的一个实践）：
 
     ```ruby
     # activesupport/lib/active_support/core_ext/string/output_safety.rb
@@ -2147,8 +2147,8 @@
     end
     ```
 * 元编程避免使用 `method_missing`。会让 Backtraces 变得很凌乱；行为没有列在 `#methods` 里；拼错的方法调用可能默默的工作（`nukes.launch_state = false`)。考虑使用 delegation, proxy, 或是 `define_method` 来取代。如果你必须使用 `method_missing`，
-  - 确保[也定义了`respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
-  - 仅捕捉字首定义良好的方法，像是 `find_by_*` ― 让你的代码愈肯定(assertive)愈好。
+  - 确保 [也定义了 `respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
+  - 仅捕捉字首定义良好的方法，像是 `find_by_*` ― 让你的代码愈肯定 (assertive) 愈好。
   - 在语句的最后调用 `super`
   - delegate 到确定的、非魔法方法中:
 
@@ -2178,7 +2178,7 @@
 
 * `ruby -w` 写安全的代码。
 * 避免使用哈希作为可选参数。这个方法是不是做太多事了？（对象初始器是本规则的例外）
-* 避免方法长于 10 行代码（LOC）。理想上，大部分的方法会小于5行。空行不算进LOC里。
+* 避免方法长于 10 行代码（LOC）。理想上，大部分的方法会小于 5 行。空行不算进 LOC 里。
 * 避免参数列表长于三或四个参数。
 * 如果你真的需要“全局”方法，把它们加到 Kernel 并设为私有的。
 * 使用模块变量代替全局变量。
@@ -2198,7 +2198,7 @@
     ```
 * 当 `alias_method` 可以做到时，避免使用 `alias` 。
 * 使用 `OptionParser` 来解析复杂的命令行选项及 `ruby -s` 来处理琐碎的命令行选项。
-* 用函数式的方法编程，在有意义的情况下避免赋值(mutation)。
+* 用函数式的方法编程，在有意义的情况下避免赋值 (mutation)。
 * 不要改变参数，除非那是方法的目的。
 * 避免超过三层的区块嵌套。
 * 保持一致性。在理想的世界里，遵循这些准则。
@@ -2214,7 +2214,7 @@
 
 ### RubyMine
 
-[RubyMine](http://www.jetbrains.com/ruby/) 的代码检查是[部分基于](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)本指南的。
+[RubyMine](http://www.jetbrains.com/ruby/) 的代码检查是 [部分基于](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections) 本指南的。
 
 # 贡献
 
