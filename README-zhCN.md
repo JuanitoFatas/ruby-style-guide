@@ -930,13 +930,12 @@
 
 * 用 `proc` 而不是 `Proc.new`。
 
-	  ```Ruby
-	  # bad
-	  p = Proc.new { |n| puts n }
-  
-	  # good
-	  p = proc { |n| puts n }
-	  ```
+    ```Ruby
+    # bad
+    p = Proc.new { |n| puts n     
+    # good
+    p = proc { |n| puts n }
+    ```
 
 * 用 `proc.call()` 而不是 `proc[]` 或 `proc.()`
 
@@ -1029,7 +1028,7 @@
     do_something if (1000...2000).include?(x)
 
 	  # 好
-	  do_something if x.between?(1000, 2000)
+    do_something if x.between?(1000, 2000)
 
     ```
 
@@ -1068,13 +1067,13 @@
 * 使用 `Kernel#at_exit` 。永远不要用 `END` 区块。
 
 	  ````Ruby
-	  # 差
+    # 差
   
-	  END { puts 'Goodbye!' }
+    END { puts 'Goodbye!' }
   
-	  # 好
+    # 好
   
-	  at_exit { puts 'Goodbye!' }
+    at_exit { puts 'Goodbye!' }
   
 	  ```
 
