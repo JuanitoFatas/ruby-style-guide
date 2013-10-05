@@ -929,7 +929,7 @@
 
     ```Ruby
     # bad
-    p = Proc.new { |n| puts n
+    p = Proc.new { |n| puts n }
     # good
     p = proc { |n| puts n }
     ```
@@ -960,7 +960,7 @@
     result = hash.map { |_, v| v + 1 }
     ```
 
-* 使用 `$stdout/$stderr/$stdin` 而不是 `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新复制的（可能是重定向到某个流），但解释器会警告。
+* 使用 `$stdout/$stderr/$stdin` 而不是 `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新赋值的（可能是重定向到某个流），但解释器会警告。
 
 * 使用 `warn` 而不是 `$stderr.puts`。除了更加清晰简洁，如果你需要的话，
   `warn` 还允许你压制（suppress）警告（通过 `-W0` 将警告级别设为 0）。
@@ -1414,7 +1414,7 @@
       end
 
       def to_s
-        "#{@first_name #@last_name"}
+        "#{@first_name #@last_name}"
       end
     end
     ```
@@ -2055,7 +2055,7 @@
     %(<tr><td class="name">#{name}</td>)
     ```
 
-* 没有 `'` 和 `"` 的字符串不要使用 `%q` 。除非需要差值，否则普通字符串可读性更好。
+* 没有 `'` 和 `"` 的字符串不要使用 `%q` 。除非需要插值，否则普通字符串可读性更好。
 
     ```Ruby
     # 差
