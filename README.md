@@ -238,6 +238,16 @@ Translations of the guide are available in the following languages:
     [1, 2, 3].length
     ```
 
+* No space after `!`.
+
+    ```Ruby
+    # bad
+    ! something
+
+    # good
+    !something
+    ```
+
 * Indent `when` as deep as `case`. I know that many would disagree
   with this one, but it's the style established in both "The Ruby
   Programming Language" and "Programming Ruby".
@@ -322,8 +332,8 @@ Translations of the guide are available in the following languages:
       end
     ```
 
-* Use empty lines between `def`s and to break up a method into logical
-  paragraphs.
+* Use empty lines between method definitions and also to break up a method into logical
+  paragraphs internally.
 
     ```Ruby
     def some_method
@@ -421,6 +431,25 @@ Translations of the guide are available in the following languages:
         body: source.text
       )
     end
+    ```
+
+* Align the elements of array literals spanning multiple lines.
+
+    ```Ruby
+    # bad - single indent
+    menu_item = ["Spam", "Spam", "Spam", "Spam", "Spam", "Spam", "Spam", "Spam",
+      "Baked beans", "Spam", "Spam", "Spam", "Spam", "Spam"]
+
+    # good
+    menu_item = [
+      "Spam", "Spam", "Spam", "Spam", "Spam", "Spam", "Spam", "Spam",
+      "Baked beans", "Spam", "Spam", "Spam", "Spam", "Spam"
+    ]
+
+    # good
+    menu_item =
+      ["Spam", "Spam", "Spam", "Spam", "Spam", "Spam", "Spam", "Spam",
+       "Baked beans", "Spam", "Spam", "Spam", "Spam", "Spam"]
     ```
 
 * Add underscores to large numeric literals to improve their readability.
@@ -603,6 +632,27 @@ Never use `::` for regular method invocation.
 
     # good
     x = !something
+    ```
+
+* Avoid the use of `!!`.
+
+    ```Ruby
+    # bad
+    x = 'test'
+    # obscure nil check
+    if !!x
+      # body omitted
+    end
+
+    x = false
+    # double negation is useless on booleans
+    !!x # => false
+
+    # good
+    x = 'test'
+    if !x.nil?
+      # body omitted
+    end
     ```
 
 * The `and` and `or` keywords are banned. It's just not worth
@@ -1789,6 +1839,29 @@ in *Ruby* now, not in *Python*.
     end
     ```
 
+* Don't specify `RuntimeError` explicitly in the two argument version of `fail/raise`.
+
+    ```Ruby
+    # bad
+    fail RuntimeError, 'message'
+
+    # good - signals a RuntimeError by default
+    fail 'message'
+    ```
+
+* Prefer supplying an exception class and a message as two separate
+  arguments to `fail/raise`, instead of an exception instance.
+
+    ```Ruby
+    # bad
+    fail SomeException.new('message')
+    # Note that there is no way to do `fail SomeException.new('message'), backtrace`.
+
+    # good
+    fail SomeException, 'message'
+    # Consistent with `fail SomeException, 'message', backtrace`.
+    ```
+
 * Never return from an `ensure` block. If you explicitly return from a
   method inside an `ensure` block, the return will take precedence over
   any exception being raised, and the method will return as if no
@@ -2198,7 +2271,7 @@ this rule only to arrays with two or more elements.
       |  other_method
       |end
     END
-    #=> "def\n  some_method\n  \nother_method\nend"
+    #=> "def test\n  some_method\n  other_method\nend\n"
     ```
 
 ## Regular Expressions
