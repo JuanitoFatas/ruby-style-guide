@@ -181,7 +181,7 @@
 
     第一种风格极为流行，一般其他人都会建议你坚持这种风格。
     第二种风格有些更具可读性（虽然颇具争议）。
-    正如哈系那样 - 选一种风格并且保持一致。
+    正如哈希那样 - 选一种风格并且保持一致。
 
 * `(` 、 `[` 之后， `]` 、 `)` 之前，不要有空格。
 
@@ -824,7 +824,7 @@
     end
     ```
 
-* 不要在条件表达式里使用 `=` （赋值）的返回值除非条件表达式在圆括号内被赋值。这是一个想当流行的 ruby 方言有时被称为 *safe assignment in condition*
+* 不要在条件表达式里使用 `=` （赋值）的返回值除非条件表达式在圆括号内被赋值。这是一个相当流行的 ruby 方言，有时被称为 *safe assignment in condition*。
 
     ```Ruby
     # 差 (还会有个警告)
@@ -929,7 +929,7 @@
 
     ```Ruby
     # bad
-    p = Proc.new { |n| puts n
+    p = Proc.new { |n| puts n }
     # good
     p = proc { |n| puts n }
     ```
@@ -960,7 +960,7 @@
     result = hash.map { |_, v| v + 1 }
     ```
 
-* 使用 `$stdout/$stderr/$stdin` 而不是 `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新复制的（可能是重定向到某个流），但解释器会警告。
+* 使用 `$stdout/$stderr/$stdin` 而不是 `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新赋值的（可能是重定向到某个流），但解释器会警告。
 
 * 使用 `warn` 而不是 `$stderr.puts`。除了更加清晰简洁，如果你需要的话，
   `warn` 还允许你压制（suppress）警告（通过 `-W0` 将警告级别设为 0）。
@@ -1414,7 +1414,7 @@
       end
 
       def to_s
-        "#{@first_name #@last_name"}
+        "#{@first_name #@last_name}"
       end
     end
     ```
@@ -2055,7 +2055,7 @@
     %(<tr><td class="name">#{name}</td>)
     ```
 
-* 没有 `'` 和 `"` 的字符串不要使用 `%q` 。除非需要差值，否则普通字符串可读性更好。
+* 没有 `'` 和 `"` 的字符串不要使用 `%q` 。除非需要插值，否则普通字符串可读性更好。
 
     ```Ruby
     # 差
