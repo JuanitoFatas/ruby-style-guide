@@ -68,7 +68,7 @@
     end
     ```
 
-* 使用 Unix 风格的换行符（BSD/Solaris/Linux/OSX 的用户不用担心，Windows 用户要格外小心。）
+* 使用 Unix 风格的换行符。（BSD/Solaris/Linux/OSX 的用户不用担心，Windows 用户要格外小心。）
     * 如果你使用 Git ，可用下面这个配置，来保护你的项目不被 Windows 的换行符干扰：
 
     ```bash
@@ -89,7 +89,7 @@
     puts 'foo'
     puts 'bar'
 
-    puts 'foo', 'bar' # 仅对 puts 试用
+    puts 'foo', 'bar' # 仅对 puts 使用
     ```
 
 * 对于没有成员的类，尽可能使用单行类定义。
@@ -135,7 +135,7 @@
     ```
 
 * 操作符前后的空格。在逗号 `,` 、冒号 `:` 及分号 `;` 之后，在 `{` 前后，在 `}` 之前。
-  Ruby 解释器（大部分情况下）忽略空格。但要写出可读性高的代码，正确试用空格是关键。
+  Ruby 解释器（大部分情况下）忽略空格。但要写出可读性高的代码，正确使用空格是关键。
 
     ```Ruby
     sum = 1 + 2
@@ -318,7 +318,7 @@
                   ' and second part of the long string'
     ```
 
-* 当一个链式方法调用需要在另一行继续时，将 `.` 放在第二行
+* 当一个链式方法调用需要在另一行继续时，将 `.` 放在第二行。
 
     ```Ruby
     # 差 - 为了理解第二行需要去查阅第一行
@@ -330,7 +330,7 @@
       .four
     ```
 
-* 方法参数过长时，将它对齐排列在多行。当对齐的参数由于线宽不适合对齐时, 简单的在第一行之后缩进也是可以接受的
+* 方法参数过长时，将它对齐排列在多行。当对齐的参数由于线宽不适合对齐时, 简单的在第一行之后缩进也是可以接受的。
 
     ```Ruby
     # 初始（行太长了）
@@ -363,9 +363,9 @@
         subject: 'Important message',
         body: source.text)
     end
-	```
+  ```
 
-* 大数字添加下划线来改善可读性
+* 大数字添加下划线来改善可读性。
 
     ```Ruby
     # 差 - 有几个零？
@@ -450,7 +450,7 @@
     elem #=> NameError: undefined local variable or method `elem'
     ```
 
-* 永远不要在多行的 `if/unless` 中使用 `then`
+* 永远不要在多行的 `if/unless` 中使用 `then`。
 
     ```Ruby
     # 差
@@ -464,7 +464,7 @@
     end
     ```
 
-* 总是在多行的 `if/unless` 中把条件语句放在同一行
+* 总是在多行的 `if/unless` 中把条件语句放在同一行。
 
     ```Ruby
     # 差
@@ -518,7 +518,7 @@
 
 * 永远不要使用 `when x: ...`。参考前一个规则。
 
-* 使用 `!` 替代 `not`.
+* 使用 `!` 替代 `not`。
 
     ```Ruby
     # 差 - 因为操作符有优先级，需要用括号。
@@ -585,7 +585,7 @@
     some_condition || do_something
     ```
 
-* 永远不要使用 `unless` 和 `else` 组合 。将它们改写成肯定条件。
+* 永远不要使用 `unless` 和 `else` 组合。将它们改写成肯定条件。
 
     ```Ruby
     # 差
@@ -661,7 +661,7 @@
     do_something until some_condition
     ```
 
-* 循环后条件判断使用 Kernel#loop 和 break， 而不是 `begin/end/until` 或者 `begin/end/while`。
+* 循环后条件判断使用 `Kernel#loop` 和 `break`，而不是 `begin/end/until` 或者 `begin/end/while`。
 
    ```Ruby
    # 差
@@ -678,7 +678,7 @@
    end
    ```
 
-* 忽略围绕方法参数的括号，如内部 DSL (如：Rake, Rails, RSpec)，Ruby 中带有 " 关键字 " 状态的方法（如：`attr_reader`, `puts`）以及属性存取方法。所有其他的方法呼叫使用括号围绕参数。
+* 忽略围绕方法参数的括号，如内部 DSL (如：Rake, Rails, RSpec)，Ruby 中带有 " 关键字 " 状态的方法（如：`attr_reader`，`puts`）以及属性存取方法。所有其他的方法呼叫使用括号围绕参数。
 
     ```Ruby
     class Person
@@ -698,7 +698,7 @@
     bowling.score.should == 0
     ```
 
-* 忽略可选哈希参数的外部花括号
+* 忽略可选哈希参数的外部花括号。
 
     ```Ruby
     # 差
@@ -708,7 +708,7 @@
     User.set(name: 'John', age: 45, permissions: { read: true })
     ```
 
-* 如果方法是内部 DSL 的一部分, 那么忽略外层的花括号和圆括号
+* 如果方法是内部 DSL 的一部分，那么忽略外层的花括号和圆括号。
 
     ```Ruby
     class Person < ActiveRecord::Base
@@ -720,7 +720,7 @@
     end
     ```
 
-* 忽略圆括号如果方法调用不需要参数
+* 如果方法调用不需要参数，那么忽略圆括号。
 
     ```Ruby
     # bad
@@ -736,7 +736,7 @@
     'test'.upcase
     ```
 
-* 单行区块倾向使用 `{...}` 而不是 `do..end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 " 控制流程 " 及 " 方法定义 " ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
+* 单行区块倾向使用 `{...}` 而不是 `do...end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 " 控制流程 " 及 " 方法定义 " ，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
 
     ```Ruby
     names = ['Bozhidar', 'Steve', 'Sarah']
@@ -824,7 +824,7 @@
     end
     ```
 
-* 不要在条件表达式里使用 `=` （赋值）的返回值除非条件表达式在圆括号内被赋值。这是一个相当流行的 ruby 方言，有时被称为 *safe assignment in condition*。
+* 不要在条件表达式里使用 `=` （赋值）的返回值，除非条件表达式在圆括号内被赋值。这是一个相当流行的 ruby 方言，有时被称为 *safe assignment in condition*。
 
     ```Ruby
     # 差 (还会有个警告)
@@ -847,7 +847,7 @@
     end
     ```
 
-* 放心地使用 `||=` 来初始化变量
+* 放心地使用 `||=` 来初始化变量。
 
     ```Ruby
     # 仅在 name 为 nil 或 false 时，把名字设为 Bozhidar。
@@ -902,7 +902,7 @@
 
 * 总是使用 `-w` 来执行 Ruby 解释器，如果你忘了某个上述的规则，它就会警告你！
 
-* 用新的 lambda 字面语法定义单行区块，用 lambda 方法的定义多行区块。
+* 用新的 lambda 字面语法定义单行区块，用 lambda 方法定义多行区块。
 
     ```Ruby
     # 差
@@ -934,7 +934,7 @@
     p = proc { |n| puts n }
     ```
 
-* 用 `proc.call()` 而不是 `proc[]` 或 `proc.()`
+* 用 `proc.call()` 而不是 `proc[]` 或 `proc.()`。
 
     ```Ruby
     # 差 - 看上去像枚举访问
@@ -1015,7 +1015,7 @@
     Array(paths).each { |path| do_something(path) }
     ```
 
-* 尽量使用范围或 Comparable#between? 来替换复杂的逻辑比较。
+* 尽量使用范围或 `Comparable#between?` 来替换复杂的逻辑比较。
 
     ```Ruby
     # 差
@@ -1024,14 +1024,14 @@
     # 好
     do_something if (1000...2000).include?(x)
 
-	  # 好
+    # 好
     do_something if x.between?(1000, 2000)
 
     ```
 
-* 尽量用判断方法而不是使用 == 。比较数字除外。
+* 尽量用判断方法而不是使用 `==` 。比较数字除外。
 
-    ````Ruby
+    ```Ruby
     # 差
     if x % 2 == 0
     end
@@ -1057,13 +1057,13 @@
 
     if x == 0
     end
-	  ```
+    ```
 
 * 避免使用 `BEGIN` 区块。
 
 * 使用 `Kernel#at_exit` 。永远不要用 `END` 区块。
 
-	  ````Ruby
+    ```Ruby
     # 差
 
     END { puts 'Goodbye!' }
@@ -1071,13 +1071,12 @@
     # 好
 
     at_exit { puts 'Goodbye!' }
-
-	  ```
+    ```
 
 * 避免使用 flip-flops 。
 
 * 避免使用嵌套的条件来控制流程。
-  使用一个防御从句当你可能断言不合法的数据。一个防御从句是一个在函数顶部的条件声明, 这样就能尽快的跳出函数如果数据不合法。
+  当你可能断言不合法的数据，使用一个防御从句。一个防御从句是一个在函数顶部的条件声明，这样如果数据不合法就能尽快的跳出函数。
 
 
     ```Ruby
@@ -1144,7 +1143,7 @@
 
     ```
 
-* 类别与模组使用驼峰式大小写（CamelCase）。（保留类似 HTTP、RFC、XML 这种缩写为大写）
+* 类别与模组使用驼峰式大小写（CamelCase）。（保留类似 HTTP、RFC、XML 这种缩写为大写。）
 
     ```Ruby
     # 差
@@ -1269,12 +1268,12 @@
     # 差
     counter += 1 # 计数器加一
     ```
-* 即使更新注释的。过时的注解比没有注解还差。
+* 及时更新注释。过时的注解比没有注解还差。
 
 > 好代码就像是好的笑话 - 它不需要解释 <br/>
 > -- Russ Olsen
 
-* 避免替烂代码写注释。重构代码让它们看起来一目了然。 （要嘛就做，要嘛不做― 不要只是试试看。-- Yoda）
+* 避免替烂代码写注释。重构代码让它们看起来一目了然。（要嘛就做，要嘛不做― 不要只是试试看。-- Yoda）
 
 ### 注解
 
@@ -1465,6 +1464,7 @@
     Person = Struct.new(:first_name, :last_name) do
     end
     ````
+
 * 考虑加入工厂方法以提供附加的有意义的方式来生成一个特定的类实例。
 
     ```Ruby
@@ -1533,8 +1533,8 @@
 
     如同你所看到的，在类型层级中的所有类其实都共享单独一个类变量。通常情况下应该倾向使用实例变量而不是类变量。
 
-* 依据方法的目的用途指定适当的可见层级 (`private` ,`protected` )。别把所有方法都设为 `public` （方法的缺省值）。我们现在是在写 *Ruby* ，不是 *Python* 。
-* 将 `public`，`protected`，`private` 和被应用的方法定义保持一致的缩排。在上下各留一行来强调这个可见性应用于之后的所有方法。）
+* 依据方法的目的用途指定适当的可见层级 (`private`，`protected` )。别把所有方法都设为 `public` （方法的缺省值）。我们现在是在写 *Ruby* ，不是 *Python* 。
+* 将 `public`，`protected`，`private` 和被应用的方法定义保持一致的缩排。在上下各留一行来强调这个可见性应用于之后的所有方法。
 
     ```Ruby
     class SomeClass
@@ -1843,7 +1843,7 @@
     heroes.fetch(:supermen)
     ```
 
-* 在使用 `fetch` 时，使用第二个参数设置默认值
+* 在使用 `fetch` 时，使用第二个参数设置默认值。
 
    ```Ruby
    batman = { name: 'Bruce Wayne', is_evil: false }
@@ -1855,7 +1855,7 @@
    batman.fetch(:is_evil, true) # => false
    ```
 
-* 尽量用 `fetch` 加区块而不是直接设定默认值
+* 尽量用 `fetch` 加区块而不是直接设定默认值。
 
    ```Ruby
    batman = { name: 'Bruce Wayne' }
@@ -1951,7 +1951,7 @@
     end
     ```
 
-* heredocs 中的多行文字会保留前缀空白。因此最好如何缩进的规划。
+* heredocs 中的多行文字会保留前缀空白。因此做好如何缩进的规划。
 
     ```Ruby
     code = <<-END.gsub(/^\s+\|/, '')
@@ -1984,7 +1984,7 @@
     /(?:first|second)/ # 好
     ```
 
-* 不要使用 Perl 遗风的变量来表示捕获的正则分组（如 `$1` 、 `$2` 等），它们看起来神神秘秘的. 使用 `Regexp.last_match[n]` 。
+* 不要使用 Perl 遗风的变量来表示捕获的正则分组（如 `$1` 、 `$2` 等），它们看起来神神秘秘的。使用 `Regexp.last_match[n]` 。
 
     ```Ruby
     /(regexp)/ =~ string
@@ -1997,7 +1997,7 @@
     process Regexp.last_match[1]
     ```
 
-* 避免使用 `$1-9` 命名分组。因为它们明白他们代表的一丝。使用命名群组来替代。
+* 避免使用 `$1-9` 命名分组。因为很难明白他们代表的意思。使用命名群组来替代。
 
     ```Ruby
     # 差
@@ -2011,7 +2011,7 @@
     process meaningful_var
     ```
 
-* 字符类别只有几个你需要关心的特殊字符：`^`, `-`, `\`, `]`，所以你不用转义字 `.` 或 `[]` 的中括号。
+* 字符类别只有几个你需要关心的特殊字符：`^`、`-`、`\`、`]`，所以你不用转义 `[]` 中的 `.` 或中括号。
 
 * 小心使用 `^` 与 `$` ，它们匹配的是一行的开始与结束，不是字符串的开始与结束。如果你想要匹配整个字符串，使用 `\A` 与 `\z`。(译注：`\Z` 实为 `/\n?\z/`，使用 `\z` 才能匹配到有含新行的字符串的结束)
 
@@ -2036,7 +2036,7 @@
 
 ## 百分比字面
 
-* 需要插值与嵌入双引号的单行字符串使用 `%()` （是 %Q 的简写）给。多行字符串，最好用 heredocs 。
+* 需要插值与嵌入双引号的单行字符串使用 `%()` （是 `%Q` 的简写）。多行字符串，最好用 heredocs 。
 
     ```Ruby
     # 差（不需要插值）
@@ -2118,7 +2118,7 @@
 
 * 写一个函数库时不要使核心类混乱（不要使用 monkey patch）。
 
-* 倾向使用区块形式的 `class_eval` 而不是字符串插值 (string-interpolated) 的形式。
+* 倾向使用区块形式的 `class_eval` 而不是字符串插值（string-interpolated）的形式。
   - 当你使用字符串插值形式时，总是提供 `__FILE__` 及 `__LINE__`，使你的 backtrace 看起来有意义：
 
     ```ruby
@@ -2146,9 +2146,9 @@
       end
     end
     ```
-* 元编程避免使用 `method_missing`。会让 Backtraces 变得很凌乱；行为没有列在 `#methods` 里；拼错的方法调用可能默默的工作（`nukes.launch_state = false`)。考虑使用 delegation, proxy, 或是 `define_method` 来取代。如果你必须使用 `method_missing`，
+* 元编程避免使用 `method_missing`。会让 Backtraces 变得很凌乱；行为没有列在 `#methods` 里；拼错的方法调用可能默默的工作（`nukes.launch_state = false`）。考虑使用 delegation, proxy, 或是 `define_method` 来取代。如果你必须使用 `method_missing`，
   - 确保 [也定义了 `respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
-  - 仅捕捉字首定义良好的方法，像是 `find_by_*` ― 让你的代码愈肯定 (assertive) 愈好。
+  - 仅捕捉字首定义良好的方法，像是 `find_by_*` ― 让你的代码愈肯定（assertive） 愈好。
   - 在语句的最后调用 `super`
   - delegate 到确定的、非魔法方法中:
 
