@@ -3,7 +3,7 @@
 > Role models are important. <br/>
 > -- Officer Alex J. Murphy / RoboCop
 
-One thing has always bothered me as Ruby developer - Python developers
+One thing has always bothered me as a Ruby developer - Python developers
 have a great programming style reference
 ([PEP-8](http://www.python.org/dev/peps/pep-0008/)) and we never got
 an official guide, documenting Ruby coding style and best
@@ -838,7 +838,7 @@ Never use `::` for regular method invocation.
     user.set({ name: 'John', age: 45, permissions: { read: true } })
 
     # good
-    User.set(name: 'John', age: 45, permissions: { read: true })
+    user.set(name: 'John', age: 45, permissions: { read: true })
     ```
 
 * Omit both the outer braces and parentheses for methods that are
@@ -1008,8 +1008,8 @@ would happen if the current value happened to be `false`.)
     enabled = true if enabled.nil?
     ```
 
-* Avoid explicit use of the case equality operator `===`. As it name
-  implies it's meant to be used implicitly by `case` expressions and
+* Avoid explicit use of the case equality operator `===`. As its name
+  implies it is meant to be used implicitly by `case` expressions and
   outside of them it yields some pretty confusing code.
 
     ```Ruby
@@ -1347,7 +1347,8 @@ setting the warn level to 0 via `-W0`).
 
 * The names of predicate methods (methods that return a boolean value)
   should end in a question mark.
-  (i.e. `Array#empty?`).
+  (i.e. `Array#empty?`). Methods that don't return a boolean, shouldn't
+  end in a question mark.
 * The names of potentially *dangerous* methods (i.e. methods that
   modify `self` or the arguments, `exit!` (doesn't run the finalizers
   like `exit` does), etc.) should end with an exclamation mark if
@@ -2434,7 +2435,7 @@ this rule only to arrays with two or more elements.
     %q{"Test's king!", John said.}
 
     # good
-    %w(one tho three)
+    %w(one two three)
     %q("Test's king!", John said.)
     ```
 
