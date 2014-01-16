@@ -26,7 +26,7 @@ beneficial to each and every Ruby developer out there.
 
 By the way, if you're into Rails you might want to check out the
 complementary
-[Ruby on Rails 3 Style Guide](https://github.com/bbatsov/rails-style-guide).
+[Ruby on Rails 3 & 4 Style Guide](https://github.com/bbatsov/rails-style-guide).
 
 # The Ruby Style Guide
 
@@ -63,6 +63,8 @@ Translations of the guide are available in the following languages:
 * [Chinese Simplified](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
 * [Chinese Traditional](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
 * [French](https://github.com/porecreat/ruby-style-guide/blob/master/README-frFR.md)
+* [Spanish](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
+* [Vietnamese](https://github.com/scrum2b/ruby-style-guide/blob/master/README-viVN.md)
 
 ## Table of Contents
 
@@ -89,7 +91,7 @@ Translations of the guide are available in the following languages:
 > -- Jerry Coffin (on indentation)
 
 * Use `UTF-8` as the source file encoding.
-* Use two **spaces** per indentation level. No hard tabs.
+* Use two **spaces** per indentation level (aka soft tabs). No hard tabs.
 
     ```Ruby
     # bad - four spaces
@@ -103,7 +105,7 @@ Translations of the guide are available in the following languages:
     end
     ```
 
-* Use Unix-style line endings. (*BSD/Solaris/Linux/OSX users are covered by default,
+* Use Unix-style line endings. (*BSD/Solaris/Linux/OS X users are covered by default,
   Windows users have to be extra careful.)
     * If you're using Git you might want to add the following
     configuration setting to protect your project from Windows line
@@ -235,7 +237,7 @@ Translations of the guide are available in the following languages:
 
     ```Ruby
     some(arg).other
-    [1, 2, 3].length
+    [1, 2, 3].size
     ```
 
 * No space after `!`.
@@ -347,6 +349,24 @@ Translations of the guide are available in the following languages:
     def some_method
       result
     end
+    ```
+
+* Avoid comma after the last parameter in a method call, especially when the
+  parameters are not on separate lines.
+
+    ```Ruby
+    # bad - easier to move/add/remove parameters, but still not preferred
+    some_method(
+                 size,
+                 count,
+                 color,
+               )
+
+    # bad
+    some_method(size, count, color, )
+
+    # good
+    some_method(size, count, color)
     ```
 
 * Use spaces around the `=` operator when assigning default values to method parameters:
@@ -900,6 +920,33 @@ Never use `::` for regular method invocation.
     ask themselves - is this code really readable and can the blocks' contents be extracted into
     nifty methods?
 
+* Consider using explicit block argument to avoid writing block
+  literal that just passes its arguments to another block. Beware of
+  the performance impact, though, as the block gets converted to a
+  Proc.
+
+    ```Ruby
+    require 'tempfile'
+
+    # bad
+    def with_tmp_dir
+      Dir.mktmpdir do |tmp_dir|
+        Dir.chdir(tmp_dir) { |dir| yield dir }  # block just passes arguments
+      end
+    end
+
+    # good
+    def with_tmp_dir(&block)
+      Dir.mktmpdir do |tmp_dir|
+        Dir.chdir(tmp_dir, &block)
+      end
+    end
+
+    with_tmp_dir do |dir|
+      puts "dir is accessible as parameter and pwd is set: #{dir}"
+    end
+    ```
+
 * Avoid `return` where not required for flow of control.
 
     ```Ruby
@@ -1006,6 +1053,24 @@ would happen if the current value happened to be `false`.)
 
     # good
     enabled = true if enabled.nil?
+    ```
+
+* Use `&&=` to preprocess variables that may or may not exist. Using `&&=` will change the value only if it exists, removing the need to check its existence with `if`.
+
+    ```Ruby
+    # bad
+    if something
+      something = something.downcase
+    end
+
+    # ok
+    something = something.downcase if something
+
+    # good
+    something = something && something.downcase
+
+    # better
+    something &&= something.downcase
     ```
 
 * Avoid explicit use of the case equality operator `===`. As its name
@@ -1682,7 +1747,7 @@ constructor and comparison operators for you.
     ```Ruby
     # good
     class Person
-      attr_reader :first_name, :last_name
+      attr_accessor :first_name, :last_name
 
       def initialize(first_name, last_name)
         @first_name = first_name
@@ -2085,6 +2150,24 @@ this rule only to arrays with two or more elements.
     STATES = %i(draft open closed)
     ```
 
+* Avoid comma after the last item of an `Array` or `Hash` literal, especially
+  when the items are not on separate lines.
+
+    ```Ruby
+    # bad - easier to move/add/remove items, but still not preferred
+    VALUES = [
+               1001,
+               2020,
+               3333,
+             ]
+
+    # bad
+    VALUES = [1001, 2020, 3333, ]
+
+    # good
+    VALUES = [1001, 2020, 3333]
+    ```
+
 * Avoid the creation of huge gaps in arrays.
 
     ```Ruby
@@ -2455,7 +2538,7 @@ this rule only to arrays with two or more elements.
 
   - `define_method` is preferable to `class_eval{ def ... }`
 
-* When using `class_eval` (or other `eval`) with string interpolation, add a comment block showing its appearance if interpolated (a practice I learned from the Rails code):
+* When using `class_eval` (or other `eval`) with string interpolation, add a comment block showing its appearance if interpolated (a practice used in Rails code):
 
     ```ruby
     # from activesupport/lib/active_support/core_ext/string/output_safety.rb
@@ -2567,6 +2650,10 @@ community.
 
 Feel free to open tickets or send pull requests with improvements. Thanks in
 advance for your help!
+
+## How to Contribute?
+
+It's easy, just follow the [contribution guidelines](https://github.com/bbatsov/ruby-style-guide/blob/master/CONTRIBUTING.md).
 
 # License
 
