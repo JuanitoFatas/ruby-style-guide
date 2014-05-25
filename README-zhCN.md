@@ -89,7 +89,7 @@
     puts 'foo'
     puts 'bar'
 
-    puts 'foo', 'bar' # 仅对 puts 使用
+    puts 'foo', 'bar' # 仅对 puts 适用
     ```
 
 * 对于没有成员的类，尽可能使用单行类定义。
