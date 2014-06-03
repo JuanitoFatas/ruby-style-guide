@@ -188,7 +188,22 @@
     ```Ruby
     some(arg).other
     [1, 2, 3].length
+
+
     ```
+
+
+* !后不要有空格。
+
+    ```Ruby
+    # bad
+    ! something
+
+    # good
+    !something
+
+    ```
+
 * 把 `when` 跟 `case` 缩排在同一层。我知道很多人不同意这一点，但这是 "The Ruby Programming Language" 及 "Programming Ruby" 所使用的风格。
 
     ```Ruby
@@ -252,7 +267,7 @@
                calc_something_else
              end
 
-    # 好 ( 更宽敞有效 )
+    # 好 ( 避免代码让行宽过长 )
     kind =
       case year
       when 1850..1889 then 'Blues'
@@ -271,7 +286,7 @@
       end
     ```
 
-* 在 `def` 之间使用空行，并且把方法分成合乎逻辑的段落。
+* 在 `def` 之间使用空行，并且用空行把方法分成合乎逻辑的段落。
 
     ```Ruby
     def some_method
@@ -286,6 +301,24 @@
       result
     end
     ```
+
+*  函数最后一个参数后面不要加逗号，特别是每个参数单独一样的时候
+
+    ```Ruby
+    # 差 - 虽然移动和增删参数的时候会很简单，但仍不推荐
+    some_method(
+                 size,
+                 count,
+                 color,
+               )
+
+    # 差
+    some_method(size, count, color, )
+
+    # 好
+    some_method(size, count, color)
+    ```
+
 
 * 当给方法的参数赋默认值时，在 `=` 两边使用空格：
 
@@ -318,7 +351,9 @@
                   ' and second part of the long string'
     ```
 
-* 当一个链式方法调用需要在另一行继续时，将 `.` 放在第二行。
+* 使用链式方法时风格统一。社区认为前引点号和末端点号都是好的风格。
+
+   * （可选A）和当一个链式方法调用需要在另一行继续时，将 `.` 放在第二行。
 
     ```Ruby
     # 差 - 为了理解第二行需要去查阅第一行
@@ -329,6 +364,21 @@
     one.two.three
       .four
     ```
+
+
+    * （可选 B）末尾用点号表示表达式没有结束
+
+    ```Ruby
+    # bad - need to read ahead to the second line to know that the chain continues
+    one.two.three
+      .four
+
+    # good - it's immediately clear that the expression continues beyond the first line
+    one.two.three.
+      four
+    ```
+
+两种方法各自优点参阅[这里](https://github.com/bbatsov/ruby-style-guide/pull/176)。
 
 * 方法参数过长时，将它对齐排列在多行。当对齐的参数由于线宽不适合对齐时, 简单的在第一行之后缩进也是可以接受的。
 
@@ -365,6 +415,25 @@
     end
   ```
 
+* 用字面量构建数组时，如果跨行，应对齐。
+
+    ```Ruby
+    # 差 - 未对齐
+    menu_item = ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+      'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+
+    # 好
+    menu_item = [
+      'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+      'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam'
+    ]
+
+    # good
+    menu_item =
+      ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+       'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+    ```
+
 * 大数字添加下划线来改善可读性。
 
     ```Ruby
@@ -378,6 +447,7 @@
 * 使用 RDoc 以及它的惯例来撰写 API 文档。注解区块及 `def` 不要用空行隔开。
 * 每一行限制在 80 个字符内。
 * 避免行尾空格。
+* 文件以空白行结尾。
 * 不要使用区块注释。它们不能由空白引导（=begin 必须顶头开始），并且不如普通注释容易辨认。
 
     ```Ruby
@@ -512,8 +582,27 @@
     # 好
     result = some_condition ? something : something_else
     ```
-* 永远不要使用 `if x: ...` 使用三元操作符。
+* 永远不要使用 `if x; ...` 使用三元操作符。
 
+
+* 利用 if 和 case 是表达式的特性
+
+    ```Ruby
+    # 差
+    if condition
+      result = x
+    else
+      result = y
+    end
+
+    # 好
+    result =
+      if condition
+        x
+      else
+        y
+      end
+      ```
 * 单行情况使用 `when x then ...`。另一种语法 `when x: ...` 已经在 Ruby 1.9 被移除了。
 
 * 永远不要使用 `when x: ...`。参考前一个规则。
@@ -528,7 +617,26 @@
     x = !something
     ```
 
-* 用 `&&/||`，别用 `and/or`。
+* 避免使用 !!。
+
+    ```Ruby
+    # 差
+    x = 'test'
+    # obscure nil check
+    if !!x
+      # body omitted
+    end
+
+    x = false
+    # double negation is useless on booleans
+    !!x # => false
+
+    # 好
+    x = 'test'
+    unless x.nil?
+      # body omitted
+    end
+    ```
 
 * `and` 和 `or` 这两个关键字被禁止使用了。 总是使用 `&&` 和 `||` 来取代。
 
@@ -552,6 +660,7 @@
     document.saved? || document.save!
     ```
 
+
 * 避免多行的 `? : `（三元操作符）；使用 `if/unless` 来取代。
 
 * 单行主体用 `if/unless` 修饰符。另一个好的方法是使用 `&&/||` 控制流程。
@@ -567,6 +676,22 @@
 
     # 另一个好方法
     some_condition && do_something
+    ```
+
+* 避免在多行区块后使用 if/unless。
+
+    ```Ruby
+    # 差
+    10.times do
+      # multi-line body omitted
+    end if some_condition
+
+    # 好
+    if some_condition
+      10.times do
+        # multi-line body omitted
+      end
+    end
     ```
 
 *  否定判断时，`unless`（或控制流程的 `||`） 优于 `if` ( 或使用 `||` 控制流程 )。
@@ -661,6 +786,23 @@
     do_something until some_condition
     ```
 
+* 无限循环用 `Kernel#loop` ， 不用 `while/until` 。
+
+    ```Ruby
+    # 差
+    while true
+      do_something
+    end
+
+    until false
+      do_something
+    end
+
+    # 好
+    loop do
+      do_something
+    ```
+
 * 循环后条件判断使用 `Kernel#loop` 和 `break`，而不是 `begin/end/until` 或者 `begin/end/while`。
 
    ```Ruby
@@ -698,7 +840,7 @@
     bowling.score.should == 0
     ```
 
-* 忽略可选哈希参数的外部花括号。
+* 省略可选哈希参数的外部花括号。
 
     ```Ruby
     # 差
@@ -708,7 +850,7 @@
     User.set(name: 'John', age: 45, permissions: { read: true })
     ```
 
-* 如果方法是内部 DSL 的一部分，那么忽略外层的花括号和圆括号。
+* 如果方法是内部 DSL 的一部分，那么省略外层的花括号和圆括号。
 
     ```Ruby
     class Person < ActiveRecord::Base
@@ -720,7 +862,7 @@
     end
     ```
 
-* 如果方法调用不需要参数，那么忽略圆括号。
+* 如果方法调用不需要参数，那么省略圆括号。
 
     ```Ruby
     # bad
@@ -760,6 +902,30 @@
 
     某些人会争论多行串连时，使用 `{...}` 看起来还可以，但他们应该扪心自问— 这样代码真的可读吗？难道不能把区块内容取出来放到小巧的方法里吗？
 
+* 显性使用区块参数而不是用创建区块字面量的方式传递参数给区块。此规则对性能有所影响，因为区块先被转化为Proc。
+
+    ```Ruby
+    require 'tempfile'
+
+    # 差
+    def with_tmp_dir
+      Dir.mktmpdir do |tmp_dir|
+        Dir.chdir(tmp_dir) { |dir| yield dir }  # block just passes arguments
+      end
+    end
+
+    # 好
+    def with_tmp_dir(&block)
+      Dir.mktmpdir do |tmp_dir|
+        Dir.chdir(tmp_dir, &block)
+      end
+    end
+
+    with_tmp_dir do |dir| # 使用上面的方法
+      puts "dir is accessible as a parameter and pwd is set: #{dir}"
+    end
+    ```
+
 * 避免在不需要控制流程的场合时使用 `return` 。
 
     ```Ruby
@@ -796,7 +962,7 @@
     end
     ```
 
-* 避免使用带有局部变量的 shadowing 方法，除非它们彼此相等。
+* 避免局部变量 shadowing 外部方法，除非它们彼此相等。
 
     ```Ruby
     class Foo
@@ -847,7 +1013,27 @@
     end
     ```
 
-* 放心地使用 `||=` 来初始化变量。
+* 变量自赋值用简写方式
+
+    ```Ruby
+    # 差
+    x = x + y
+    x = x * y
+    x = x**y
+    x = x / y
+    x = x || y
+    x = x && y
+
+    # 好
+    x += y
+    x *= y
+    x **= y
+    x /= y
+    x ||= y
+    x &&= y
+    ```
+
+* 如果变量未被初始化过用 `||=` 来初始化变量并赋值。
 
     ```Ruby
     # 仅在 name 为 nil 或 false 时，把名字设为 Bozhidar。
@@ -862,6 +1048,27 @@
 
     # 好
     enabled = true if enabled.nil?
+
+* 使用 &&= 可先检查是否存在变量，如果存在则做相应动作。这样就无需用 `if` 检查变量是否存在了。
+
+    ```Ruby
+    # 差
+    if something
+      something = something.downcase
+    end
+
+    # 差
+    something = something ? nil : something.downcase
+
+    # 可以
+    something = something.downcase if something
+
+    # 好
+    something = something && something.downcase
+
+    # 更好
+    something &&= something.downcase
+    ```
 
 * 避免使用 `case` 语句的 `===` 操作符（case equality operator）。从名称可知，这是 `case` 台面下所用的操作符，在 `case` 语句外的场合使用，会产生难以理解的代码。
 
@@ -928,9 +1135,10 @@
 * 用 `proc` 而不是 `Proc.new`。
 
     ```Ruby
-    # bad
+    # 差
     p = Proc.new { |n| puts n }
-    # good
+
+    # 好
     p = proc { |n| puts n }
     ```
 
@@ -950,14 +1158,32 @@
     l.call(1)
     ```
 
-* 未使用的区块参数使用 `_` 。
+* 未使用的区块参数和局部变量使用 `_` 前缀或直接使用 `_`（虽然表意性差些） 。Ruby解释器和RuboCop都能辨认此规则，并会抑制相关地有变量未使用的警告。
 
     ```Ruby
     # 差
     result = hash.map { |k, v| v + 1 }
 
-    # 好
+    def something(x)
+      unused_var, used_var = something_else(x)
+      # ...
+    end
+
+    # good
+    result = hash.map { |_k, v| v + 1 }
+
+    def something(x)
+      _unused_var, used_var = something_else(x)
+      # ...
+    end
+
+    # good
     result = hash.map { |_, v| v + 1 }
+
+    def something(x)
+      _, used_var = something_else(x)
+      # ...
+    end
     ```
 
 * 使用 `$stdout/$stderr/$stdin` 而不是 `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新赋值的（可能是重定向到某个流），但解释器会警告。
@@ -1000,8 +1226,8 @@
     # => 'one, two, three'
     ```
 
-* 当处理你希望像 Array 那样对待的变量，但是你不确定它是一个数组时，
-  使用 `[*var]` or `Array()` 而不是显式的 `Array` 检查。
+* 当处理你希望将变量作为数组使用，但不确定它是不是数组时，
+  使用 `[*var]` 或 `Array()` 而不是显式的 `Array` 检查。
 
     ```Ruby
     # 差
@@ -1059,6 +1285,22 @@
     end
     ```
 
+* 除非是布尔值，不用显示检查它是否不是`nil` 。
+
+    ```Ruby
+    # 差
+    do_something if !something.nil?
+    do_something if something != nil
+
+    # 好
+    do_something if something
+
+    # 好 —— 检查的是布尔值
+    def value_set?
+      !@some_boolean.nil?
+    end
+    ```
+
 * 避免使用 `BEGIN` 区块。
 
 * 使用 `Kernel#at_exit` 。永远不要用 `END` 区块。
@@ -1099,6 +1341,23 @@
         return re_compute(thing) unless thing[:foo][:bar]
         partial_compute(thing)
       end
+    ```
+
+ 使用 `next` 而不是条件区块
+
+    ```Ruby
+    # bad
+    [0, 1, 2, 3].each do |item|
+      if item > 1
+        puts item
+      end
+    end
+
+    # good
+    [0, 1, 2, 3].each do |item|
+      next unless item > 1
+      puts item
+    end
     ```
 
 ## 命名
@@ -1169,6 +1428,12 @@
     end
     ```
 
+* 文件名用蛇底式小写，如 `hello_world.rb`。
+
+* 目录名用蛇底式小写，如 `lib/hello_world/hello_world.rb`。
+
+* 每个类/模块都在单独的文件，文件名用蛇底式小写而不是驼峰式大小写。
+
 * 其他常数使用尖叫蛇底式大写（SCREAMING_SNAKE_CASE）。
 
     ```Ruby
@@ -1179,7 +1444,7 @@
     SOME_CONST = 5
     ```
 
-* 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (例如： `Array#empty?` )
+* 判断式方法的名字（返回布尔值的方法）应以问号结尾。 (例如： `Array#empty?` )。不返回布尔值的方法不应用问号结尾。
 
 * 有潜在 * 危险性 * 的方法，若此 * 危险 * 方法有安全版本存在时，应以安全版本名加上惊叹号结尾（例如：改动 `self` 或参数、 `exit!` （不会向 `exit` 那样运行 finalizers）, 等等方法）。
 
@@ -1228,7 +1493,7 @@
     end
     ```
 
-* 在短的区块使用 `reduce` 时，把参数命名为 `|a, e|` (累加器，元素)
+* 在简短区块中使用 `reduce` 时，把参数命名为 `|a, e|` (累加器（`accumulator`），元素（`element`）)
 
 * 在定义二元操作符时，把参数命名为 `other` （`<<` 与 `[]` 是这条规则的例外，因为它们的语义不同）。
 
@@ -1239,6 +1504,17 @@
     ```
 
 * 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
+
+* 不用用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
+
+    ```Ruby
+    # bad
+    some_hash.count
+
+    # good
+    some_hash.size
+    ```
+
 
 * 倾向使用 `flat_map` 而不是 `map` + `flatten` 的组合。
   这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map` 。
@@ -1252,10 +1528,20 @@
     all_songs = users.flat_map(&:songs).uniq
     ```
 
+* 使用 `reverse_each` ，不用 `reverse.each` 。 `reverse_each` 不会重新分配新数组。
+
+    ```Ruby
+    # 差
+    array.reverse.each { ... }
+
+
+    # 好
+    array.reverse_each { ... }
+    ```
+
 ## 注释
 
-> 良好的代码是最佳的文档。当你要加一个注释时，扪心自问，<br/>
-> " 如何改善代码让它不需要注释？" 改善代码，再写相应文档使之更清楚。<br/>
+> 良好的代码是最佳的文档。当你要加一个注释时，扪心自问， " 如何改善代码让它不需要注释？" 改善代码，再写相应文档使之更清楚。<br/>
 > -- Steve McConnell
 
 * 编写让人一目了然的代码然后忽略这一节的其它部分。我是认真的！
@@ -1339,6 +1625,46 @@
       private
 
       def some_private_method
+      end
+    end
+    ```
+
+* 如果某个类需要多行代码，则不要嵌套在其它类中。应将其独立写在文件中，存放以包含它的类的的名字命名的文件夹中。
+
+    ```Ruby
+    # 差
+
+    # foo.rb
+    class Foo
+      class Bar
+        # 30个方法
+      end
+
+      class Car
+        # 20个方法
+      end
+
+      # 30个方法
+    end
+
+    # 好
+
+    # foo.rb
+    class Foo
+      # 30个方法
+    end
+
+    # foo/bar.rb
+    class Foo
+      class Bar
+        # 30个方法
+      end
+    end
+
+    # foo/car.rb
+    class Foo
+      class Car
+        # 20个方法
       end
     end
     ```
@@ -1447,6 +1773,18 @@
     end
     ```
 
+* 不要使用 `attr`。使用  `attr_reader` 和 `attr_accessor`。
+
+    ```Ruby
+    # 差 - ruby 1.9 中就不推荐了
+    attr :something, true
+    attr :one, :two, :three # behaves as attr_reader
+
+    # 好
+    attr_accessor :something
+    attr_reader :one, :two, :three
+    ```
+
 * 考虑使用 `Struct.new`，它替你定义了那些琐碎的存取器（accessors），构造器（constructor）以及比较操作符（comparison operators）。
 
     ```Ruby
@@ -1465,6 +1803,7 @@
     end
     ````
 
+* 不要扩展 `Struct.new`。它已经是个类了。对它扩展不但引入了无意义的类的层次也会在该文件多次被require是出现奇怪的错误。
 * 考虑加入工厂方法以提供附加的有意义的方式来生成一个特定的类实例。
 
     ```Ruby
@@ -1554,7 +1893,7 @@
     end
     ```
 
-* 使用 `def self.method` 来定义 singleton 方法。由于类的名称不会重复的关系，这使得代码更容易重构。
+* 使用 `def self.method` 来定义 singleton 方法。在代码重构时如果修改类名也无需重复多次修改了。
 
     ```Ruby
     class TestClass
@@ -1568,8 +1907,7 @@
         # 省略方法体
       end
 
-      # 也有可能及当你要定义多个
-      # singleton 时的便利方法
+      # 另一种便捷的方式
       class << self
         def first_method
           # 省略方法体
@@ -1592,6 +1930,28 @@
     rescue => error
       raise if error.message != 'Oops'
     end
+    ```
+
+* 如果 `fail/raise` 只有两个参数，无需显性指定 RuntimeError。
+
+    ```Ruby
+    # 差
+    fail RuntimeError, 'message'
+
+    # 好 —— 默认就是 RuntimeError
+    fail 'message'
+    ```
+
+* 将异常类和消息作为参数给 `fail/raise` ，而不是异常类的的实例。
+
+    ```Ruby
+    # 差
+    fail SomeException.new('message')
+    # 无法使用 `fail SomeException.new('message'), backtrace`.
+
+    # 好
+    fail SomeException, 'message'
+    # 可以使用 `fail SomeException, 'message', backtrace`.
     ```
 
 * 永远不要从 `ensure` 区块返回。如果你显式地从 `ensure` 区块中的一个方法返回，那么这方法会如同没有异常般的返回。实际上，异常会被默默丢掉。
@@ -1654,7 +2014,7 @@
     with_io_error_handling { something_else_that_might_fail }
     ```
 
-* 不要封锁异常。
+* 不要抑制异常。
 
     ```Ruby
     begin
@@ -1754,6 +2114,21 @@
       f.close unless f.nil?
     end
     ```
+
+* 用 `ensure` 区块释放程序使用的外部资源。
+
+
+    ```Ruby
+    f = File.open('testfile')
+    begin
+      # .. process
+    rescue
+      # .. handle error
+    ensure
+      f.close unless f.nil?
+    end
+    ```
+
 * 倾向使用标准库的异常类而不是导入新的异常类。
 
 ## 集合
@@ -1790,6 +2165,22 @@
     STATES = %i(draft open closed)
     ```
 
+* 避免在 `Array` 和 `Hash` 字面量中的最后一个元素后面使用逗号。特别是元素同一行的情况下
+
+    ```Ruby
+    # 差 - 方面移动、增加和修改参数，但仍不建议使用
+    VALUES = [
+           1001,
+           2020,
+           3333,
+         ]
+
+    # 差
+    VALUES = [1001, 2020, 3333, ]
+    # 好
+    VALUES = [1001, 2020, 3333]
+    ````
+
 * 避免在数组中创造巨大的间隔。
 
     ```Ruby
@@ -1810,7 +2201,7 @@
 
 * 避免使用可变的对象作为键值。
 
-* 当哈希的键为符号时，使用哈希的字面语法。
+* 当哈希的键为符号时，使用Ruby 1.9的哈希的字面语法。
 
     ```Ruby
     # 差
@@ -1819,6 +2210,17 @@
     # 好
     hash = { one: 1, two: 2, three: 3 }
     ```
+
+* 但哈希的键有符号也有字符串时，不使用Ruby 1.9的字面量语法。
+
+    ```Ruby
+    # 差
+    { a: 1, 'b' => 2 }
+
+    # 好
+    { :a => 1, 'b' => 2 }
+    ```
+
 * 用 `Hash#key?`。不用 `Hash#has_key?`。用 `Hash#value?`。不用 `Hash#has_value?`。松本提到过已经不推荐使用较长的形式了。
 
     ```Ruby
@@ -1888,7 +2290,9 @@
     "#{ user.last_name }, #{ user.first_name }"
     ```
 
-* 当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，尽量使用单引号的字符串。
+* 选定一个字符串字面量创建的风格。Ruby社区认可两种分割，默认用单引号（风格A）和默认用双引号（风格B）
+
+  （风格A）当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，尽量使用单引号的字符串。
 
     ```Ruby
     # 差
@@ -1896,6 +2300,16 @@
 
     # 好
     name = 'Bozhidar'
+    ```
+
+    （风格B） 用双引号除非字符串用有双引号或者你希望抑制的逃逸字符
+
+    ```Ruby
+    # 差
+    name = 'Bozhidar'
+
+    # 好
+    name = "Bozhidar"
     ```
 
 * 不要用 `?x`。从 Ruby 1.9 开始， `?x` 和 `'x'` 是等价的（只包括一个字符的字符串）。
@@ -1936,6 +2350,16 @@
 
     # 好
     puts "$global = #{$global}"
+    ```
+
+* 字符串插值是不要用 `Object#to_s` 。Ruby会默认调用该方法。
+
+    ```Ruby
+    # bad
+    message = "This is the #{result.to_s}."
+
+    # good
+    message = "This is the #{result}."
     ```
 
 * 当你需要建构庞大的数据块（chunk）时，避免使用 `String#+` 。
@@ -1997,13 +2421,13 @@
     process Regexp.last_match[1]
     ```
 
-* 避免使用 `$1-9` 命名分组。因为很难明白他们代表的意思。使用命名群组来替代。
+* 避免使用用用数字获取分组。因为很难明白他们代表的意思。使用命名群组来替代。
 
     ```Ruby
     # 差
     /(regexp)/ =~ string
     ...
-    process $1
+    process Regexp.last_match[1]
 
     # 好
     /(?<meaningful_var>regexp)/ =~ string
@@ -2083,8 +2507,6 @@
     # 好
     %r(^/blog/2011/(.*)$)
     ```
-
-
 
 * 除非调用的命令中用到了反引号（这种情况不常见），否则不要用 `%x` 。
 
@@ -2198,6 +2620,7 @@
     ```
 * 当 `alias_method` 可以做到时，避免使用 `alias` 。
 * 使用 `OptionParser` 来解析复杂的命令行选项及 `ruby -s` 来处理琐碎的命令行选项。
+* 使用 `Time.now over` 而不是 `Time.new` 来获取系统时间
 * 用函数式的方法编程，在有意义的情况下避免赋值 (mutation)。
 * 不要改变参数，除非那是方法的目的。
 * 避免超过三层的区块嵌套。
