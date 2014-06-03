@@ -1771,6 +1771,18 @@
     end
     ```
 
+* 不要使用 `attr`。使用  `attr_reader` 和 `attr_accessor`。
+
+    ```Ruby
+    # 差 - ruby 1.9 中就不推荐了
+    attr :something, true
+    attr :one, :two, :three # behaves as attr_reader
+
+    # 好
+    attr_accessor :something
+    attr_reader :one, :two, :three
+    ```
+
 * 考虑使用 `Struct.new`，它替你定义了那些琐碎的存取器（accessors），构造器（constructor）以及比较操作符（comparison operators）。
 
     ```Ruby
@@ -1788,6 +1800,8 @@
     Person = Struct.new(:first_name, :last_name) do
     end
     ````
+
+* Don't extend a Struct.new - it already is a new class. Extending it introduces a superfluous class level and may also introduce weird errors if the file is required multiple times.
 
 * 考虑加入工厂方法以提供附加的有意义的方式来生成一个特定的类实例。
 
