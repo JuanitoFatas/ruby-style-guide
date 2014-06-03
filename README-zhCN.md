@@ -351,7 +351,9 @@
                   ' and second part of the long string'
     ```
 
-* 当一个链式方法调用需要在另一行继续时，将 `.` 放在第二行。
+* 使用链式方法时风格统一。社区认为前引点号和末端点号都是好的风格。
+
+   * （可选A）和当一个链式方法调用需要在另一行继续时，将 `.` 放在第二行。
 
     ```Ruby
     # 差 - 为了理解第二行需要去查阅第一行
@@ -361,6 +363,19 @@
     # 好 - 第二行在做什么立刻变得很清晰
     one.two.three
       .four
+    ```
+
+
+    * （可选 B）末尾用点号表示表达式没有结束
+
+    ```Ruby
+    # bad - need to read ahead to the second line to know that the chain continues
+    one.two.three
+      .four
+
+    # good - it's immediately clear that the expression continues beyond the first line
+    one.two.three.
+      four
     ```
 
 * 方法参数过长时，将它对齐排列在多行。当对齐的参数由于线宽不适合对齐时, 简单的在第一行之后缩进也是可以接受的。
