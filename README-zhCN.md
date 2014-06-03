@@ -1891,7 +1891,7 @@
     end
     ```
 
-* 使用 `def self.method` 来定义 singleton 方法。由于类的名称不会重复的关系，这使得代码更容易重构。
+* 使用 `def self.method` 来定义 singleton 方法。在代码重构时如果修改类名也无需重复多次修改了。
 
     ```Ruby
     class TestClass
@@ -1905,8 +1905,7 @@
         # 省略方法体
       end
 
-      # 也有可能及当你要定义多个
-      # singleton 时的便利方法
+      # 另一种便捷的方式
       class << self
         def first_method
           # 省略方法体
