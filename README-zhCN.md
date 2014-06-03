@@ -1341,6 +1341,23 @@
       end
     ```
 
+ 使用 `next` 而不是条件区块
+
+    ```Ruby
+    # bad
+    [0, 1, 2, 3].each do |item|
+      if item > 1
+        puts item
+      end
+    end
+
+    # good
+    [0, 1, 2, 3].each do |item|
+      next unless item > 1
+      puts item
+    end
+    ```
+
 ## 命名
 
 > 程式设计的真正难题是替事物命名及使缓存失效。 <br/>
