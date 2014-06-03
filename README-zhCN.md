@@ -2286,7 +2286,9 @@ VALUES = [1001, 2020, 3333]
     "#{ user.last_name }, #{ user.first_name }"
     ```
 
-* 当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，尽量使用单引号的字符串。
+* 选定一个字符串字面量创建的风格。Ruby社区认可两种分割，默认用单引号（风格A）和默认用双引号（风格B）
+
+  （风格A）当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，尽量使用单引号的字符串。
 
     ```Ruby
     # 差
@@ -2294,6 +2296,16 @@ VALUES = [1001, 2020, 3333]
 
     # 好
     name = 'Bozhidar'
+    ```
+
+    （风格B） 用双引号除非字符串用有双引号或者你希望抑制的逃逸字符
+
+    ```Ruby
+    # 差
+    name = 'Bozhidar'
+
+    # 好
+    name = "Bozhidar"
     ```
 
 * 不要用 `?x`。从 Ruby 1.9 开始， `?x` 和 `'x'` 是等价的（只包括一个字符的字符串）。
@@ -2335,6 +2347,14 @@ VALUES = [1001, 2020, 3333]
     # 好
     puts "$global = #{$global}"
     ```
+
+Don't use Object#to_s on interpolated objects. It's invoked on them automatically.
+
+# bad
+message = "This is the #{result.to_s}."
+
+# good
+message = "This is the #{result}."
 
 * 当你需要建构庞大的数据块（chunk）时，避免使用 `String#+` 。
   使用 `String#<<` 来替代。`<<` 就地改变字符串实例，因此比 `String#+` 来得快。`String#+` 创造了一堆新的字符串对象。
