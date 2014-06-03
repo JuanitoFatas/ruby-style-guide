@@ -2012,7 +2012,7 @@
     with_io_error_handling { something_else_that_might_fail }
     ```
 
-* 不要封锁异常。
+* 不要抑制异常。
 
     ```Ruby
     begin
