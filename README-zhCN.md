@@ -962,7 +962,7 @@
     end
     ```
 
-* 避免使用带有局部变量的 shadowing 方法，除非它们彼此相等。
+* 避免局部变量 shadowing 外部方法，除非它们彼此相等。
 
     ```Ruby
     class Foo
