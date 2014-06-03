@@ -1503,6 +1503,14 @@
 
 * 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
 
+* 不用用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
+
+# bad
+some_hash.count
+
+# good
+some_hash.size
+
 * 倾向使用 `flat_map` 而不是 `map` + `flatten` 的组合。
   这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map` 。
   `flat_map` 将数组变平坦一个层级，而 `flatten` 会将整个数组变平坦。
