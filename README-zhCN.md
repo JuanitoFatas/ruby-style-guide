@@ -1505,11 +1505,14 @@
 
 * 不用用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
 
-# bad
-some_hash.count
+    ```Ruby
+    # bad
+    some_hash.count
 
-# good
-some_hash.size
+    # good
+    some_hash.size
+    ```
+
 
 * 倾向使用 `flat_map` 而不是 `map` + `flatten` 的组合。
   这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map` 。
@@ -1521,6 +1524,17 @@ some_hash.size
 
     # 好
     all_songs = users.flat_map(&:songs).uniq
+    ```
+
+* 使用 `reverse_each` ，不用 `reverse.each` 。 `reverse_each` 不会重新分配新数组。
+
+    ```Ruby
+    # 差
+    array.reverse.each { ... }
+
+
+    # 好
+    array.reverse_each { ... }
     ```
 
 ## 注释
