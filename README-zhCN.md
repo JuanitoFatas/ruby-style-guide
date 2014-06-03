@@ -188,7 +188,22 @@
     ```Ruby
     some(arg).other
     [1, 2, 3].length
+
+
     ```
+
+
+* !后不要有空格。
+
+    ```Ruby
+    # bad
+    ! something
+
+    # good
+    !something
+
+    ```
+
 * 把 `when` 跟 `case` 缩排在同一层。我知道很多人不同意这一点，但这是 "The Ruby Programming Language" 及 "Programming Ruby" 所使用的风格。
 
     ```Ruby
