@@ -1049,6 +1049,25 @@
     # 好
     enabled = true if enabled.nil?
 
+* 使用 &&= 可先检查是否存在变量，如果存在则做相应动作。这样就无需用 `if` 检查变量是否存在了。
+
+    # 差
+    if something
+      something = something.downcase
+    end
+
+    # 差
+    something = something ? nil : something.downcase
+
+    # 可以
+    something = something.downcase if something
+
+    # 好
+    something = something && something.downcase
+
+    # 更好
+    something &&= something.downcase
+
 * 避免使用 `case` 语句的 `===` 操作符（case equality operator）。从名称可知，这是 `case` 台面下所用的操作符，在 `case` 语句外的场合使用，会产生难以理解的代码。
 
     ```Ruby
