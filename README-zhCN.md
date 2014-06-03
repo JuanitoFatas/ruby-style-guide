@@ -2417,13 +2417,13 @@ VALUES = [1001, 2020, 3333]
     process Regexp.last_match[1]
     ```
 
-* 避免使用 `$1-9` 命名分组。因为很难明白他们代表的意思。使用命名群组来替代。
+* 避免使用用用数字获取分组。因为很难明白他们代表的意思。使用命名群组来替代。
 
     ```Ruby
     # 差
     /(regexp)/ =~ string
     ...
-    process $1
+    process Regexp.last_match[1]
 
     # 好
     /(?<meaningful_var>regexp)/ =~ string
