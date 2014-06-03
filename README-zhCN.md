@@ -617,6 +617,27 @@
     x = !something
     ```
 
+* 避免使用 !!。
+
+    ```Ruby
+    # bad
+    x = 'test'
+    # obscure nil check
+    if !!x
+      # body omitted
+    end
+
+    x = false
+    # double negation is useless on booleans
+    !!x # => false
+
+    # good
+    x = 'test'
+    unless x.nil?
+      # body omitted
+    end
+    ```
+
 * 用 `&&/||`，别用 `and/or`。
 
 * `and` 和 `or` 这两个关键字被禁止使用了。 总是使用 `&&` 和 `||` 来取代。
