@@ -1156,14 +1156,32 @@
     l.call(1)
     ```
 
-* 未使用的区块参数使用 `_` 。
+* 未使用的区块参数和局部变量使用 `_` 前缀或直接使用 `_`（虽然表意性差些） 。Ruby解释器和RuboCop都能辨认此规则，并会抑制相关地有变量未使用的警告。
 
     ```Ruby
     # 差
     result = hash.map { |k, v| v + 1 }
 
-    # 好
+    def something(x)
+      unused_var, used_var = something_else(x)
+      # ...
+    end
+
+    # good
+    result = hash.map { |_k, v| v + 1 }
+
+    def something(x)
+      _unused_var, used_var = something_else(x)
+      # ...
+    end
+
+    # good
     result = hash.map { |_, v| v + 1 }
+
+    def something(x)
+      _, used_var = something_else(x)
+      # ...
+    end
     ```
 
 * 使用 `$stdout/$stderr/$stdin` 而不是 `STDOUT/STDERR/STDIN`。`STDOUT/STDERR/STDIN` 是常量，虽然在 Ruby 中是可以给常量重新赋值的（可能是重定向到某个流），但解释器会警告。
