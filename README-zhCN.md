@@ -1801,8 +1801,7 @@
     end
     ````
 
-* Don't extend a Struct.new - it already is a new class. Extending it introduces a superfluous class level and may also introduce weird errors if the file is required multiple times.
-
+* 不要扩展 `Struct.new`。它已经是个类了。对它扩展不但引入了无意义的类的层次也会在该文件多次被require是出现奇怪的错误。
 * 考虑加入工厂方法以提供附加的有意义的方式来生成一个特定的类实例。
 
     ```Ruby
