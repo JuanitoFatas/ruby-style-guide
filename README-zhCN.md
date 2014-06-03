@@ -1940,16 +1940,17 @@
     fail 'message'
     ```
 
-Prefer supplying an exception class and a message as two separate arguments to fail/raise, instead of an exception instance.
+* 将异常类和消息作为参数给 `fail/raise` ，而不是异常类的的实例。
 
-# bad
-fail SomeException.new('message')
-# Note that there is no way to do `fail SomeException.new('message'), backtrace`.
+    ```Ruby
+    # 差
+    fail SomeException.new('message')
+    # 无法使用 `fail SomeException.new('message'), backtrace`.
 
-# good
-fail SomeException, 'message'
-# Consistent with `fail SomeException, 'message', backtrace`.
-
+    # 好
+    fail SomeException, 'message'
+    # 可以使用 `fail SomeException, 'message', backtrace`.
+    ```
 
 * 永远不要从 `ensure` 区块返回。如果你显式地从 `ensure` 区块中的一个方法返回，那么这方法会如同没有异常般的返回。实际上，异常会被默默丢掉。
 
