@@ -2348,13 +2348,15 @@ VALUES = [1001, 2020, 3333]
     puts "$global = #{$global}"
     ```
 
-Don't use Object#to_s on interpolated objects. It's invoked on them automatically.
+* 字符串插值是不要用 `Object#to_s` 。Ruby会默认调用该方法。
 
-# bad
-message = "This is the #{result.to_s}."
+    ```Ruby
+    # bad
+    message = "This is the #{result.to_s}."
 
-# good
-message = "This is the #{result}."
+    # good
+    message = "This is the #{result}."
+    ```
 
 * 当你需要建构庞大的数据块（chunk）时，避免使用 `String#+` 。
   使用 `String#<<` 来替代。`<<` 就地改变字符串实例，因此比 `String#+` 来得快。`String#+` 创造了一堆新的字符串对象。
