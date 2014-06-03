@@ -378,6 +378,8 @@
       four
     ```
 
+两种方法各自优点参阅[这里](https://github.com/bbatsov/ruby-style-guide/pull/176)。
+
 * 方法参数过长时，将它对齐排列在多行。当对齐的参数由于线宽不适合对齐时, 简单的在第一行之后缩进也是可以接受的。
 
     ```Ruby
@@ -412,6 +414,25 @@
         body: source.text)
     end
   ```
+
+* 用字面量构建数组时，如果跨行，应对齐。
+
+    ```Ruby
+    # bad - single indent
+    menu_item = ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+      'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+
+    # good
+    menu_item = [
+      'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+      'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam'
+    ]
+
+    # good
+    menu_item =
+      ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+       'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+    ```
 
 * 大数字添加下划线来改善可读性。
 
