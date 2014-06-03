@@ -582,7 +582,7 @@
     # 好
     result = some_condition ? something : something_else
     ```
-* 永远不要使用 `if x: ...` 使用三元操作符。
+* 永远不要使用 `if x; ...` 使用三元操作符。
 
 * 单行情况使用 `when x then ...`。另一种语法 `when x: ...` 已经在 Ruby 1.9 被移除了。
 
