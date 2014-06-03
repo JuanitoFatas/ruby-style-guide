@@ -2112,6 +2112,21 @@
       f.close unless f.nil?
     end
     ```
+
+* 用 `ensure` 区块释放程序使用的外部资源。
+
+
+    ```Ruby
+    f = File.open('testfile')
+    begin
+      # .. process
+    rescue
+      # .. handle error
+    ensure
+      f.close unless f.nil?
+    end
+    ```
+
 * 倾向使用标准库的异常类而不是导入新的异常类。
 
 ## 集合
