@@ -840,7 +840,7 @@
     bowling.score.should == 0
     ```
 
-* 忽略可选哈希参数的外部花括号。
+* 省略可选哈希参数的外部花括号。
 
     ```Ruby
     # 差
@@ -850,7 +850,7 @@
     User.set(name: 'John', age: 45, permissions: { read: true })
     ```
 
-* 如果方法是内部 DSL 的一部分，那么忽略外层的花括号和圆括号。
+* 如果方法是内部 DSL 的一部分，那么省略外层的花括号和圆括号。
 
     ```Ruby
     class Person < ActiveRecord::Base
@@ -862,7 +862,7 @@
     end
     ```
 
-* 如果方法调用不需要参数，那么忽略圆括号。
+* 如果方法调用不需要参数，那么省略圆括号。
 
     ```Ruby
     # bad
