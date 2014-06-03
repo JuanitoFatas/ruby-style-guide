@@ -1283,6 +1283,22 @@
     end
     ```
 
+* 除非是布尔值，不用显示检查它是否不是`nil` 。
+
+    ```Ruby
+    # 差
+    do_something if !something.nil?
+    do_something if something != nil
+
+    # 好
+    do_something if something
+
+    # 好 —— 检查的是布尔值
+    def value_set?
+      !@some_boolean.nil?
+    end
+    ```
+
 * 避免使用 `BEGIN` 区块。
 
 * 使用 `Kernel#at_exit` 。永远不要用 `END` 区块。
