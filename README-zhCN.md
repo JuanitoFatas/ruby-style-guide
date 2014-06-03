@@ -1426,6 +1426,12 @@
     end
     ```
 
+* 文件名用蛇底式小写，如 `hello_world.rb`。
+
+* 目录名用蛇底式小写，如 `lib/hello_world/hello_world.rb`。
+
+* 每个类/模块都在单独的文件，文件名用蛇底式小写而不是驼峰式大小写。
+
 * 其他常数使用尖叫蛇底式大写（SCREAMING_SNAKE_CASE）。
 
     ```Ruby
