@@ -418,11 +418,11 @@
 * 用字面量构建数组时，如果跨行，应对齐。
 
     ```Ruby
-    # bad - single indent
+    # 差 - 未对齐
     menu_item = ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
       'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
 
-    # good
+    # 好
     menu_item = [
       'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
       'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam'
@@ -588,14 +588,14 @@
 * 利用 if 和 case 是表达式的特性
 
     ```Ruby
-    # bad
+    # 差
     if condition
       result = x
     else
       result = y
     end
 
-    # good
+    # 好
     result =
       if condition
         x
@@ -620,7 +620,7 @@
 * 避免使用 !!。
 
     ```Ruby
-    # bad
+    # 差
     x = 'test'
     # obscure nil check
     if !!x
@@ -631,7 +631,7 @@
     # double negation is useless on booleans
     !!x # => false
 
-    # good
+    # 好
     x = 'test'
     unless x.nil?
       # body omitted
@@ -784,6 +784,23 @@
 
     # 好
     do_something until some_condition
+    ```
+
+* 无限循环用 `Kernel#loop` ， 不用 `while/until` 。
+
+    ```Ruby
+    # 差
+    while true
+      do_something
+    end
+
+    until false
+      do_something
+    end
+
+    # 好
+    loop do
+      do_something
     ```
 
 * 循环后条件判断使用 `Kernel#loop` 和 `break`，而不是 `begin/end/until` 或者 `begin/end/while`。
