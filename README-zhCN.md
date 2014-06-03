@@ -678,6 +678,22 @@
     some_condition && do_something
     ```
 
+* 避免在多行区块后使用 if/unless。
+
+    ```Ruby
+    # 差
+    10.times do
+      # multi-line body omitted
+    end if some_condition
+
+    # 好
+    if some_condition
+      10.times do
+        # multi-line body omitted
+      end
+    end
+    ```
+
 *  否定判断时，`unless`（或控制流程的 `||`） 优于 `if` ( 或使用 `||` 控制流程 )。
 
     ```Ruby
