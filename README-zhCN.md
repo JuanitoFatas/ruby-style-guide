@@ -1133,9 +1133,10 @@
 * 用 `proc` 而不是 `Proc.new`。
 
     ```Ruby
-    # bad
+    # 差
     p = Proc.new { |n| puts n }
-    # good
+
+    # 好
     p = proc { |n| puts n }
     ```
 
