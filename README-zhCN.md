@@ -302,6 +302,24 @@
     end
     ```
 
+*  函数最后一个参数后面不要加逗号，特别是每个参数单独一样的时候
+
+    ```Ruby
+    # 差 - 虽然移动和增删参数的时候会很简单，但仍不推荐
+    some_method(
+                 size,
+                 count,
+                 color,
+               )
+
+    # 差
+    some_method(size, count, color, )
+
+    # 好
+    some_method(size, count, color)
+    ```
+
+
 * 当给方法的参数赋默认值时，在 `=` 两边使用空格：
 
     ```Ruby
