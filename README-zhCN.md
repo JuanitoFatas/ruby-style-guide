@@ -902,6 +902,30 @@
 
     某些人会争论多行串连时，使用 `{...}` 看起来还可以，但他们应该扪心自问— 这样代码真的可读吗？难道不能把区块内容取出来放到小巧的方法里吗？
 
+* 显性使用区块参数而不是用创建区块字面量的方式传递参数给区块。此规则对性能有所影响，因为区块先被转化为Proc。
+
+    ```Ruby
+    require 'tempfile'
+
+    # 差
+    def with_tmp_dir
+      Dir.mktmpdir do |tmp_dir|
+        Dir.chdir(tmp_dir) { |dir| yield dir }  # block just passes arguments
+      end
+    end
+
+    # 好
+    def with_tmp_dir(&block)
+      Dir.mktmpdir do |tmp_dir|
+        Dir.chdir(tmp_dir, &block)
+      end
+    end
+
+    with_tmp_dir do |dir| # 使用上面的方法
+      puts "dir is accessible as a parameter and pwd is set: #{dir}"
+    end
+    ```
+
 * 避免在不需要控制流程的场合时使用 `return` 。
 
     ```Ruby
