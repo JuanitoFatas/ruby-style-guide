@@ -584,6 +584,25 @@
     ```
 * 永远不要使用 `if x; ...` 使用三元操作符。
 
+
+* 利用 if 和 case 是表达式的特性
+
+    ```Ruby
+    # bad
+    if condition
+      result = x
+    else
+      result = y
+    end
+
+    # good
+    result =
+      if condition
+        x
+      else
+        y
+      end
+      ```
 * 单行情况使用 `when x then ...`。另一种语法 `when x: ...` 已经在 Ruby 1.9 被移除了。
 
 * 永远不要使用 `when x: ...`。参考前一个规则。
