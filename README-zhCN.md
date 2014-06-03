@@ -1627,6 +1627,46 @@
     end
     ```
 
+* 如果某个类需要多行代码，则不要嵌套在其它类中。应将其独立写在文件中，存放以包含它的类的的名字命名的文件夹中。
+
+    ```Ruby
+    # 差
+
+    # foo.rb
+    class Foo
+      class Bar
+        # 30个方法
+      end
+
+      class Car
+        # 20个方法
+      end
+
+      # 30个方法
+    end
+
+    # 好
+
+    # foo.rb
+    class Foo
+      # 30个方法
+    end
+
+    # foo/bar.rb
+    class Foo
+      class Bar
+        # 30个方法
+      end
+    end
+
+    # foo/car.rb
+    class Foo
+      class Car
+        # 20个方法
+      end
+    end
+    ```
+
 * 倾向使用模块，而不是只有类别方法的类。类别应该只在产生实例是合理的时候使用。
 
     ```Ruby
