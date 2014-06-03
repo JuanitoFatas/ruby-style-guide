@@ -267,7 +267,7 @@
                calc_something_else
              end
 
-    # 好 ( 更宽敞有效 )
+    # 好 ( 避免代码让行宽过长 )
     kind =
       case year
       when 1850..1889 then 'Blues'
