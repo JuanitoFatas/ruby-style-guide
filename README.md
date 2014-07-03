@@ -2919,18 +2919,6 @@ Translations of the guide are available in the following languages:
 
 * Use module instance variables instead of global variables.
 
-<<<<<<< HEAD
-    ```Ruby
-    # bad
-
-     = 1
-
-    # good
-    module Foo
-      class << self
-        attr_accessor :bar
-      end
-=======
   ```Ruby
   # bad
   $foo_bar = 1
@@ -2939,7 +2927,6 @@ Translations of the guide are available in the following languages:
   module Foo
     class << self
       attr_accessor :bar
->>>>>>> 88fc53e116e1d6ccfb09ad87b0f4d0b39b5b29e5
     end
   end
 
