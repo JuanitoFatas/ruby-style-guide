@@ -3,7 +3,7 @@
 > 榜样很重要 <br>
 > ── 墨菲警官  / 《机器战警》
 
-身为 Ruby 开发者，有件事总是令我烦心 ── Python 开发者有一份好的编程风格参考指南 ([PEP-8](http://www.python.org/dev/peps/pep-0008/)) 而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像 Ruby 这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
+身为 Ruby 开发者，有件总是令我烦心的事 ── Python 开发者有一份好的编程风格参考指南（[PEP-8](http://www.python.org/dev/peps/pep-0008/)）而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像 Ruby 这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
 
 这份指南开始是作为我们公司内部的 Ruby 编程指南 (在下所写的)。后来，我决定要把成果贡献给广大的 Ruby 社区，况且这个世界再多一份公司司内部文件又有何意义。然而由社区制定及策动的一系列 Ruby 编程惯例、实践及风格，确能让世界收益。
 
@@ -17,7 +17,7 @@
 
 本指南依照相关规则分成数个小节。我尽力在规则后面说明理由（如果省略了说明，那是因为其理由显而易见）。
 
-规则不是我凭空想出来的 ─ 绝大部分来自我作为从业多年的职业软件工程师的经验，从 Ruby 社区成员得到的反馈及建议，和几个评价甚高的 Ruby 编程资源，像 ["Programming Ruby 1.9"](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) 以及 ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
+规则不是我凭空想出来的 ─ 绝大部分来自我作为从业多年的职业软件工程师的经验，从 Ruby 社区成员得到的反馈及建议，和几个评价甚高的 Ruby 编程资源，像 [《Programming Ruby 1.9》](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) 以及 [《The Ruby Programming Language》](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
 
 本指南仍在完善中 ─ 某些规则缺乏实例，某些例子也不够清楚。到时候都会解决的 — 放心吧。
 
@@ -30,6 +30,12 @@
 * [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
 * [繁體中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
 * [法文](https://github.com/porecreat/ruby-style-guide/blob/master/README-frFR.md)
+* [日文](https://github.com/fortissimo1997/ruby-style-guide/blob/japanese/README.ja.md)
+* [葡萄牙文](https://github.com/rubensmabueno/ruby-style-guide/blob/master/README-PT-BR.md)
+* [俄文](https://github.com/arbox/ruby-style-guide/blob/master/README-ruRU.md)
+* [西班牙文](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
+* [越南文](https://github.com/scrum2b/ruby-style-guide/blob/master/README-viVN.md)
+
 
 ## 目录
 
