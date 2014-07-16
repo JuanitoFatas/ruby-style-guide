@@ -962,7 +962,7 @@
     def ready?
       if last_reviewed_at > last_updated_at
         worker.update(content, options)
-        status = :in_progress
+        self.status = :in_progress
       end
       status == :verified
     end
