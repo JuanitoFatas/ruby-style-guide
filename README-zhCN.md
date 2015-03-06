@@ -1065,7 +1065,7 @@
     end
 
     # 差
-    something = something ? nil : something.downcase
+    something = something ? something.downcase : nil
 
     # 可以
     something = something.downcase if something
