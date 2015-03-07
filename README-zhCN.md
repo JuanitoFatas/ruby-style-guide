@@ -1042,7 +1042,13 @@
 * 如果变量未被初始化过，用 `||=` 来初始化变量并赋值。
 
     ```Ruby
-    # 仅在 name 为 nil 或 false 时，把名字设为 Bozhidar。
+    # 差
+    name = name ? name : 'Bozhidar'
+
+    # 差
+    name = 'Bozhidar' unless name
+
+    # 好 仅在 name 为 nil 或 false 时，把名字设为 Bozhidar。
     name ||= 'Bozhidar'
     ```
 
@@ -1350,7 +1356,7 @@
       end
     ```
 
- 使用 `next` 而不是条件区块
+ 使用 `next` 而不是条件区块。
 
     ```Ruby
     # bad
@@ -1365,6 +1371,40 @@
       next unless item > 1
       puts item
     end
+    ```
+
+* 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
+
+* 不用用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
+
+    ```Ruby
+    # bad
+    some_hash.count
+
+    # good
+    some_hash.size
+    ```
+
+* 倾向使用 `flat_map` 而不是 `map` + `flatten` 的组合。
+  这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map`。
+  `flat_map` 将数组变平坦一个层级，而 `flatten` 会将整个数组变平坦。
+
+    ```Ruby
+    # 差
+    all_songs = users.map(&:songs).flatten.uniq
+
+    # 好
+    all_songs = users.flat_map(&:songs).uniq
+    ```
+
+* 使用 `reverse_each` ，不用 `reverse.each` 。 `reverse_each` 不会重新分配新数组。
+
+    ```Ruby
+    # 差
+    array.reverse.each { ... }
+
+    # 好
+    array.reverse_each { ... }
     ```
 
 ## 命名
@@ -1455,7 +1495,7 @@
 
 * 有潜在**危险性**的方法，若此**危险**方法有安全版本存在时，应以安全版本名加上惊叹号结尾（例如：改动 `self` 或参数、 `exit!` （不会向 `exit` 那样运行 finalizers）, 等等方法）。
 
-* 如果存在潜在的**危险**方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行 finalizers 的 `exit!`，等等）的安全版本，那么 * 危险 * 方法的名字应该以惊叹号结尾。
+* 如果存在潜在的**危险**方法（即修改 `self` 或者参数的方法，不像 `exit` 那样运行 finalizers 的 `exit!`，等等）的安全版本，那么 *危险* 方法的名字应该以惊叹号结尾。
 
     ```Ruby
     # 不好 - 没有对应的安全方法
@@ -1510,42 +1550,6 @@
     end
     ```
 
-* 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
-
-* 不用用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
-
-    ```Ruby
-    # bad
-    some_hash.count
-
-    # good
-    some_hash.size
-    ```
-
-
-* 倾向使用 `flat_map` 而不是 `map` + `flatten` 的组合。
-  这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map`。
-  `flat_map` 将数组变平坦一个层级，而 `flatten` 会将整个数组变平坦。
-
-    ```Ruby
-    # 差
-    all_songs = users.map(&:songs).flatten.uniq
-
-    # 好
-    all_songs = users.flat_map(&:songs).uniq
-    ```
-
-* 使用 `reverse_each` ，不用 `reverse.each` 。 `reverse_each` 不会重新分配新数组。
-
-    ```Ruby
-    # 差
-    array.reverse.each { ... }
-
-
-    # 好
-    array.reverse_each { ... }
-    ```
-
 ## 注释
 
 > 良好的代码是最佳的文档。当你要加一个注释时，扪心自问，“如何改善代码让它不需要注释？” 改善代码，再写相应文档使之更清楚。<br>
@@ -1593,7 +1597,7 @@
 * 使用 `FIXME` 标记需要修复的代码。
 * 使用 `OPTIMIZE` 标记可能影响性能的缓慢或效率低下的代码。
 * 使用 `HACK` 标记代码异味，即那些应该被重构的可疑编码习惯。
-* 使用 `REVIEW` 标记需要确认其编码意图是否正确的代码。举例来说：`REVIEW:` 我们确定用户现在是这么做的吗？
+* 使用 `REVIEW` 标记需要确认其编码意图是否正确的代码。举例来说：`REVIEW: 我们确定用户现在是这么做的吗？`
 * 如果你觉得恰当的话，可以使用其他定制的注解关键字，但别忘记录在项目的 `README` 或类似文档中。
 
 ## 类与模块
@@ -1733,7 +1737,7 @@
     ```
 
 * 当设计类型层级时，确认它们符合 [Liskov 替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。
-* 尽可能让你的类型越 [SOLID](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design\)) 越好。
+* 尽可能让你的类型越 [SOLID](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)) 越好。
 * 永远替类型提供一个适当的 `to_s` 方法给来表示领域模型。
 
     ```Ruby
@@ -2122,20 +2126,6 @@
     end
     ```
 
-* 用 `ensure` 区块释放程序使用的外部资源。
-
-
-    ```Ruby
-    f = File.open('testfile')
-    begin
-      # .. process
-    rescue
-      # .. handle error
-    ensure
-      f.close unless f.nil?
-    end
-    ```
-
 * 倾向使用标准库的异常类而不是导入新的异常类。
 
 ## 集合
@@ -2186,7 +2176,7 @@
     VALUES = [1001, 2020, 3333, ]
     # 好
     VALUES = [1001, 2020, 3333]
-    ````
+    ```
 
 * 避免在数组中创造巨大的间隔。
 
@@ -2240,7 +2230,7 @@
     hash.value?(value)
     ```
 
-* 在处理应该存在的哈希键时，使用 `fetch`。
+* 在处理应该存在的哈希键时，使用 `Hash#fetch`。
 
     ```Ruby
     heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
@@ -2252,7 +2242,7 @@
     heroes.fetch(:supermen)
     ```
 
-* 在使用 `fetch` 时，使用第二个参数设置默认值。
+* 在使用 `Hash#fetch` 时，使用第二个参数设置默认值。
 
    ```Ruby
    batman = { name: 'Bruce Wayne', is_evil: false }
@@ -2264,7 +2254,7 @@
    batman.fetch(:is_evil, true) # => false
    ```
 
-* 尽量用 `fetch` 加区块而不是直接设定默认值。
+* 尽量用 `Hash#fetch` 加区块而不是直接设定默认值。
 
    ```Ruby
    batman = { name: 'Bruce Wayne' }
@@ -2300,7 +2290,7 @@
 
 * 选定一个字符串字面量创建的风格。Ruby 社区认可两种分割，默认用单引号（风格 A）和默认用双引号（风格 B）
 
-   （风格 A）当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，尽量使用单引号的字符串。
+  * **（风格 A）**当你不需要插入特殊符号如 `\t`, `\n`, `'`, 等等时，尽量使用单引号的字符串。
 
     ```Ruby
     # 差
@@ -2310,7 +2300,7 @@
     name = 'Bozhidar'
     ```
 
-    （风格 B） 用双引号。除非字符串中含有双引号，或者含有你希望抑制的逃逸字符。
+  * **（风格 B）** 用双引号。除非字符串中含有双引号，或者含有你希望抑制的逃逸字符。
 
     ```Ruby
     # 差
