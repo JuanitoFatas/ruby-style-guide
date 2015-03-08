@@ -202,10 +202,10 @@
 * `!` 后不要有空格。
 
     ```Ruby
-    # bad
+    # 差
     ! something
 
-    # good
+    # 好
     !something
 
     ```
@@ -375,11 +375,11 @@
     * （可选 B）末尾用点号表示表达式没有结束
 
     ```Ruby
-    # bad - need to read ahead to the second line to know that the chain continues
+    # 差 - 需要读到第二行才能确定表达式没有结束
     one.two.three
       .four
 
-    # good - it's immediately clear that the expression continues beyond the first line
+    # 好 - 从第一行就可以立即明白表达式没有结束
     one.two.three.
       four
     ```
@@ -434,7 +434,7 @@
       'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam'
     ]
 
-    # good
+    # 好
     menu_item =
       ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
        'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
@@ -591,7 +591,7 @@
 * 永远不要使用 `if x; ...` 使用三元操作符。
 
 
-* 利用 if 和 case 是表达式的特性
+* 利用 if 和 case 是表达式的特性。
 
     ```Ruby
     # 差
@@ -871,13 +871,13 @@
 * 如果方法调用不需要参数，那么省略圆括号。
 
     ```Ruby
-    # bad
+    # 差
     Kernel.exit!()
     2.even?()
     fork()
     'test'.upcase()
 
-    # good
+    # 好
     Kernel.exit!
     2.even?
     fork
@@ -1100,10 +1100,10 @@
 * 避免使用 Perl 风格的特殊变量（像是 `$:`、`$;` 等）。它们看起来非常神秘，除非用于单行脚本，否则不鼓励使用。使用 `English` 库提供的友好别名。
 
     ```Ruby
-    # bad
+    # 差
     $:.unshift File.dirname(__FILE__)
 
-    # good
+    # 好
     require 'English'
     $LOAD_PATH.unshift File.dirname(__FILE__)
     ```
@@ -1182,7 +1182,7 @@
       # ...
     end
 
-    # good
+    # 好
     result = hash.map { |_k, v| v + 1 }
 
     def something(x)
@@ -1190,7 +1190,7 @@
       # ...
     end
 
-    # good
+    # 好
     result = hash.map { |_, v| v + 1 }
 
     def something(x)
@@ -1359,14 +1359,14 @@
  使用 `next` 而不是条件区块。
 
     ```Ruby
-    # bad
+    # 差
     [0, 1, 2, 3].each do |item|
       if item > 1
         puts item
       end
     end
 
-    # good
+    # 好
     [0, 1, 2, 3].each do |item|
       next unless item > 1
       puts item
@@ -1378,10 +1378,10 @@
 * 不用用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
 
     ```Ruby
-    # bad
+    # 差
     some_hash.count
 
-    # good
+    # 好
     some_hash.size
     ```
 
@@ -1812,7 +1812,7 @@
     # 更好
     Person = Struct.new(:first_name, :last_name) do
     end
-    ````
+    ```
 
 * 不要扩展 `Struct.new`。它已经是个类了。对它扩展不但引入了无意义的类的层次也会在该文件多次被require时出现奇怪的错误。
 * 考虑加入工厂方法以提供附加的有意义的方式来生成一个特定的类实例。
@@ -2184,6 +2184,9 @@
     arr = []
     arr[100] = 1 # 现在你有一个很多 nil 的数组
     ```
+
+* 当访问数组的首元素或尾元素时，尽量使用 `first` 或 `last`， 而非 `[0]` 或 `[-1]`。
+
 * 当处理的元素没有重复时，使用 `Set` 来替代 `Array` 。 `Set` 实现了无序、无重复值的集合。 `Set` 的方法同数组类一样直观，还可像哈希中那样快速查找元素。
 
 * 尽量用符号来取代字符串作为哈希的键。
@@ -2266,6 +2269,17 @@
    batman.fetch(:powers) { get_batman_powers }
    ```
 
+* 当需要从哈希中同时获取多个键值时，使用 `Hash#values_at`。
+
+  ```Ruby
+  # 差
+  email = data['email']
+  username = data['nickname']
+
+  # 好
+  email, username = data.values_at('email', 'nickname')
+  ```
+
 * Ruby 1.9 的哈希是有序的，利用这个特性。
 
 * 在遍历一个集合时，不要改动它。
@@ -2313,10 +2327,10 @@
 * 不要用 `?x`。从 Ruby 1.9 开始， `?x` 和 `'x'` 是等价的（只包括一个字符的字符串）。
 
     ```Ruby
-    # bad
+    # 差
     char = ?c
 
-    # good
+    # 好
     char = 'c'
     ```
 
@@ -2353,10 +2367,10 @@
 * 字符串插值不要用 `Object#to_s` 。Ruby 默认会调用该方法。
 
     ```Ruby
-    # bad
+    # 差
     message = "This is the #{result.to_s}."
 
-    # good
+    # 好
     message = "This is the #{result}."
     ```
 
@@ -2371,6 +2385,21 @@
     paragraphs.each do |paragraph|
       html << "<p>#{paragraph}</p>"
     end
+    ```
+
+* 当你可以选择更快速、更专门的替代方法时，不要使用 `String#gsub`。
+
+    ```Ruby
+    url = 'http://example.com'
+    str = 'lisp-case-rules'
+
+    # 差
+    url.gsub("http://", "https://")
+    str.gsub("-", "_")
+
+    # 好
+    url.sub("http://", "https://")
+    str.tr("-", "_")
     ```
 
 * heredocs 中的多行文字会保留前缀空白。因此做好如何缩进的规划。
