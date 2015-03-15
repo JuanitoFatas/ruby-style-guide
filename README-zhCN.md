@@ -807,6 +807,7 @@
     # 好
     loop do
       do_something
+    end
     ```
 
 * 循环后条件判断使用 `Kernel#loop` 和 `break`，而不是 `begin/end/until` 或者 `begin/end/while`。
