@@ -9,7 +9,7 @@
 
 在開始寫這份指南時，我收到世界上很多優秀 Ruby 社群用戶們的反饋。感謝所有的建議及幫助！我們同心協力創造一個能夠讓每一個 Ruby 開發者受益的資源。
 
-順道一提，如果你對 Rails 有興趣，你可以看看這份與之互補的 [Ruby on Rails 3 風格指南](https://github.com/bbatsov/rails-style-guide)。
+順道一提，如果你對 Rails 有興趣，你可以看看這份與之互補的 [Ruby on Rails 風格指南](https://github.com/bbatsov/rails-style-guide)。
 
 # Ruby 風格指南
 
@@ -23,13 +23,20 @@
 
 你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 來產生本指南的一份 PDF 或 HTML 副本。
 
-[rubocop](https://github.com/bbatsov/rubocop) 專案會自動檢查你的 Ruby 程式碼是否符合這份 Ruby 風格指南。目前這個專案尚有許多功能缺漏，不足以被正式地使用，歡迎有志之士協助改進。
+[RuboCop](https://github.com/bbatsov/rubocop) 專案會自動檢查你的 Ruby 程式碼是否符合這份 Ruby 風格指南。目前這個專案尚有許多功能缺漏，不足以被正式地使用，歡迎有志之士協助改進。
 
 本指南被翻譯成下列語言：
 
 * [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
 * [繁體中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
 * [法文](https://github.com/porecreat/ruby-style-guide/blob/master/README-frFR.md)
+* [德文](https://github.com/arbox/ruby-style-guide/blob/master/README-deDE.md)
+* [日文](https://github.com/fortissimo1997/ruby-style-guide/blob/japanese/README.ja.md)
+* [韓文](https://github.com/dalzony/ruby-style-guide/blob/master/README-koKR.md)
+* [葡萄牙文](https://github.com/rubensmabueno/ruby-style-guide/blob/master/README-PT-BR.md)
+* [俄文](https://github.com/arbox/ruby-style-guide/blob/master/README-ruRU.md)
+* [西班牙文](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
+* [越南文](https://github.com/scrum2b/ruby-style-guide/blob/master/README-viVN.md)
 
 ## 目錄
 
@@ -75,63 +82,62 @@
       $ git config --global core.autocrlf true
       ```
 
-* Don't use `;` to separate statements and expressions. As a
-  corollary - use one expression per line.
+* 不要使用 `;` 分隔敘述與表達式。 由此推論 - 一行一個表達式。
 
     ```Ruby
-    # bad
-    puts 'foobar'; # superfluous semicolon
+    # 不好
+    puts 'foobar'; # 多餘的分號
 
-    puts 'foo'; puts 'bar' # two expression on the same line
+    puts 'foo'; puts 'bar' # 同一行有兩個表達式
 
-    # good
+    # 好
     puts 'foobar'
 
     puts 'foo'
     puts 'bar'
 
-    puts 'foo', 'bar' # this applies to puts in particular
+    puts 'foo', 'bar' # 僅對 puts 適用
     ```
 
-* Prefer a single-line format for class definitions with no body.
+* 沒有內容的類別，偏好使用單行定義。
 
     ```Ruby
-    # bad
+    # 不好
     class FooError < StandardError
     end
 
-    # good
+    # 還可以
     class FooError < StandardError; end
+
+    # 好
+    FooError = Class.new(StandardError)
     ```
 
-* Avoid single-line methods. Although they are somewhat popular in the
-  wild, there are a few peculiarities about their definition syntax
-  that make their use undesirable. At any rate - there should no more
-  than one expression in a single-line method.
+* 避免單行方法。 雖然這種方式蠻普遍的，但是因為有點怪異的語法，使用起來並不好用。 無論如何 - 單行方法不應該有一個以上的表達式。
 
     ```Ruby
-    # bad
+    # 不好
     def too_much; something; something_else; end
 
-    # okish - notice that the first ; is required
+    # 還可以 - 注意第一個 ; 是必要的
     def no_braces_method; body end
 
-    # okish - notice that the second ; is optional
+    # 還可以 - 注意第二個 ; 是可選的
     def no_braces_method; body; end
 
-    # okish - valid syntax, but no ; make it kind of hard to read
+    # 還可以 - 語法正確, 但沒有 ; 難以閱讀
     def some_method() body end
 
-    # good
+    # 好
     def some_method
       body
     end
     ```
 
-    One exception to the rule are empty-body methods.
+    唯一的例外是沒有內容的方法
 
     ```Ruby
-    # good
+    # 好
     def no_op; end
     ```
 
@@ -141,8 +147,8 @@
     ```Ruby
     sum = 1 + 2
     a, b = 1, 2
-    1 > 2 ? true : false; puts 'Hi'
     [1, 2, 3].each { |e| puts e }
+    class FooError < StandardError; end
     ```
     （針對運算子）唯一的例外是當使用指數運算子時：
 
@@ -154,48 +160,75 @@
     e = M * c**2
     ```
 
-    `{` and `}` deserve a bit of clarification, since they are used
-    for block and hash literals, as well as embedded expressions in
-    strings. For hash literals two styles are considered acceptable.
+    由於 `{` 與 `}` 被用在區塊與雜湊的語法，以及嵌入字串的表達式裡，應該要被更清晰的表達。對於雜湊的語法，可以接受下列兩種撰寫方式。
 
     ```Ruby
-    # good - space after { and before }
+    # 好 - 在 { 之後與 } 之前加上空格
     { one: 1, two: 2 }
 
-    # good - no space after { and before }
+    # 好 - 在 { 之後與 } 之前不加空格
     {one: 1, two: 2}
     ```
 
-    The first variant is slightly more readable (and arguably more
-    popular in the Ruby community in general). The second variant has
-    the advantage of adding visual difference between block and hash
-    literals. Whichever one you pick - apply it consistently.
+    第一種寫法稍微容易閱讀（一般來說在Ruby社群裡也較為普及）。第二種寫法的優點是能夠在視覺上區分區塊與雜湊字面語法。不管你選擇哪一種方式 - 持續使用它。
 
-    As far as embedded expressions go, there are also two acceptable
-    options:
+    至於嵌入的表達式，一樣有兩種可行的選擇：
 
     ```Ruby
-    # good - no spaces
+    # 好 - 沒有空格
     "string#{expr}"
 
-    # ok - arguably more readable
+    # ok - 也許比較好閱讀
     "string#{ expr }"
     ```
 
-    The first style is extremely more popular and you're generally
-    advised to stick with it. The second, on the other hand, is
-    (arguably) a bit more readable. As with hashes - pick one style
-    and apply it consistently.
+    第一種風格非常普遍，原則上建議你持續使用它。第二種風格稍微容易閱讀（可議）。與雜湊一樣 - 選擇其中一種風格並持續使用。
 
 * 不要有空格在 `(` 、 `[` 之後，或 `]` 、 `)` 之前。
 
     ```Ruby
     some(arg).other
-    [1, 2, 3].length
+    [1, 2, 3].size
     ```
+
+* 不要有空格在 `!` 之後.
+
+  ```Ruby
+  # 不好
+  ! something
+
+  # 好
+  !something
+  ```
+
+* 範圍的字面語法中不要有空格
+
+  ```Ruby
+  # 不好
+  1 .. 3
+  'a' ... 'z'
+
+  # 好
+  1..3
+  'a'...'z'
+  ```
+
 * 把 `when` 跟 `case` 縮排在同一層。我知道很多人不同意這一點，但這是 "The Ruby Programming Language" 及 "Programming Ruby" 所設立的風格。
 
     ```Ruby
+    # 不好
+    case
+      when song.name == 'Misty'
+        puts 'Not again!'
+      when song.duration > 120
+        puts 'Too long!'
+      when Time.now.hour > 21
+        puts "It's too late"
+      else
+        song.play
+    end
+
+    # 好
     case
     when song.name == 'Misty'
       puts 'Not again!'
@@ -206,7 +239,27 @@
     else
       song.play
     end
+    ```
+* 當條件表達式的結果被賦值給一個變數時，保持分支的對齊。
 
+    ```Ruby
+    # 不好 - 非常複雜
+    kind = case year
+    when 1850..1889 then 'Blues'
+    when 1890..1909 then 'Ragtime'
+    when 1910..1929 then 'New Orleans Jazz'
+    when 1930..1939 then 'Swing'
+    when 1940..1950 then 'Bebop'
+    else 'Jazz'
+    end
+
+    result = if some_cond
+      calc_something
+    else
+      calc_something_else
+    end
+
+    # 好 - 清楚暸解做什麼事
     kind = case year
            when 1850..1889 then 'Blues'
            when 1890..1909 then 'Ragtime'
@@ -215,6 +268,30 @@
            when 1940..1950 then 'Bebop'
            else 'Jazz'
            end
+
+    result = if some_cond
+               calc_something
+             else
+               calc_something_else
+             end
+
+    # 好 (稍微減少行寬)
+    kind =
+      case year
+      when 1850..1889 then 'Blues'
+      when 1890..1909 then 'Ragtime'
+      when 1910..1929 then 'New Orleans Jazz'
+      when 1930..1939 then 'Swing'
+      when 1940..1950 then 'Bebop'
+      else 'Jazz'
+      end
+
+    result =
+      if some_cond
+        calc_something
+      else
+        calc_something_else
+      end
     ```
 
 * 在 `def` 之間使用空行，並且把方法分成合乎邏輯的段落。
@@ -232,66 +309,92 @@
       result
     end
     ```
-* Use spaces around the `=` operator when assigning default values to method parameters:
+
+* 避免在方法最後一個參數之後加逗號，尤其是參數沒有分佈在不同行的時候。
+
+  ```Ruby
+  # 不好 - 比較容易移動/新增/移除參數，但還是不偏好這種做法
+  some_method(
+               size,
+               count,
+               color,
+             )
+
+  # 不好
+  some_method(size, count, color, )
+
+  # 好
+  some_method(size, count, color)
+  ```
+
+* 當賦予預設值給方法參數時，使用空格圍繞 `=` 運算元：
 
     ```Ruby
-    # bad
+    # 不好
     def some_method(arg1=:default, arg2=nil, arg3=[])
       # do something...
     end
 
-    # good
+    # 好
     def some_method(arg1 = :default, arg2 = nil, arg3 = [])
       # do something...
     end
     ```
 
-    While several Ruby books suggest the first style, the second is much more prominent
-    in practice (and arguably a bit more readable).
+    雖然幾本Ruby的書籍建議第一種風格，不過第二種風格在實務上更為常見（並應該會較容易閱讀）。
 
-* Avoid line continuation (\\) where not required. In practice, avoid using
-  line continuations at all.
+* 避免在不需要的時候使用續行 `\`。在實務上，除了字串的連接，避免使用續行在任何地方。
 
     ```Ruby
-    # bad
+    # 不好
     result = 1 - \
              2
 
-    # good (but still ugly as hell)
+    # 好 (但仍然醜到爆)
     result = 1 \
              - 2
+
+    long_string = 'First part of the long string' \
+                ' and second part of the long string'
     ```
 
-* When continuing a chained method invocation on another line keep the `.` on the second line.
+* 採用一貫的多行方法鏈結風格。在Ruby社群中有兩種普遍的風格，兩種都被認為是好的寫法 - 前置 `.`（選項 A） 與後置 `.` （選項 B）。
+
+  * **（選項 A）** 當另一行繼續調用鏈結式方法時，把 `.` 放在第二行。
 
     ```Ruby
-    # bad - need to consult first line to understand second line
+    # 不好 - 必須要查看第一行才能了解第二行
     one.two.three.
       four
 
-    # good - it's immediately clear what's going on the second line
+    # 好 - 第二行發生什麼事可以立即地了解
     one.two.three
       .four
     ```
 
-* 當一個方法呼叫的參數擴展超過一行時，排列它們。
+  * **（選項 B）** 當另一行繼續調用鏈結式方法時，將 `.` 放在第一行，暗示下一行還有表達式。
 
     ```Ruby
-    # 一開始（一行太長）
+    # 不好 - 需要讀到第二行，才知道方法有繼續鏈結
+    one.two.three
+      .four
+
+    # 好 - 馬上知道還有表達式接續在第一行之後
+    one.two.three.
+      four
+    ```
+
+  關於這兩種可供替換的寫法，可以在[這裡](https://github.com/bbatsov/ruby-style-guide/pull/176)找到討論。
+
+* 如果一個方法呼叫的參數擴展超過一行時，排列它們。當排列參數超過行寬限制，也可以讓第二行只縮排一層。
+
+    ```Ruby
+    # 一開始 (一行太長)
     def send_mail(source)
       Mailer.deliver(to: 'bob@example.com', from: 'us@example.com', subject: 'Important message', body: source.text)
     end
 
-    # 不好（一般的縮排）
-    def send_mail(source)
-      Mailer.deliver(
-        to: 'bob@example.com',
-        from: 'us@example.com',
-        subject: 'Important message',
-        body: source.text)
-    end
-
-    # 不好（兩倍縮排）
+    # 不好 (兩倍縮排)
     def send_mail(source)
       Mailer.deliver(
           to: 'bob@example.com',
@@ -307,8 +410,38 @@
                      subject: 'Important message',
                      body: source.text)
     end
+
+    # 好 (一般的縮排)
+    def send_mail(source)
+      Mailer.deliver(
+        to: 'bob@example.com',
+        from: 'us@example.com',
+        subject: 'Important message',
+        body: source.text
+      )
+    end
     ```
-* Add underscores to big numeric literals to improve their readability.
+
+* 跨越多行來排列陣列的元素。
+
+  ```Ruby
+  # 不好 - 單層縮排
+  menu_item = ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+    'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+
+  # 好
+  menu_item = [
+    'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+    'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam'
+  ]
+
+  # 好
+  menu_item =
+    ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+     'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+  ```
+
+* 在語法中加入底線來改進大數值的可讀性。
 
     ```Ruby
     # 差勁 - 到底是有幾個零？
@@ -319,19 +452,21 @@
     ```
 
 * 使用 RDoc 以及它的慣例來撰寫 API 文件。不要在註解區塊及 `def` 之前放一個空行。
+
 * 將每一行限制在最多 80 個字元。
+
 * 避免尾隨的空白（trailing whitesapce）。
-* Don't use block comments. They cannot be preceded by whitespace and are not
-as easy to spot as regular comments.
+
+* 不要使用區塊註解，它們不能夠在開頭置入空白，而且無法像一般的註解一樣容易的被辨識出來。
 
     ```Ruby
-    # bad
+    # 不好
     == begin
     comment line
     another comment line
     == end
 
-    # good
+    # 好
     # comment line
     # another comment line
     ```
