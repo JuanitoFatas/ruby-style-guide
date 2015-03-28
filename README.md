@@ -1705,7 +1705,7 @@ condition](#safe-assignment-in-condition).
   end
   ```
 
-* <a name="map-fine-select-reduce-size"></a>
+* <a name="map-find-select-reduce-size"></a>
   Prefer `map` over `collect`, `find` over `detect`, `select` over `find_all`,
   `reduce` over `inject` and `size` over `length`. This is not a hard
   requirement; if the use of the alias enhances readability, it's ok to use it.
@@ -1713,7 +1713,7 @@ condition](#safe-assignment-in-condition).
   programming languages. The reason the use of `select` is encouraged over
   `find_all` is that it goes together nicely with `reject` and its name is
   pretty self-explanatory.
-<sup>[[link](#map-fine-select-reduce-size)]</sup>
+<sup>[[link](#map-find-select-reduce-size)]</sup>
 
 * <a name="count-vs-size"></a>
   Don't use `count` as a substitute for `size`. For `Enumerable` objects other
@@ -1998,7 +1998,8 @@ condition](#safe-assignment-in-condition).
 
 * <a name="indent-annotations"></a>
   If multiple lines are required to describe the problem, subsequent lines
-  should be indented two spaces after the `#`.
+  should be indented three spaces after the `#` (one general plus two for
+  indentation purpose).
 <sup>[[link](#indent-annotations)]</sup>
 
   ```Ruby
@@ -2301,10 +2302,19 @@ condition](#safe-assignment-in-condition).
   ````
 
 * <a name="no-extend-struct-new"></a>
-  Don't extend a `Struct.new` - it already is a new class. Extending it
-  introduces a superfluous class level and may also introduce weird errors if
-  the file is required multiple times.
+  Don't extend an instance initialized by `Struct.new`. Extending it introduces
+  a superfluous class level and may also introduce weird errors if the file is
+  required multiple times.
 <sup>[[link](#no-extend-struct-new)]</sup>
+
+  ```Ruby
+  # bad
+  class Person < Struct.new(:first_name, :last_name)
+  end
+
+  # good
+  Person = Struct.new(:first_name, :last_name)
+  ````
 
 * <a name="factory-methods"></a>
   Consider adding factory methods to provide additional sensible ways to
@@ -2392,7 +2402,7 @@ condition](#safe-assignment-in-condition).
 <sup>[[link](#visibility)]</sup>
 
 * <a name="indent-public-private-protected"></a>
-  Indent the `public`, `protected`, and `private` methods as much the method
+  Indent the `public`, `protected`, and `private` methods as much as the method
   definitions they apply to. Leave one blank line above the visibility modifier
   and one blank line below in order to emphasize that it applies to all methods
   below it.
@@ -2734,9 +2744,9 @@ condition](#safe-assignment-in-condition).
   end
   ```
 
-* <a name="file-close"></a>
-  Release external resources obtained by your program in an ensure block.
-<sup>[[link](#file-close)]</sup>
+* <a name="release-resources"></a>
+  Release external resources obtained by your program in an `ensure` block.
+<sup>[[link](#release-resources)]</sup>
 
   ```Ruby
   f = File.open('testfile')
@@ -2746,6 +2756,23 @@ condition](#safe-assignment-in-condition).
     # .. handle error
   ensure
     f.close if f
+  end
+  ```
+
+* <a name="auto-release-resources"></a>
+Use versions of resource obtaining methods that do automatic
+resource cleanup when possible.
+<sup>[[link](#auto-release-resources)]</sup>
+
+  ```Ruby
+  # bad - you need to close the file descriptor explicitly
+  f = File.open('testfile')
+    # ...
+  f.close
+
+  # good - the file descriptor is closed automatically
+  File.open('testfile') do |f|
+    # ...
   end
   ```
 
@@ -2965,6 +2992,42 @@ condition](#safe-assignment-in-condition).
   Do not modify a collection while traversing it.
 <sup>[[link](#no-modifying-collections)]</sup>
 
+* <a name="accessing-elements-directly"></a>
+  When accessing elements of a collection, avoid direct access
+  via `[n]` by using an alternate form of the reader method if it is
+  supplied. This guards you from calling `[]` on `nil`.
+<sup>[[link](#accessing-elements-directly)]</sup>
+
+  ```Ruby
+  # bad
+  Regexp.last_match[1]
+
+  # good
+  Regexp.last_match(1)
+  ```
+
+* <a name="provide-alternate-accessor-to-collections"></a>
+  When providing an accessor for a collection, provide an alternate form
+  to save users from checking for `nil` before accessing an element in
+  the collection.
+<sup>[[link](#provide-alternate-accessor-to-collections)]</sup>
+
+  ```Ruby
+  # bad
+  def awesome_things
+    @awesome_things
+  end
+
+  # good
+  def awesome_things(index = nil)
+    if index && @awesome_things
+      @awesome_things[index]
+    else
+      @awesome_things
+    end
+  end
+  ```
+
 ## Strings
 
 * <a name="string-interpolation"></a>
@@ -3167,7 +3230,7 @@ condition](#safe-assignment-in-condition).
 
 * <a name="no-perl-regexp-last-matchers"></a>
   Don't use the cryptic Perl-legacy variables denoting last regexp group
-  matches (`$1`, `$2`, etc). Use `Regexp.last_match[n]` instead.
+  matches (`$1`, `$2`, etc). Use `Regexp.last_match(n)` instead.
 <sup>[[link](#no-perl-regexp-last-matchers)]</sup>
 
   ```Ruby
@@ -3178,7 +3241,7 @@ condition](#safe-assignment-in-condition).
   process $1
 
   # good
-  process Regexp.last_match[1]
+  process Regexp.last_match(1)
   ```
 
 * <a name="no-numbered-regexes"></a>
@@ -3190,7 +3253,7 @@ condition](#safe-assignment-in-condition).
   # bad
   /(regexp)/ =~ string
   ...
-  process Regexp.last_match[1]
+  process Regexp.last_match(1)
 
   # good
   /(?<meaningful_var>regexp)/ =~ string
@@ -3278,7 +3341,7 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="percent-r"></a>
-  Use `%r` only for regular expressions matching *more than* one '/'
+  Use `%r` only for regular expressions matching *at least* one '/'
   character.
 <sup>[[link](#percent-r)]</sup>
 
@@ -3286,11 +3349,8 @@ condition](#safe-assignment-in-condition).
   # bad
   %r(\s+)
 
-  # still bad
-  %r(^/(.*)$)
-  # should be /^\/(.*)$/
-
   # good
+  %r(^/(.*)$)
   %r(^/blog/2011/(.*)$)
   ```
 
@@ -3332,9 +3392,9 @@ condition](#safe-assignment-in-condition).
 
 ## Metaprogramming
 
-* <a name="no-metaprogramming-masturbation"></a>
+* <a name="no-needless-metaprogramming"></a>
   Avoid needless metaprogramming.
-<sup>[[link](#no-metaprogramming-masturbation)]</sup>
+<sup>[[link](#no-needless-metaprogramming)]</sup>
 
 * <a name="no-monkey-patching"></a>
   Do not mess around in core classes when writing libraries.  (Do not
