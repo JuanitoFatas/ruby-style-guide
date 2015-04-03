@@ -210,6 +210,18 @@
 
     ```
 
+* 范围表达式中间不要有空格。
+
+    ```Ruby
+    # 差
+    1 .. 3
+    'a' ... 'z'
+
+    # 好
+    1..3
+    'a'...'z'
+    ```
+
 * 把 `when` 跟 `case` 缩排在同一层。我知道很多人不同意这一点，但这是《The Ruby Programming Language》及《Programming Ruby》所使用的风格。
 
     ```Ruby
@@ -1376,7 +1388,7 @@
 
 * 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
 
-* 不用用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
+* 不要用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
 
     ```Ruby
     # 差
@@ -1416,6 +1428,9 @@
 * 标识符用英语命名。
 
     ```Ruby
+    # 差 - 变量名用非ascii字符
+    заплата = 1_000
+
     # 差 - 变量名用带有拉丁文的保加利亚语写成。
     zaplata = 1_000
 
@@ -2285,6 +2300,34 @@
 
 * 在遍历一个集合时，不要改动它。
 
+* 当访问集合中的元素时，避免通过 `[n]` 直接访问，尽量使用提供的方法。这样可以防止你对 `nil` 调用 `[]`。
+
+  ```Ruby
+  # 差
+  Regexp.last_match[1]
+
+  # 好
+  Regexp.last_match(1)
+  ```
+
+* 为集合提供存取器时，在访问元素之前采用一种替代的形式，从而防止用户访问的下标是 `nil`。
+
+  ```Ruby
+  # 差
+  def awesome_things
+    @awesome_things
+  end
+
+  # 好
+  def awesome_things(index = nil)
+    if index && @awesome_things
+      @awesome_things[index]
+    else
+      @awesome_things
+    end
+  end
+  ```
+
 ## 字符串
 
 * 尽量使用字符串插值（interpolation），而不是字符串连接（concatenation）。
@@ -2324,6 +2367,8 @@
     # 好
     name = "Bozhidar"
     ```
+
+  有争议的是，第二种风格在 Ruby 社区里更受欢迎一些。但是本指南中字符串采用第一种风格。
 
 * 不要用 `?x`。从 Ruby 1.9 开始， `?x` 和 `'x'` 是等价的（只包括一个字符的字符串）。
 
@@ -2646,7 +2691,7 @@
 
     Foo.bar = 1
     ```
-* 当 `alias_method` 可以做到时，避免使用 `alias` 。
+
 * 使用 `OptionParser` 来解析复杂的命令行选项及 `ruby -s` 来处理琐碎的命令行选项。
 * 使用 `Time.now` 而不是 `Time.new` 来获取系统时间。
 * 用函数式的方法编程，在有意义的情况下避免赋值 (mutation)。
@@ -2672,6 +2717,9 @@
 在本指南所写的每条规则都不是定案。这只是我渴望想与同样对 Ruby 编程风格有兴趣的大家一起工作，以致于最终我们可以替整个 Ruby 社区创造一个有益的资源。
 
 欢迎 open tickets 或 push 一个带有改进的更新请求。在此提前感谢你的帮助！
+
+## 如何贡献？
+很简单，只需要参考 [贡献准则](https://github.com/bbatsov/ruby-style-guide/blob/master/CONTRIBUTING.md)。
 
 # 授权
 
