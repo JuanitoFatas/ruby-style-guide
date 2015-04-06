@@ -473,28 +473,40 @@
 
 ## 語法
 
-* Use `::` only to reference constants(this includes classes and
-modules). Never use `::` for method invocation.
+* 只使用 `::` 去參照常數（這包括類別與模組）與建構式（像是 `Array()` 或 `Nokogiri::HTML()` ）。不要使用 `::` 作為一般的方法調用。
 
     ```Ruby
-    # bad
+    # 不好
     SomeClass::some_method
     some_object::some_method
 
-    # good
+    # 好
     SomeClass.some_method
     some_object.some_method
     SomeModule::SomeClass::SOME_CONST
+    SomeModule::SomeClass()
     ```
 
 * 使用 `def` 時，當有參數時使用括號。當方法不接受任何參數時，省略括號。
 
      ```Ruby
+     # 不好
+     def some_method()
+       # 省略主體
+     end
+
+     # 好
      def some_method
        # 省略主體
      end
 
-     def some_method_with_arguments(arg1, arg2)
+     # 不好
+     def some_method_with_parameters param1, param2
+       # 省略主體
+     end
+
+     # 好
+     def some_method_with_parameters(param1, param2)
        # 省略主體
      end
      ```
@@ -509,8 +521,14 @@ modules). Never use `::` for method invocation.
       puts elem
     end
 
+    # 注意，在迴圈外一樣可以存取該元素
+    elem # => 3
+
     # 好
     arr.each { |elem| puts elem }
+
+    # 該元素不能在 each 的區塊之外被存取
+    elem # => NameError: undefined local variable or method `elem'
     ```
 
 * 永遠不要在多行的 `if/unless` 使用 `then`
@@ -526,6 +544,23 @@ modules). Never use `::` for method invocation.
       # 省略主體
     end
     ```
+
+* 在多行的條件判斷區域中，永遠將條件式與 `if`/`unless` 放在同一行。
+
+  ```Ruby
+  # 不好
+  if
+    some_condition
+    do_something
+    do_something_else
+  end
+
+  # 好
+  if some_condition
+    do_something
+    do_something_else
+  end
+  ```
 
 * 偏愛三元運算元 `? : ` 勝於 `if/then/else/end` 結構
 * 它更為常見及更精準。
@@ -550,7 +585,7 @@ modules). Never use `::` for method invocation.
       something_else
     end
     ```
-* 永遠不要使用 `if x: ...` — 它已經在 Ruby 1.9 被移除了。使用三元運算元來取代。
+* 永遠不要使用 `if x; ...`。使用三元運算元來取代。
 
     ```Ruby
     # 不好
@@ -559,7 +594,25 @@ modules). Never use `::` for method invocation.
     # 好
     result = some_condition ? something : something_else
     ```
-* 永遠不要使用 `if x; ...` 使用三元運算元來取代。
+
+* 充分利用 `if` 與 `case` 會回傳結果的特性
+
+  ```Ruby
+  # 不好
+  if condition
+    result = x
+  else
+    result = y
+  end
+
+  # 好
+  result =
+    if condition
+      x
+    else
+      y
+    end
+  ```
 
 * 一行的情況使用 `when x then ...` 。替代方案的語法 `when x: ...` 已經在 Ruby 1.9 被移除了。
 
@@ -575,17 +628,49 @@ modules). Never use `::` for method invocation.
     x = !something
     ```
 
-* 布林表達式使用 `&&/||`，控制流程使用 `and/or`。（經驗法則：如果你需要使用外部括號，你正在使用錯誤的運算元。）
+* 避免使用 `!!`。
 
-    ```Ruby
-    # 布林表達式
-    if some_condition && some_other_condition
-      do_something
-    end
+  ```Ruby
+  # 不好
+  x = 'test'
+  # 令人混淆的 nil 檢查
+  if !!x
+    # 省略主體
+  end
 
-    # 控制流程
-    document.saved? or document.save!
-    ```
+  x = false
+  # 雙重否定對布林值來說是不必要的
+  !!x # => false
+
+  # 好
+  x = 'test'
+  unless x.nil?
+    # 省略主體
+  end
+  ```
+
+* 禁止使用 `and` 與 `or`。這麼做不值得。永遠使用 `&&` 與 `||` 取代。
+
+  ```Ruby
+  # 不好
+  # 布林表達式
+  if some_condition and some_other_condition
+    do_something
+  end
+
+  # 控制流程
+  document.saved? or document.save!
+
+  # 好
+  # 布林表達式
+  if some_condition && some_other_condition
+    do_something
+  end
+
+  # 控制流程
+  document.saved? || document.save!
+  ```
+
 * 避免多行的 `? : `（三元運算元）；使用 `if/unless` 來取代。
 
 * 當你有單行的主體時，偏愛 `if/unless` 修飾符。另一個好的方法是使用控制流程的 `and/or` 。
@@ -600,14 +685,33 @@ modules). Never use `::` for method invocation.
     do_something if some_condition
 
     # 另一個好方法
-    some_condition and do_something
+    some_condition && do_something
     ```
 
-* 否定條件偏愛 `unless` 優於 `if`  （或是控制流程 `or`）。
+* 多行的複雜區塊避免使用 `if/unless` 修飾符。
+
+  ```Ruby
+  # 不好
+  10.times do
+    # 多行主體省略
+  end if some_condition
+
+  # 好
+  if some_condition
+    10.times do
+      # 多行主體省略
+    end
+  end
+  ```
+
+* 否定條件偏愛 `unless` 優於 `if` （或是控制流程 `||`）。
 
     ```Ruby
     # 不好
     do_something if !some_condition
+
+    # 不好
+    do_something if not some_condition
 
     # 好
     do_something unless some_condition
@@ -644,34 +748,89 @@ modules). Never use `::` for method invocation.
     if x > 10
       # 省略主體
     end
-
-    # 好
-    if (x = self.next_value)
-      # 省略主體
-    end
     ```
+
+注意這項規則有個例外，[條件式中的安全賦值](#safe-assignment-in-condition)。
+
+* 多行的 `while/until` 不要使用 `while/until condition do`。
+
+  ```Ruby
+  # 不好
+  while x > 5 do
+    # 主體省略
+  end
+
+  until x > 5 do
+    # 主體省略
+  end
+
+  # 好
+  while x > 5
+    # 主體省略
+  end
+
+  until x > 5
+    # 主體省略
+  end
+  ```
 
 * 當你有一個單行的主體時，偏愛使用 `while/until` 修飾子。
 
     ```Ruby
-    # bad
+    # 不好
     while some_condition
       do_something
     end
 
-    # good
+    # 好
     do_something while some_condition
     ```
 
 * 負面條件偏愛 `until` 勝於 `while`。
 
     ```Ruby
-    # bad
+    # 不好
     do_something while !some_condition
 
-    # good
+    # 好
     do_something until some_condition
     ```
+
+* 當你需要使用 `Kernel#loop` 代替 `while/until`。
+
+    ```ruby
+    # 不好
+    while true
+      do_something
+    end
+
+    until false
+      do_something
+    end
+
+    # 好
+    loop do
+      do_something
+    end
+    ```
+
+* 迴圈後測試使用 `Kernel#loop` 搭配 `break`，而不是 `begin/end/until` 或
+  `begin/end/while`。
+
+  ```Ruby
+  # 不好
+  begin
+    puts val
+    val += 1
+  end while val < 0
+
+  # 好
+  loop do
+    puts val
+    val += 1
+    break unless val < 0
+  end
+  ```
 
 * 忽略圍繞方法參數的括號，如內部 DSL (如：Rake, Rails, RSpec)，Ruby 中帶有 "關鍵字" 狀態的方法（如：`attr_reader`, `puts`）以及屬性存取方法。所有其他的方法呼叫，使用括號圍繞參數。
 
@@ -689,7 +848,47 @@ modules). Never use `::` for method invocation.
 
     x = Math.sin(y)
     array.delete(e)
+
+    bowling.score.should == 0
     ```
+
+* 省略圍繞在隱式選項雜湊外圍的花括號。
+
+  ```Ruby
+  # 不好
+  user.set({ name: 'John', age: 45, permissions: { read: true } })
+
+  # 好
+  user.set(name: 'John', age: 45, permissions: { read: true })
+  ```
+
+* 方法屬於內部DSL時，同時省略外圍的花括號與圓括號。
+
+  ```Ruby
+  class Person < ActiveRecord::Base
+    # 不好
+    validates(:name, { presence: true, length: { within: 1..10 } })
+
+    # 好
+    validates :name, presence: true, length: { within: 1..10 }
+  end
+  ```
+
+* 方法呼叫不包含參數時，省略圓括號。
+
+  ```Ruby
+  # 不好
+  Kernel.exit!()
+  2.even?()
+  fork()
+  'test'.upcase()
+
+  # 好
+  Kernel.exit!
+  2.even?
+  fork
+  'test'.upcase
+  ```
 
 * 單行區塊喜好 `{...}` 勝於 `do..end`。多行區塊避免使用 `{...}`（多行串連總是醜陋）。在 `do...end` 、 "控制流程" 及"方法定義"，永遠使用 `do...end` （如 Rakefile 及某些 DSL）。串連時避免使用 `do...end`。
 
@@ -713,6 +912,30 @@ modules). Never use `::` for method invocation.
     names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
     ```
     某些人會爭論多行串連時，使用`{...}`看起來還可以，但他們應該捫心自問 — 這樣程式碼真的可讀嗎？難道不能把區塊內容取出來放到絕妙的方法裡嗎？
+
+* 考慮使用明確的區塊參數，避免只為了傳遞參數到另一個區塊而使用區塊語法。注意區塊轉換成 Proc 所造成的效能影響。
+
+  ```Ruby
+  require 'tempfile'
+
+  # 不好
+  def with_tmp_dir
+    Dir.mktmpdir do |tmp_dir|
+      Dir.chdir(tmp_dir) { |dir| yield dir }  # block just passes arguments
+    end
+  end
+
+  # 好
+  def with_tmp_dir(&block)
+    Dir.mktmpdir do |tmp_dir|
+      Dir.chdir(tmp_dir, &block)
+    end
+  end
+
+  with_tmp_dir do |dir|
+    puts "dir is accessible as a parameter and pwd is set: #{dir}"
+  end
+  ```
 
 * 避免在不需要控制流程的場合時使用 `return` 。
 
@@ -759,7 +982,7 @@ modules). Never use `::` for method invocation.
       # ok
       def initialize(options)
         self.options = options
-        # both options and self.options are equivalent here
+        # options 與 self.options 相等
       end
 
       # 不好
@@ -778,63 +1001,61 @@ modules). Never use `::` for method invocation.
     end
     ```
 
-* 當賦予預設值給方法參數時，使用空格圍繞 `=` 運算元。
+* 不要在條件表達式中使用 `=`（賦值）回傳值，除非賦值被包在圓括號中。 這樣的做法在Ruby開發者（Rubyists）中被廣泛稱之為＊條件式中的安全賦值（safe assignment in condition）*。
 
-    ```Ruby
-    # 不好
-    def some_method(arg1=:default, arg2=nil, arg3=[])
-      # 做些事情...
-    end
+  ```Ruby
+  # 不好 (＋ 會出現警告)
+  if v = array.grep(/foo/)
+    do_something(v)
+    ...
+  end
 
-    # 好
-    def some_method(arg1 = :default, arg2 = nil, arg3 = [])
-      # 做些事情...
-    end
-    ```
+  # 好 (MRI 還是會出現警告, 但 RuboCop 不會)
+  if (v = array.grep(/foo/))
+    do_something(v)
+    ...
+  end
 
-    然而幾本 Ruby 書建議第一個風格，第二個風格在實踐中更為常見（並可爭議地可讀性更高一點）。
+  # 好
+  v = array.grep(/foo/)
+  if v
+    do_something(v)
+    ...
+  end
+  ```
 
-* 避免在不需要的場合使用續行 `\`。在實踐中，盡量避免使用續行。
+* 盡量使用自我賦值的簡寫寫運算元。
 
-    ```Ruby
-    # 不好
-    result = 1 - \
-             2
+  ```Ruby
+  # 不好
+  x = x + y
+  x = x * y
+  x = x**y
+  x = x / y
+  x = x || y
+  x = x && y
 
-    # 好 (但仍然醜的跟地獄一樣）
-    result = 1 \
-             - 2
-    ```
+  # 好
+  x += y
+  x *= y
+  x **= y
+  x /= y
+  x ||= y
+  x &&= y
+  ```
 
-* 不要在條件表達式裡使用 `=`（賦值）的回傳值。
+* 只有在變數尚未被初始化時，使用 `||=` 初始化變數。
 
-    ```Ruby
-    # bad (+ a warning)
-    if (v = array.grep(/foo/))
-      do_something(v)
-      ...
-    end
+  ```Ruby
+  # 不好
+  name = name ? name : 'Bozhidar'
 
-    # bad (+ a warning)
-    if v = array.grep(/foo/)
-      do_something(v)
-      ...
-    end
+  # 不好
+  name = 'Bozhidar' unless name
 
-    # good
-    v = array.grep(/foo/)
-    if v
-      do_something(v)
-      ...
-    end
-    ```
-
-* 隨意使用 `||=` 來初始化變數
-
-    ```Ruby
-    # 僅在name為nil或false時，把名字設為 Bozhidar。
-    name ||= 'Bozhidar'
-    ```
+  # 好 - 只有在 name 不是 nil 或 false 時，設定為 Bozhidar
+  name ||= 'Bozhidar'
+  ```
 
 * 不要使用 `||=` 來初始化布林變數。（想看看如果現在的值剛好是 `false` 時會發生什麼。）
 
@@ -844,8 +1065,63 @@ modules). Never use `::` for method invocation.
 
     # 好
     enabled = true if enabled.nil?
-    ```
-* 避免使用 Perl 風格的特別變數（像是 `$0-9`, `$`, 等等）。它們看起來非常神祕以及不鼓勵使用一行的腳本。
+
+* 使用 `&&=` 預先處理變數是否存在。 `&&=` 只會更改已經存在的變數，所以能夠移除使用 `if` 確認變數是否存在。
+
+  ```Ruby
+  # 不好
+  if something
+    something = something.downcase
+  end
+
+  # 不好
+  something = something ? something.downcase : nil
+
+  # 還可以
+  something = something.downcase if something
+
+  # 好
+  something = something && something.downcase
+
+  # 更好
+  something &&= something.downcase
+  ```
+
+* 避免直接使用型態相等運算元（case equality operator） `===`。它的名字暗示它絕對該被用在 `case` 表達式，不在此情形內則會產生一些令人困惑的程式碼。
+
+  ```Ruby
+  # 不好
+  Array === something
+  (1..100) === 7
+  /something/ === some_string
+
+  # 好
+  something.is_a?(Array)
+  (1..100).include?(7)
+  some_string =~ /something/
+  ```
+
+* 可以使用 `==` 則不要使用 `eql?`。實務中很少需要 `eql?` 所提供的嚴格比較。
+
+  ```Ruby
+  # 不好 - 對字串來說 eql? 與 == 作用一樣
+  "ruby".eql? some_str
+
+  # 好
+  "ruby" == some_str
+  1.0.eql? x # 使用 eql? 區別 Fixnum 與 Float 的 1 很合理
+  ```
+
+* 避免使用 Perl 風格的特別變數（像是 `$:` 、 `$;` 等等）。它們看起來非常神祕以及不鼓勵使用一行的腳本。使用函式庫 `English` 提供的可閱讀的別名。
+
+  ```Ruby
+  # 不好
+  $:.unshift File.dirname(__FILE__)
+
+  # 好
+  require 'English'
+  $LOAD_PATH.unshift File.dirname(__FILE__)
+  ```
 
 * 避免在方法名與左括號之間放一個空格。
 
@@ -856,90 +1132,290 @@ modules). Never use `::` for method invocation.
     # 好
     f(3 + 2) + 1
     ```
+
 * 如果方法的第一個參數由左括號開始，永遠在這個方法呼叫裡使用括號。舉個例子，寫 `f((3+2) + 1)`。
 
 * 總是使用 `-w` 來執行 Ruby 直譯器，如果你忘了某個上述的規則，它就會警告你！
 
-* 使用新的 lambda 字面語法。
+* 對單行區塊主體使用新的 lambda 字面語法，多行區塊使用 `lambda` 方法。
 
     ```Ruby
     # 不好
     lambda = lambda { |a, b| a + b }
     lambda.call(1, 2)
 
+    # 正確，但使用非常不方便
+    l = ->(a, b) do
+      tmp = a * 7
+      tmp * b / 50
+    end
+
     # 好
-    lambda = ->(a, b) { a + b }
-    lambda.(1, 2)
+    l = ->(a, b) { a + b }
+    l.call(1, 2)
+
+    l = lambda do |a, b|
+      tmp = a * 7
+      tmp * b / 50
+    end
     ```
-* 未使用的區塊參數使用 `_` 。
+
+* 偏愛 `proc` 勝過 `Proc.new` 。
+
+  ```Ruby
+  # 不好
+  p = Proc.new { |n| puts n }
+
+  # 好
+  p = proc { |n| puts n }
+  ```
+
+* 對 lambdas 與 procs ，偏愛 `proc.call()` 勝過 `proc[]` 或是 `proc.()` 。
+
+  ```Ruby
+  # 不好 - 與列舉（Enumeration）的存取相似
+  l = ->(v) { puts v }
+  l[1]
+
+  # 還是不好 - 不常見的語法
+  l = ->(v) { puts v }
+  l.(1)
+
+  # 好
+  l = ->(v) { puts v }
+  l.call(1)
+  ```
+
+* 將沒有使用的區塊參數與區域變數加上前綴 `_` ，也可以只使用 `_` （雖然少了一點描述）。 Ruby 直譯器與工具像是 RuboCop 可以解析這個慣例，不會發出尚未使用變數的警告。
+
+  ```Ruby
+  # 不好
+  result = hash.map { |k, v| v + 1 }
+
+  def something(x)
+    unused_var, used_var = something_else(x)
+    # ...
+  end
+
+  # 好
+  result = hash.map { |_k, v| v + 1 }
+
+  def something(x)
+    _unused_var, used_var = something_else(x)
+    # ...
+  end
+
+  # 好
+  result = hash.map { |_, v| v + 1 }
+
+  def something(x)
+    _, used_var = something_else(x)
+    # ...
+  end
+  ```
+
+* 使用 `$stdout/$stderr/$stdin` 而不是
+  `STDOUT/STDERR/STDIN` 。 `STDOUT/STDERR/STDIN` 是常數， 在Ruby中的確可以將常數重新賦值（也許是想重新導向到某個串流）
+  ，但直譯器會發出警告。
+
+* 使用 `warn` 而不是 `$stderr.puts`。 除了比較清晰簡潔外， `warn` 允許停用警告（透過 `-W0` 設定警告級別為 0 ）。
+
+* 偏愛使用 `sprintf` 與它的別名 `format`，而不是使用相當晦澀的 `String#%` 方法。
+
+  ```Ruby
+  # 不好
+  '%d %d' % [20, 10]
+  # => '20 10'
+
+  # 好
+  sprintf('%d %d', 20, 10)
+  # => '20 10'
+
+  # 好
+  sprintf('%{first} %{second}', first: 20, second: 10)
+  # => '20 10'
+
+  format('%d %d', 20, 10)
+  # => '20 10'
+
+  # 好
+  format('%{first} %{second}', first: 20, second: 10)
+  # => '20 10'
+  ```
+
+* 偏愛使用 `Array#join` 而不是相當晦澀帶有字串參數的 `Array#*` 。
 
     ```Ruby
     # 不好
-    result = hash.map { |k, v| v + 1 }
-
-    # 好
-    result = hash.map { |_, v| v + 1 }
-    ```
-
-* Use `$stdout/$stderr/$stdin` instead of
-  `STDOUT/STDERR/STDIN`. `STDOUT/STDERR/STDIN` are constants, and
-  while you can actually reassign (possibly to redirect some stream)
-  constants in Ruby, you'll get an interpreter warning if you do so.
-
-* Use `warn` instead of `$stderr.puts`. Apart from being more concise
-and clear, `warn` allows you to suppress warnings if you need to (by
-setting the warn level to 0 via `-W0`).
-
-* Favor the use of `sprintf` over the fairly cryptic `String#%` method.
-
-    ```Ruby
-    # bad
-    '%d %d' % [20, 10]
-    # => '20 10'
-
-    # good
-    sprintf('%d %d', 20, 10)
-    # => '20 10'
-    ```
-
-* Favor the use of `Array#join` over the fairly cryptic `Array#*` with
-  a string argument.
-
-    ```Ruby
-    # bad
     %w(one two three) * ', '
     # => 'one, two, three'
 
-    # good
+    # 好
     %w(one two three).join(', ')
     # => 'one, two, three'
     ```
 
-* Use `[*var]` or `Array()` instead of explicit `Array` check, when dealing with a
-  variable you want to treat as an Array, but you're not certain it's
-  an array.
+* 當想要使用作為陣列用途的變數，但並不確定它是否為陣列，利用 `[*var]` 或是 `Array()` 而不是直接進行 `Array` 檢查。
 
     ```Ruby
-    # bad
+    # 不好
     paths = [paths] unless paths.is_a? Array
     paths.each { |path| do_something(path) }
 
-    # good
+    # 好
     [*paths].each { |path| do_something(path) }
 
-    # good (and a bit more readable)
+    # 好 （更加可讀）
     Array(paths).each { |path| do_something(path) }
     ```
 
-* Use ranges instead of complex comparison logic when possible.
+* 當可以使用範圍或是 `Comparable#between?` 就別使用複雜的邏輯比較。
 
-    ```Ruby
-    # bad
-    do_something if x >= 1000 && x < 2000
+  ```Ruby
+  # 不好
+  do_something if x >= 1000 && x <= 2000
 
-    # good
-    do_something if (1000...2000).include?(x)
+  # 好
+  do_something if (1000..2000).include?(x)
+
+  # 好
+  do_something if x.between?(1000, 2000)
+  ```
+
+* 偏愛使用述語方法（predicate methods）與 `==` 做出明確的區別。可以接受數字比較。
+
+  ```Ruby
+  # 不好
+  if x % 2 == 0
+  end
+
+  if x % 2 == 1
+  end
+
+  if x == nil
+  end
+
+  # 好
+  if x.even?
+  end
+
+  if x.odd?
+  end
+
+  if x.nil?
+  end
+
+  if x.zero?
+  end
+
+  if x == 0
+  end
+  ```
+
+* 不使用明確的非- `nil` 檢查，除非是處理布林值。
+
+    ```ruby
+    # 不好
+    do_something if !something.nil?
+    do_something if something != nil
+
+    # 好
+    do_something if something
+
+    # 好 - 處理布林值
+    def value_set?
+      !@some_boolean.nil?
+    end
     ```
+
+* 避免使用 `BEGIN` 區塊。
+
+* 不要使用 `END` 區塊。使用 `Kernel#at_exit` 。
+
+  ```ruby
+  # 不好
+  END { puts 'Goodbye!' }
+
+  # 好
+  at_exit { puts 'Goodbye!' }
+  ```
+
+* 避免使用範圍運算元（flip-flops）。
+
+* 避免在流程控制中使用巢狀的條件。
+
+  當你能斷定無效的資料時，則偏好使用守衛語句（guard clause）。 守衛語句是在函式最上方的條件句，在必要的時候能夠盡快地脫離方法。
+
+  ```Ruby
+  # 不好
+  def compute_thing(thing)
+    if thing[:foo]
+      update_with_bar(thing)
+      if thing[:foo][:bar]
+        partial_compute(thing)
+      else
+        re_compute(thing)
+      end
+    end
+  end
+
+  # 好
+  def compute_thing(thing)
+    return unless thing[:foo]
+    update_with_bar(thing[:foo])
+    return re_compute(thing) unless thing[:foo][:bar]
+    partial_compute(thing)
+  end
+  ```
+
+  偏愛在迴圈中使用 `next` 而不是條件區塊。
+
+  ```Ruby
+  # 不好
+  [0, 1, 2, 3].each do |item|
+    if item > 1
+      puts item
+    end
+  end
+
+  # 好
+  [0, 1, 2, 3].each do |item|
+    next unless item > 1
+    puts item
+  end
+  ```
+
+* 偏好 `map` 比 `collect` 好， `find` 比 `detect` 好， `select` 比 `find_all` 好， `reduce` 比 `inject` 好， `size` 比 `length` 好。這並非是硬性的需求;如果使用別名能增強可讀性，那就用吧。 押韻方法（rhyming methods）沿襲自 Smalltalk ，這在其他程式語言中並不常見。鼓勵使用 `select` 大於 `find_all` ，因為能夠很好的與 `reject` 放在一起，而且它的名字能夠解釋自己的作用。
+
+* 不要使用 `count` 作為 `size` 的替代方案。除了 `Enumerable` 物件之外還有 `Array` ，都會遍歷整個集合來取得它的大小。
+
+  ```Ruby
+  # 不好
+  some_hash.count
+
+  # 好
+  some_hash.size
+  ```
+
+* 使用 `flat_map` 而不是 `map` + `flatten`。這不適用於深度大於兩層的陣列，舉例來說，如果 `users.first.songs == ['a', ['b','c']]` ，則使用 `map + flatten` 而不是 `flat_map`。`flat_map` 扁平化第一層的陣列，然而 `flatten` 所有情形都會進行扁平化。
+
+  ```Ruby
+  # 不好
+  all_songs = users.map(&:songs).flatten.uniq
+
+  # 好
+  all_songs = users.flat_map(&:songs).uniq
+  ```
+
+* 使用 `reverse_each` 而不是 `reverse.each` 。 `reverse_each` 不會製造一個新的陣列作為分配用途，這樣很好。
+
+  ```Ruby
+  # 不好
+  array.reverse.each { ... }
+
+  # 好
+  array.reverse_each { ... }
+  ```
 
 ## 命名
 
