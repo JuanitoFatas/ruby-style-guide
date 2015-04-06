@@ -1424,144 +1424,141 @@
 
 * 識別字用英語命名。
 
-    ```Ruby
-    # bad - variable name written in Bulgarian with latin characters
-    zaplata = 1_000
+  ```Ruby
+  # 不好 - 識別字使用非 ASCII 字母
+  заплата = 1_000
 
-    # good
-    salary = 1_000
-    ```
+  # 不好 - 識別字使用保加利亞語英語拼音（相較前例使用斯拉夫拼音）
+  zaplata = 1_000
+
+  # 好
+  salary = 1_000
+  ```
 
 * 符號、方法與變數使用蛇底式小寫（snake_case）。
 
-    ```Ruby
-    # 差
-    :'some symbol'
-    :SomeSymbol
-    :someSymbol
+  ```Ruby
+  # 不好
+  :'some symbol'
+  :SomeSymbol
+  :someSymbol
 
-    someVar = 5
+  someVar = 5
 
-    def someMethod
-      ...
-    end
+  def someMethod
+    ...
+  end
 
-    def SomeMethod
-     ...
-    end
+  def SomeMethod
+   ...
+  end
 
-    # 好
-    :some_symbol
+  # 好
+  :some_symbol
 
-    def some_method
-      ...
-    end
-    ```
+  def some_method
+    ...
+  end
+  ```
 
 * 類別與模組使用駝峰式大小寫（CamelCase）。（保留像是 HTTP、RFC、XML 這種縮寫為大寫）
 
-    ```Ruby
-    # 差
-    class Someclass
-      ...
-    end
+  ```Ruby
+  # 不好
+  class Someclass
+    ...
+  end
 
-    class Some_Class
-      ...
-    end
+  class Some_Class
+    ...
+  end
 
-    class SomeXml
-      ...
-    end
+  class SomeXml
+    ...
+  end
 
-    # 好
-    class SomeClass
-      ...
-    end
+  # 好
+  class SomeClass
+    ...
+  end
 
-    class SomeXML
-      ...
-    end
-    ```
+  class SomeXML
+    ...
+  end
+  ```
+
+* 檔案命名使用蛇底式小寫（snake_case），例如： `hello_world.rb` 。
+
+* 資料夾命名亦使用蛇底式小寫（snake_case），例如： `lib/hello_world/hello_world.rb` 。
+
+* 盡量讓每一個檔案內只有單一類別或模組。使用該類別或模組的名稱來替該檔案命名，但將名稱從駝峰式大小寫（CamelCase）置換成蛇底式小寫（snake_case）。
 
 * 其他常數使用尖叫蛇底式大寫（SCREAMING_SNAKE_CASE）。
 
-    ```Ruby
-    # 差
-    SomeConst = 5
+  ```Ruby
+  # 不好
+  SomeConst = 5
 
-    # 好
-    SOME_CONST = 5
-    ```
+  # 好
+  SOME_CONST = 5
+  ```
 
-* 判斷式方法的名字（回傳布林值的方法）應以問號結尾。(即 `Array#empty?` )
+* 判斷式方法的名字（回傳布林值的方法）應以問號結尾。(即 `Array#empty?` )。非回傳布林值的方法，不應以問號結尾。
+
 * 有潛在“危險性”的方法，若此 *危險* 方法有安全版本存在時，應以安全版本名加上驚嘆號結尾（即：改動 `self` 或參數、 `exit!` 等等方法）。
 
-    ```Ruby
-    # 不好 - 沒有對應的安全方法
-    class Person
-      def update!
-      end
+  ```Ruby
+  # 不好 - 沒有對應的安全方法
+  class Person
+    def update!
+    end
+  end
+
+  # 好
+  class Person
+    def update
+    end
+  end
+
+  # 好
+  class Person
+    def update!
     end
 
-    # 好
-    class Person
-      def update
-      end
+    def update
     end
-
-    # 好
-    class Person
-      def update!
-      end
-
-      def update
-      end
-    end
-    ```
+  end
+  ```
 
 * 如果可能的話，從危險方法（bang）的角度來定義對應的安全方法（non-bang）。
 
-    ```Ruby
-    class Array
-      def flatten_once!
-        res = []
+  ```Ruby
+  class Array
+    def flatten_once!
+      res = []
 
-        each do |e|
-          [*e].each { |f| res << f }
-        end
-
-        replace(res)
+      each do |e|
+        [*e].each { |f| res << f }
       end
 
-      def flatten_once
-        dup.flatten_once!
-      end
+      replace(res)
     end
-    ```
+
+    def flatten_once
+      dup.flatten_once!
+    end
+  end
+  ```
 
 * 在短的區塊使用 `reduce` 時，把參數命名為 `|a, e|` (累加器，元素)
+
 * 在定義二元操作符時，把參數命名為 `other` （`<<` 與 `[]` 是這條規則的例外，因為它們的語義不同）。
 
-    ```Ruby
-    def +(other)
-      # 省略主體
-    end
-    ```
-* 偏好 `map` 勝於 `collect` ， `find` 勝於 `detect` ， `select` 勝於 `find_all` ， `reduce` 勝於 `inject` 以及 `size` 勝於 `length` 。這不是一個硬性要求；如果使用別名增加了可讀性，使用它沒關係。這些有押韻的方法名是從 Smalltalk 繼承而來，在別的語言不常見。鼓勵使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起來是一目了然的。
-
-* 使用 `flat_map` 勝於使用 `map` + `flatten` 的組合。
-  這並不適用於深度大於 2 的陣列，舉個例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，則使用 `map + flatten` 的組合，而不是使用 `flat_map` 。
-  `flat_map` 將陣列變平坦一個層級，而 `flatten` 會將整個陣列變平坦。
-
-
-    ```Ruby
-    # bad
-    all_songs = users.map(&:songs).flatten.uniq
-
-    # good
-    all_songs = users.flat_map(&:songs).uniq
-    ```
+  ```Ruby
+  def +(other)
+    # 省略主體
+  end
+  ```
 
 ## 註解
 
