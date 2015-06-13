@@ -30,7 +30,9 @@
 * [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
 * [繁體中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
 * [法文](https://github.com/porecreat/ruby-style-guide/blob/master/README-frFR.md)
+* [德文](https://github.com/arbox/de-ruby-style-guide/blob/master/README-deDE.md)
 * [日文](https://github.com/fortissimo1997/ruby-style-guide/blob/japanese/README.ja.md)
+* [韩文](https://github.com/dalzony/ruby-style-guide/blob/master/README-koKR.md)
 * [葡萄牙文](https://github.com/rubensmabueno/ruby-style-guide/blob/master/README-PT-BR.md)
 * [俄文](https://github.com/arbox/ruby-style-guide/blob/master/README-ruRU.md)
 * [西班牙文](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
@@ -160,7 +162,7 @@
     ```
 
     `{` 和 `}` 需要额外说明，因为他们是用在块（block）、
-    哈希字面量（hash literals），以及嵌入字符串的表达式中。
+    哈希字面量（hash literals），以及字符串插值中。
     对于哈希字面量来说，两种风格都是可接受的。
 
     ```Ruby
@@ -175,19 +177,6 @@
     第二种风格具有可为块和哈希字面量添加可视化的差别的优点。
     无论你选哪一种都行——但是最好保持一致。
 
-    至于嵌入表达式（embedded expressions），这儿也有两个可接受的选择：
-
-    ```Ruby
-    # 好——没有空格
-    "string#{expr}"
-
-    # 可以——更具可读性（有些争议）
-    "string#{ expr }"
-    ```
-
-    第一种风格极为流行，一般其他人都会建议你坚持这种风格。
-    第二种风格有些更具可读性（虽然颇具争议）。
-    正如哈希那样——选一种风格并且保持一致。
 
 * `(` 、 `[` 之后， `]` 、 `)` 之前，不要有空格。
 
@@ -508,11 +497,11 @@
       # 此处省略方法体
 
     # 差
-    def some_method_with_arguments arg1, arg2
+    def some_method_with_parameters param1, param2
       # 此处省略方法体
 
     # 好
-    def some_method_with_arguments(arg1, arg2)
+    def some_method_with_parameters(param1, param2)
       # 此处省略方法体
     end
     ```
@@ -897,10 +886,20 @@
     'test'.upcase
     ```
 
+* 当被调用的方法是只有一个操作的区块时，使用`Proc`。
+
+    ```Ruby
+    # 差
+    names.map { |name| name.upcase }
+
+    # 好
+    names.map(&:upcase)
+    ```
+
 * 单行区块倾向使用 `{...}` 而不是 `do...end`。多行区块避免使用 `{...}`（多行串连总是​​丑陋）。在 `do...end` 、 “控制流程”及“方法定义”，永远使用 `do...end` （如 Rakefile 及某些 DSL）。串连时避免使用 `do...end`。
 
     ```Ruby
-    names = ['Bozhidar', 'Steve', 'Sarah']
+    names = %w(Bozhidar Steve Sarah)
 
     # 差
     names.each do |name|
@@ -916,7 +915,7 @@
     end.map { |name| name.upcase }
 
     # 好
-    names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
+    names.select { |name| name.start_with?('S') }.map(&:upcase)
     ```
 
     某些人会争论多行串连时，使用 `{...}` 看起来还可以，但他们应该扪心自问——这样代码真的可读吗？难道不能把区块内容取出来放到小巧的方法里吗？
@@ -1156,6 +1155,16 @@
       tmp = a * 7
       tmp * b / 50
     end
+    ```
+
+* 当定义一个简短且没有参数的 lambda 时，省略参数的括号。
+
+    ```Ruby
+    # 差
+    l = ->() { something }
+
+    # 好
+    l = -> { something }
     ```
 
 * 用 `proc` 而不是 `Proc.new`。
@@ -1639,6 +1648,10 @@
       def self.some_method
       end
 
+      # 初始化方法在类方法和实例方法之间
+      def initialize
+      end
+
       # 跟着是公开的实例方法
       def some_method
       end
@@ -1920,7 +1933,7 @@
     end
     ```
 
-* 使用 `def self.method` 来定义 Singleton 方法。在代码重构时如果修改类名也无需重复多次修改了。
+* 使用 `def self.method` 来定义方法。在代码重构时如果修改类名也无需重复多次修改了。
 
     ```Ruby
     class TestClass
@@ -1934,7 +1947,7 @@
         # 省略方法体
       end
 
-      # 另一种便捷的方式
+      # 当你需要定义很多个类时，另一种便捷的方式
       class << self
         def first_method
           # 省略方法体
@@ -2273,16 +2286,16 @@
    batman.fetch(:is_evil, true) # => false
    ```
 
-* 尽量用 `Hash#fetch` 加区块而不是直接设定默认值。
+* 如果求值的代码有副作用或者开销大，尽量用 `Hash#fetch` 加区块而不是直接设定默认值。
 
    ```Ruby
    batman = { name: 'Bruce Wayne' }
 
    # 差 - 默认值是立即求值
-   batman.fetch(:powers, get_batman_powers) # get_batman_powers 需要复杂的计算
+   batman.fetch(:powers, obtain_batman_powers) # obtain_batman_powers 需要复杂的计算
 
    # 好 - 区块是惰性求职，只有当 KeyError 异常时才执行
-   batman.fetch(:powers) { get_batman_powers }
+   batman.fetch(:powers) { obtain_batman_powers }
    ```
 
 * 当需要从哈希中同时获取多个键值时，使用 `Hash#values_at`。
@@ -2340,10 +2353,14 @@
     email_with_name = "#{user.name} <#{user.email}>"
     ```
 
-* 考虑替字符串插值留白。這使插值在字符串里看起來更清楚。
+* 对于插值表达式, 括号内不应有留白（padded-spacing）。
 
     ```Ruby
-    "#{ user.last_name }, #{ user.first_name }"
+    # 差
+    "From: #{ user.first_name }, #{ user.last_name }"
+
+    # 好
+    "From: #{user.first_name}, #{user.last_name}"
     ```
 
 * 选定一个字符串字面量创建的风格。Ruby 社区认可两种分割，默认用单引号（风格 A）和默认用双引号（风格 B）
@@ -2570,14 +2587,11 @@
 
     ```Ruby
     # 差
-    %r(\s+)
-
-    # 仍然差
-    %r(^/(.*)$)
-    # 应当是 /^\/(.*)$/
+    %r{\s+}
 
     # 好
-    %r(^/blog/2011/(.*)$)
+    %r{^/(.*)$}
+    %r{^/blog/2011/(.*)$}
     ```
 
 * 除非调用的命令中用到了反引号（这种情况不常见），否则不要用 `%x` 。
