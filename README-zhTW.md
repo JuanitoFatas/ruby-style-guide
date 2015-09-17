@@ -461,10 +461,10 @@
 
     ```Ruby
     # 不好
-    == begin
+    =begin
     comment line
     another comment line
-    == end
+    =end
 
     # 好
     # comment line
@@ -1001,7 +1001,7 @@
     end
     ```
 
-* 不要在條件表達式中使用 `=`（賦值）回傳值，除非賦值被包在圓括號中。 這樣的做法在Ruby開發者（Rubyists）中被廣泛稱之為＊條件式中的安全賦值（safe assignment in condition）*。
+* 不要在條件表達式中使用 `=`（賦值）回傳值，除非賦值被包在圓括號中。 這樣的做法在Ruby開發者（Rubyists）中被廣泛稱之為*條件式中的安全賦值（safe assignment in condition）*。
 
   ```Ruby
   # 不好 (＋ 會出現警告)
@@ -1065,6 +1065,7 @@
 
     # 好
     enabled = true if enabled.nil?
+    ```
 
 * 使用 `&&=` 預先處理變數是否存在。 `&&=` 只會更改已經存在的變數，所以能夠移除使用 `if` 確認變數是否存在。
 
@@ -1769,7 +1770,7 @@
     # 較佳
     Person = Struct.new(:first_name, :last_name) do
     end
-    ````
+    ```
 * 考慮加入工廠方法來提供額外合理的方式，來創造一個特定類別的實體。
 
     ```Ruby
