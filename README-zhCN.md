@@ -2594,7 +2594,7 @@
     /(?:first|second)/ # 好
     ```
 
-* 不要使用 Perl 遗风的变量来表示捕获的正则分组（如 `$1` 、 `$2` 等），它们看起来神神秘秘的。使用 `Regexp.last_match[n]`。
+* 不要使用 Perl 遗风的变量来表示捕获的正则分组（如 `$1` 、 `$2` 等），它们看起来神神秘秘的。使用 `Regexp.last_match(n)`。
 
     ```Ruby
     /(regexp)/ =~ string
@@ -2604,7 +2604,7 @@
     process $1
 
     # 好
-    process Regexp.last_match[1]
+    process Regexp.last_match(1)
     ```
 
 * 避免使用数字来获取分组。因为很难明白它们代表的意思。应该使用命名分组来替代。
@@ -2613,7 +2613,7 @@
     # 差
     /(regexp)/ =~ string
     ...
-    process Regexp.last_match[1]
+    process Regexp.last_match(1)
 
     # 好
     /(?<meaningful_var>regexp)/ =~ string
