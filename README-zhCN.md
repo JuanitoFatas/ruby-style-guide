@@ -1632,7 +1632,7 @@
 
 * `#` 与注释文字之间使用一个空格。
 
-* 注释超过一个单词时句首字母大写，并且在句子停顿或结尾处使用标点符号。句号后使用[一个空格](http://en.wikipedia.org/wiki/Sentence_spacing。
+* 注释超过一个单词时句首字母大写，并且在句子停顿或结尾处使用标点符号。句号后使用[一个空格](http://en.wikipedia.org/wiki/Sentence_spacing)。
 
 * 避免肤浅的注释。
 
