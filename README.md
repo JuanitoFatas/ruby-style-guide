@@ -248,6 +248,11 @@ Translations of the guide are available in the following languages:
 <sup>[[link](#no-spaces-braces)]</sup>
 
   ```Ruby
+  # bad
+  some( arg ).other
+  [ 1, 2, 3 ].size
+
+  # good
   some(arg).other
   [1, 2, 3].size
   ```
@@ -635,12 +640,37 @@ Translations of the guide are available in the following languages:
    end
    ```
 
+* <a name="optional-arguments"></a>
+    Define optional arguments at the end of the list of arguments.
+    Ruby has some unexpected results when calling methods that have
+    optional arguments at the front of the list.
+<sup>[[link](#optional-arguments)]</sup>
+
+  ```Ruby
+  # bad
+  def some_method(a = 1, b = 2, c, d)
+    puts "#{a}, #{b}, #{c}, #{d}"
+  end
+
+  some_method('w', 'x') # => '1, 2, w, x'
+  some_method('w', 'x', 'y') # => 'w, 2, x, y'
+  some_method('w', 'x', 'y', 'z') # => 'w, x, y, z'
+
+  # good
+  def some_method(c, d, a = 1, b = 2)
+    puts "#{a}, #{b}, #{c}, #{d}"
+  end
+
+  some_method('w', 'x') # => 'w, x, 1, 2'
+  some_method('w', 'x', 'y') # => 'w, x, y, 2'
+  some_method('w', 'x', 'y', 'z') # => 'w, x, y, z'
+  ```
+
 * <a name="parallel-assignment"></a>
     Avoid the use of parallel assignment for defining variables. Parallel
     assignment is allowed when it is the return of a method call, used with
     the splat operator, or when used to swap variable assignment. Parallel
-    assignment is less readable than separate assignment. It is also slightly
-    slower than separate assignment.
+    assignment is less readable than separate assignment.
 <sup>[[link](#parallel-assignment)]</sup>
 
   ```Ruby
@@ -1507,6 +1537,19 @@ condition](#safe-assignment-in-condition).
   end
   ```
 
+* <a name="stabby-lambda-with-args"></a>
+Don't omit the parameter parentheses when defining a stabby lambda with
+parameters.
+<sup>[[link](#stabby-lambda-with-args)]</sup>
+
+  ```Ruby
+  # bad
+  l = ->x, y { something(x, y) }
+
+  # good
+  l = ->(x, y) { something(x, y) }
+  ```
+
 * <a name="stabby-lambda-no-args"></a>
 Omit the parameter parentheses when defining a stabby lambda with
 no parameters.
@@ -1913,12 +1956,20 @@ no parameters.
     ...
   end
 
+  class XmlSomething
+    ...
+  end
+
   # good
   class SomeClass
     ...
   end
 
   class SomeXML
+    ...
+  end
+
+  class XMLSomething
     ...
   end
   ```
@@ -2805,7 +2856,6 @@ no parameters.
   # also good
   begin
     # an exception occurs here
-
   rescue StandardError => e
     # exception handling
   end
@@ -2820,18 +2870,18 @@ no parameters.
   # bad
   begin
     # some code
-  rescue Exception => e
-    # some handling
   rescue StandardError => e
+    # some handling
+  rescue IOError => e
     # some handling that will never be executed
   end
 
   # good
   begin
     # some code
-  rescue StandardError => e
+  rescue IOError => e
     # some handling
-  rescue Exception => e
+  rescue StandardError => e
     # some handling
   end
   ```
@@ -3250,6 +3300,14 @@ resource cleanup when possible.
 <sup>[[link](#concat-strings)]</sup>
 
   ```Ruby
+  # bad
+  html = ''
+  html += '<h1>Page title</h1>'
+
+  paragraphs.each do |paragraph|
+    html += "<p>#{paragraph}</p>"
+  end
+
   # good and also fast
   html = ''
   html << '<h1>Page title</h1>'
@@ -3314,12 +3372,15 @@ resource cleanup when possible.
   ```
 
 * <a name="non-capturing-regexp"></a>
-  Use non-capturing groups when you don't use captured result of parentheses.
+  Use non-capturing groups when you don't use the captured result.
 <sup>[[link](#non-capturing-regexp)]</sup>
 
   ```Ruby
-  /(first|second)/   # bad
-  /(?:first|second)/ # good
+  # bad
+  /(first|second)/
+
+  # good
+  /(?:first|second)/
   ```
 
 * <a name="no-perl-regexp-last-matchers"></a>
@@ -3388,8 +3449,14 @@ resource cleanup when possible.
   ```
 
 * <a name="gsub-blocks"></a>
-  For complex replacements `sub`/`gsub` can be used with block or hash.
+  For complex replacements `sub`/`gsub` can be used with a block or a hash.
 <sup>[[link](#gsub-blocks)]</sup>
+
+  ```Ruby
+  words = 'foo bar'
+  words.sub(/f/, 'f' => 'F') # => 'Foo bar'
+  words.gsub(/\w+/) { |word| word.capitalize } # => 'Foo Bar'
+  ```
 
 ## Percent Literals
 
@@ -3432,6 +3499,7 @@ resource cleanup when possible.
   name = 'Bruce Wayne'
   time = "8 o'clock"
   question = '"What did you say?"'
+  quote = %q(<p class='quote'>"What did you say?"</p>)
   ```
 
 * <a name="percent-r"></a>
@@ -3644,7 +3712,7 @@ resource cleanup when possible.
 
 ## Tools
 
-Here's some tools to help you automatically check Ruby code against
+Here are some tools to help you automatically check Ruby code against
 this guide.
 
 ### RuboCop
