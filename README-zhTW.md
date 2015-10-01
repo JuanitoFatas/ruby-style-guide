@@ -2186,7 +2186,7 @@ this rule only to arrays with two or more elements.
 
     ```Ruby
     # 不好
-    name = 'Bozhidar'
+    name = "Bozhidar"
 
     # 好
     name = 'Bozhidar'
