@@ -510,6 +510,81 @@
     end
     ```
 
+* 定义参数默认值时候，有默认值的参数应该在参数列表的后面。如果有默认值的参数应该在参数列表的前面，Ruby调用时会发生不可预料的结果。
+   
+    ```Ruby
+    # bad
+    def some_method(a = 1, b = 2, c, d)
+    puts "#{a}, #{b}, #{c}, #{d}"
+    end
+
+    some_method('w', 'x') # => '1, 2, w, x'
+    some_method('w', 'x', 'y') # => 'w, 2, x, y'
+    some_method('w', 'x', 'y', 'z') # => 'w, x, y, z'
+
+    # good
+    def some_method(a, b, c = 1, d = 2)
+      puts "#{a}, #{b}, #{c}, #{d}"
+    end
+
+    some_method('w', 'x') # => 'w, x, 1, 2'
+    some_method('w', 'x', 'y') # => 'w, x, y, 2'
+    some_method('w', 'x', 'y', 'z') # => 'w, x, y, z'
+    ```
+
+* 避免使用并行赋值，当使用方法返回值，变量带星号，交换赋值时可以使用并行赋值。单独给变量赋值相比并行赋值更有可读性。
+
+    ```Ruby
+    # bad
+    a, b, c, d = 'foo', 'bar', 'baz', 'foobar'
+
+    # good
+    a = 'foo'
+    b = 'bar'
+    c = 'baz'
+    d = 'foobar'
+
+    # good - swapping variable assignment
+    # Swapping variable assignment is a special case because it will allow you to
+    # swap the values that are assigned to each variable.
+    a = 'foo'
+    b = 'bar'
+
+    a, b = b, a
+    puts a # => 'bar'
+    puts b # => 'foo'
+
+    # good - method return
+    def multi_return
+      [1, 2]
+    end
+
+    first, second = multi_return
+
+    # good - 带`*`其实就是把变量当成数组
+    first, *list = [1,2,3,4]
+
+    hello_array = *"Hello"
+
+    a = *(1..3)
+    ```
+
+* 并行赋值时避免在最右边使用不必要的下划线变量。当左边的变量带`*`时才使用下划线变量。避免`*_`这个用法。
+
+    ```Ruby
+    # bad
+    a, b, _ = *foo
+    a, _, _ = *foo
+    a, *_ = *foo
+
+    # good
+    *a, _ = *foo
+    *a, b, _ = *foo
+    a, = *foo
+    a, b, = *foo
+    a, _b = *foo
+    a, _b, = *foo
+    ```
 
 * 永远不要使用 `for` ，除非你很清楚为什么。大部分情况应该使用迭代器。`for` 是由 `each` 实现的，所以你绕弯了。另外，`for` 没有包含一个新的作用域 (`each` 有），因此在它区块中定义的变量在外部是可见的。
 
@@ -2033,6 +2108,55 @@
     end
     ```
 
+* 在类的语法作用域中定义别名时优先使用`alias`，因为`alias`有词法作用域，`self对象`是源代码被读取时候的值（不是运行时候的`self`），她清楚地告诉使用程序员，除非明确说明，否则方法别名的引用不会在运行时被改变或者被任何子类改变。
+   
+    ```Ruby
+    class Westerner
+      def first_name
+        @names.first
+      end
+
+      alias given_name first_name
+    end
+    ```
+  因为`alias`和`def`一样，是关键词，相比字符串和符号，优先使用裸字(bareword);也就是说，这样使用`alias foo bar`， 不是`alias :foo :bar`。
+  另外要知道Ruby怎么处理别名和继承，方法别名定义后，即使对应的方法在后面的代码中重新定义（即修改内部实现）后，
+  别名仍然可以调用到修改前的方法。
+  
+    ```Ruby
+    class Fugitive < Westerner
+      def first_name
+        'Nobody'
+      end
+    end
+    ```
+  这个例子中，`Fugitive#given_name`仍然调用原来的`Westerner#first_name`方法，而不是`Fugitive#first_name`方法。
+  要想覆写`Fugitive#given_name`行为，必须在类中重新定义一次。
+
+    ```Ruby
+    class Fugitive < Westerner
+      def first_name
+        'Nobody'
+      end
+
+      alias given_name first_name
+    end
+    ```
+  
+* 运行时定义模块方法，类方法和单件类方法别名，总是使用`alias_method`。因为在上述情况下`alias`会导致不可预期的结果
+
+    ```Ruby
+    module Mononymous
+      def self.included(other)
+        other.class_eval { alias_method :full_name, :given_name }
+      end
+    end
+
+    class Sting < Westerner
+      include Mononymous
+    end
+    ```
+
 ## 异常
 
 * 使用 `fail` 方法来抛出异常。仅在捕捉到异常时使用 `raise` 来重新抛出异常（因为没有失败，所以只是显式地有目的性地抛出一个异常）
@@ -2778,8 +2902,60 @@
     # 最好的方式，可能是每个可找到的属性被声明后，使用 define_method。
     ```
 
-* 倾向使用 `public_send` 而 `send`，因为后者会徊避 `private`/`protected` 的可见性。
+* 相比较 `send`，倾向优先使用 `public_send`，因为后者会无视 `private`/`protected` 的可见性。
 
+    ```Ruby
+    # We have  an ActiveModel Organization that includes concern Activatable
+    module Activatable
+      extend ActiveSupport::Concern
+
+      included do
+        before_create :create_token
+      end
+
+      private
+
+      def reset_token
+        ...
+      end
+
+      def create_token
+        ...
+      end
+
+      def activate!
+        ...
+      end
+    end
+
+    class Organization < ActiveRecord::Base
+      include Activatable
+    end
+
+    linux_organization = Organization.find(...)
+    # BAD - violates privacy
+    linux_organization.send(:reset_token)
+    # GOOD - should throw an exception
+    linux_organization.public_send(:reset_token)
+    ```
+
+* 相比`send`，优先使用`__send__`，因为调用对象可能已经存在send方法。
+
+    ```Ruby
+    require 'socket'
+
+    u1 = UDPSocket.new
+    u1.bind('127.0.0.1', 4913)
+    u2 = UDPSocket.new
+    u2.connect('127.0.0.1', 4913)
+    # 不会发送一个消息给接受者
+    # 实际上她通过UDP socket发送一个消息
+    u2.send :sleep, 0
+    
+    # 发送一个消息给接受者，相当于u2.sleep(0)
+    u2.__send__ :sleep, 0
+    ```
+    
 ## 其它
 
 * `ruby -w` 写安全的代码。
