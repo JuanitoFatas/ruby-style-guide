@@ -1971,11 +1971,18 @@
     do_something rescue nil
     ```
 
-* 避免在 modifier 形式裡使用 `rescue` 。
+* 避免以修飾符的形式使用 `rescue` 。
 
     ```Ruby
-    # 差勁 - 這捕捉了所有的 StandardError 異常。
-    do_something rescue nil
+    # 不好 - 這會捕捉 StandardError 類別和其所有子孫類別
+    read_file rescue handle_error($!)
+
+    # 好 - 這只會捕捉 Errno::ENOENT 類別和其所有子孫類別
+    def foo
+      read_file
+    rescue Errno::ENOENT => ex
+      handle_error(ex)
+    end
     ```
 
 * 不要為了控制流程而使用異常。
