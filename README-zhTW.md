@@ -2003,12 +2003,12 @@
     end
     ```
 
-* 避免救援 `Exception` 類別。這會把信號困住，並呼叫 `exit`，導致你需要 `kill -9` 進程。
+* 避免救援 `Exception` 類別。這會困住信號與對 `exit` 的呼叫，導致你需要 `kill -9` 進程。
 
     ```Ruby
     # 不好
     begin
-      # 呼叫 exit 及殺掉信號會被捕捉（除了 kill -9）
+      # 呼叫 exit 及 kill 信號會被捕捉（除了 kill -9）
       exit
     rescue Exception
       puts "you didn't really want to exit, right?"
