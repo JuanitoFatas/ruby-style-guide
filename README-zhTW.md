@@ -589,7 +589,7 @@
 
     ```Ruby
     # 不好
-    result = if some_condition: something else something_else end
+    result = if some_condition; something else something_else end
 
     # 好
     result = some_condition ? something : something_else
