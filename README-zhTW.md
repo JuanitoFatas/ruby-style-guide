@@ -717,7 +717,7 @@
     do_something unless some_condition
 
     # 另一個好方法
-    some_condition or do_something
+    some_condition || do_something
     ```
 * 永遠不要使用 `unless` 搭配 `else`。 將它們改寫成肯定條件。
 
