@@ -90,7 +90,7 @@
       $ git config --global core.autocrlf true
       ```
 
-* * <a name="no-semicolon"></a>
+* <a name="no-semicolon"></a>
   不要使用 `;` 分隔敘述與表達式。 由此推論 - 一行一個表達式。
 <sup>[[link](#no-semicolon)]</sup>
 
