@@ -2278,7 +2278,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   # 更好
   Person = Struct.new(:first_name, :last_name) do
   end
-  ````
+  ```
 
 * <a name="no-extend-struct-new"></a>
   不要扩展 `Struct.new` 实例化后的对象。对它进行扩展不但引入了毫无意义的类层次，而且在此文件被多次引入时可能会产生奇怪的错误。
@@ -2291,7 +2291,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
   # 好
   Person = Struct.new(:first_name, :last_name)
-  ````
+  ```
 
 * <a name="factory-methods"></a>
   优先考虑通过工厂方法的方式创建某些具有特定意义的实例对象。
