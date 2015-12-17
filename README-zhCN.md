@@ -629,25 +629,29 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="trailing-underscore-variables"></a>
-  Avoid the use of unnecessary trailing underscore variables during
-  parallel assignment. Trailing underscore variables are necessary
-  when there is a splat variable defined on the left side of the assignment,
-  and the splat variable is not an underscore.
+  除非必要，否则避免在并行赋值时使用单字符的 `_` 变量。优先考虑前缀形式的下划线变量，而不是直接使用 `_`，因为前者可以提供一定的语义信息。但当赋值语句左侧出现带 `*` 操作符的变量时，使用 `_` 也是可以接受的。
 <sup>[[link]](#trailing-underscore-variables)</sup>
 
   ```Ruby
-  # bad
-  a, b, _ = *foo
-  a, _, _ = *foo
-  a, *_ = *foo
+  foo = 'one,two,three,four,five'
 
-  # good
-  *a, _ = *foo
-  *a, b, _ = *foo
-  a, = *foo
-  a, b, = *foo
-  a, _b = *foo
-  a, _b, = *foo
+  # 差 - 可有可无，且无任何有用信息
+  first, second, _ = foo.split(',')
+  first, _, _ = foo.split(',')
+  first, *_ = foo.split(',')
+
+  # 好
+  a, = foo.split(',')
+  a, b, = foo.split(',')
+
+  # 好 - 可有可无，但提供了额外信息
+  first, _second = foo.split(',')
+  first, _second, = foo.split(',')
+  first, *_ending = foo.split(',')
+
+  # 好 - 占位符，_ 担当最后一个元素
+  *beginning, _ = foo.split(',')
+  *beginning, something, _ = foo.split(',')
   ```
 
 * <a name="no-for-loops"></a>
@@ -2278,7 +2282,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   # 更好
   Person = Struct.new(:first_name, :last_name) do
   end
-  ````
+  ```
 
 * <a name="no-extend-struct-new"></a>
   不要扩展 `Struct.new` 实例化后的对象。对它进行扩展不但引入了毫无意义的类层次，而且在此文件被多次引入时可能会产生奇怪的错误。
@@ -2291,7 +2295,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
   # 好
   Person = Struct.new(:first_name, :last_name)
-  ````
+  ```
 
 * <a name="factory-methods"></a>
   优先考虑通过工厂方法的方式创建某些具有特定意义的实例对象。
@@ -3508,7 +3512,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
 # 贡献
 
-本指南仍在不断改进。某些规则可能缺乏恰当示例，有些规则可能尚未表述到位。任何对这些规则的改进都是对 Ruby 社区的有益帮助。希望在适当时候，这些问题都能够得到解决，暂且铭记于心。
+本指南仍在不断改进。某些规则可能缺乏恰当示例，某些规则可能尚未表述到位。任何对这些规则的改进都是对 Ruby 社区的有益帮助。希望在适当时候，这些问题都能够得到解决，暂且铭记于心。
 
 这里的每条规则都不是定案。这只是我渴望与同样对 Ruby 编程风格感兴趣的大家一起工作，最终可以为整个 Ruby 社区创造一份有益的资源。欢迎发起讨论或提交一个带有改进性质的更新请求。在此提前感谢你的帮助！
 
