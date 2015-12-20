@@ -709,24 +709,36 @@ Translations of the guide are available in the following languages:
 
 * <a name="trailing-underscore-variables"></a>
   Avoid the use of unnecessary trailing underscore variables during
-  parallel assignment. Trailing underscore variables are necessary
-  when there is a splat variable defined on the left side of the assignment,
-  and the splat variable is not an underscore.
+  parallel assignment. Named underscore variables are to be preferred over
+  underscore variables because of the context that they provide.
+  Trailing underscore variables are necessary when there is a splat variable
+  defined on the left side of the assignment, and the splat variable is
+  not an underscore.
 <sup>[[link]](#trailing-underscore-variables)</sup>
 
   ```Ruby
   # bad
-  a, b, _ = *foo
-  a, _, _ = *foo
-  a, *_ = *foo
+  foo = 'one,two,three,four,five'
+  # Unnecessary assignment that does not provide useful information
+  first, second, _ = foo.split(',')
+  first, _, _ = foo.split(',')
+  first, *_ = foo.split(',')
+
 
   # good
-  *a, _ = *foo
-  *a, b, _ = *foo
-  a, = *foo
-  a, b, = *foo
-  a, _b = *foo
-  a, _b, = *foo
+  foo = 'one,two,three,four,five'
+  # The underscores is needed to show that you want all elements
+  # except for the last number of underscore elements
+  *beginning, _ = foo.split(',')
+  *beginning, something, _ = foo.split(',')
+
+  a, = foo.split(',')
+  a, b, = foo.split(',')
+  # Unnecessary assignment to an unused variable, but the assignment
+  # provides us with useful inforation.
+  first, _second = foo.split(',')
+  first, _second, = foo.split(',')
+  first, *_ending = foo.split(',')
   ```
 
 * <a name="no-for-loops"></a>
@@ -2476,7 +2488,7 @@ no parameters.
   # better
   Person = Struct.new(:first_name, :last_name) do
   end
-  ````
+  ```
 
 * <a name="no-extend-struct-new"></a>
   Don't extend an instance initialized by `Struct.new`. Extending it introduces
@@ -2491,7 +2503,7 @@ no parameters.
 
   # good
   Person = Struct.new(:first_name, :last_name)
-  ````
+  ```
 
 * <a name="factory-methods"></a>
   Consider adding factory methods to provide additional sensible ways to
@@ -2702,46 +2714,44 @@ no parameters.
 
 ## Exceptions
 
-* <a name="fail-method"></a>
-  Signal exceptions using the `fail` method. Use `raise` only when catching an
-  exception and re-raising it (because here you're not failing, but explicitly
-  and purposefully raising an exception).
-<sup>[[link](#fail-method)]</sup>
+* <a name="prefer-raise"></a>
+  Prefer `raise` over `fail` for exceptions.
+  <sup>[[link](#prefer-raise-over-fail)]</sup>
 
   ```Ruby
-  begin
-    fail 'Oops'
-  rescue => error
-    raise if error.message != 'Oops'
-  end
+  # bad
+  fail SomeException, 'message'
+
+  # good
+  raise SomeException, 'message'
   ```
 
 * <a name="no-explicit-runtimeerror"></a>
   Don't specify `RuntimeError` explicitly in the two argument version of
-  `fail/raise`.
+  `raise`.
 <sup>[[link](#no-explicit-runtimeerror)]</sup>
 
   ```Ruby
   # bad
-  fail RuntimeError, 'message'
+  raise RuntimeError, 'message'
 
   # good - signals a RuntimeError by default
-  fail 'message'
+  raise 'message'
   ```
 
 * <a name="exception-class-messages"></a>
   Prefer supplying an exception class and a message as two separate arguments
-  to `fail/raise`, instead of an exception instance.
+  to `raise`, instead of an exception instance.
 <sup>[[link](#exception-class-messages)]</sup>
 
   ```Ruby
   # bad
-  fail SomeException.new('message')
-  # Note that there is no way to do `fail SomeException.new('message'), backtrace`.
+  raise SomeException.new('message')
+  # Note that there is no way to do `raise SomeException.new('message'), backtrace`.
 
   # good
-  fail SomeException, 'message'
-  # Consistent with `fail SomeException, 'message', backtrace`.
+  raise SomeException, 'message'
+  # Consistent with `raise SomeException, 'message', backtrace`.
   ```
 
 * <a name="no-return-ensure"></a>
@@ -2753,7 +2763,7 @@ no parameters.
 
   ```Ruby
   def foo
-    fail
+    raise
   ensure
     return 'very bad idea'
   end
