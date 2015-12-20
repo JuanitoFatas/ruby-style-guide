@@ -2482,40 +2482,40 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
 ## 异常
 
-* <a name="fail-method"></a>
-  使用 `fail` 方法抛出异常。只有在捕获异常后重新抛出时才使用 `raise` 方法（因为此时并没有真正意义上的失败，而是显式地有目的地抛出异常）。
-<sup>[[link](#fail-method)]</sup>
+* <a name="prefer-raise-over-fail"></a>
+  对于异常处理，倾向使用 `raise` 而不是 `fail`。
+<sup>[[link](#prefer-raise-over-fail)]</sup>
 
   ```Ruby
-  begin
-    fail 'Oops'
-  rescue => error
-    raise if error.message != 'Oops'
-  end
+  # 差
+  fail SomeException, 'message'
+
+  # 好
+  raise SomeException, 'message'
   ```
 
 * <a name="no-explicit-runtimeerror"></a>
-  不要在带双参数形式的 `fail/raise` 方法中显式指定 `RuntimeError`。
+  不要在带双参数形式的 `raise` 方法中显式指定 `RuntimeError`。
 <sup>[[link](#no-explicit-runtimeerror)]</sup>
 
   ```Ruby
   # 差
-  fail RuntimeError, 'message'
+  raise RuntimeError, 'message'
 
   # 好 - 默认就是 RuntimeError
-  fail 'message'
+  raise 'message'
   ```
 
 * <a name="exception-class-messages"></a>
-  倾向使用带异常类、消息的双参数形式调用 `fail/raise` 方法，而不是使用异常的实例。
+  倾向使用带异常类、消息的双参数形式调用 `raise` 方法，而不是使用异常的实例。
 <sup>[[link](#exception-class-messages)]</sup>
 
   ```Ruby
-  # 差 - 并无 fail SomeException.new('message') [, backtraces] 这种调用形式
-  fail SomeException.new('message')
+  # 差 - 并无 raise SomeException.new('message') [, backtraces] 这种调用形式
+  raise SomeException.new('message')
 
-  # 好 - 与调用形式 fail SomeException [, 'message' [, backtraces]] 保持一致
-  fail SomeException, 'message'
+  # 好 - 与调用形式 raise SomeException [, 'message' [, backtraces]] 保持一致
+  raise SomeException, 'message'
   ```
 
 * <a name="no-return-ensure"></a>
@@ -2524,7 +2524,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
   ```Ruby
   def foo
-    fail
+    raise
   ensure
     return 'very bad idea'
   end
