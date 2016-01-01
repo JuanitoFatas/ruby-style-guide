@@ -2714,7 +2714,7 @@ no parameters.
 
 ## Exceptions
 
-* <a name="prefer-raise"></a>
+* <a name="prefer-raise-over-fail"></a>
   Prefer `raise` over `fail` for exceptions.
   <sup>[[link](#prefer-raise-over-fail)]</sup>
 
@@ -3392,6 +3392,36 @@ resource cleanup when possible.
     |end
   END
   # => "def test\n  some_method\n  other_method\nend\n"
+  ```
+
+* <a name="squiggly-heredocs"></a>
+  Use Ruby 2.3's squiggly heredocs for nicely indented multiline strings.
+<sup>[[link](#squiggly-heredocs)]</sup>
+
+  ```Ruby
+  # bad - using Powerpack String#strip_margin
+  code = <<-END.strip_margin('|')
+    |def test
+    |  some_method
+    |  other_method
+    |end
+  END
+
+  # also bad
+  code = <<-END
+  def test
+    some_method
+    other_method
+  end
+  END
+
+  # good
+  code = <<~END
+    def test
+      some_method
+      other_method
+    end
+  END
   ```
 
 ## Regular Expressions
