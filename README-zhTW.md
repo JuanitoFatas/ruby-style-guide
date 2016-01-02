@@ -2571,6 +2571,36 @@ this rule only to arrays with two or more elements.
     end
     ```
 
+* <a name="squiggly-heredocs"></a>
+  使用 Ruby 2.3 新增的`<<~` 操作符來縮排 heredocs 中的多行文本。
+<sup>[[link](#squiggly-heredocs)]</sup>
+
+  ```Ruby
+  # 差 — 使用 Powerpack 專案的 String#strip_margin
+  code = <<-END.strip_margin('|')
+    |def test
+    | some_method
+    | other_method
+    |end
+  END
+
+  # 差
+  code = <<-END
+  def test
+    some_method
+    other_method
+  end
+  END
+
+  # 好
+  code = <<~END
+    def test
+      some_method
+      other_method
+    end
+  END
+  ```
+
 ## 正規表示法
 
 > 有些人在面對問題時，不經大腦便認為，「我知道，這裡該用正規表示法」。現在問題反倒變成兩個了。<br>
