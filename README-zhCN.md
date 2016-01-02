@@ -3112,6 +3112,36 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   # => "def test\n  some_method\n  other_method\nend\n"
   ```
 
+* <a name="squiggly-heredocs"></a>
+  使用 Ruby 2.3 新增的 `<<~` 操作符来缩排 heredocs 中的多行文本。
+<sup>[[link](#squiggly-heredocs)]</sup>
+
+  ```Ruby
+  # 差 - 使用 Powerpack 程序库的 String#strip_margin
+  code = <<-END.strip_margin('|')
+    |def test
+    |  some_method
+    |  other_method
+    |end
+  END
+
+  # 差
+  code = <<-END
+  def test
+    some_method
+    other_method
+  end
+  END
+
+  # 好
+  code = <<~END
+    def test
+      some_method
+      other_method
+    end
+  END
+  ```
+
 ## 正则表达式
 
 > 有些人在面对问题时，不经大脑便认为，“我知道，这里该用正则表达式”。现在他要面对两个问题了。<br>
