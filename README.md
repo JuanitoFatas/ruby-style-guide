@@ -2287,7 +2287,7 @@ no parameters.
   ```
 
 * <a name="file-classes"></a>
-  Don't nest multi line classes within classes. Try to have such nested
+  Don't nest multi-line classes within classes. Try to have such nested
   classes each in their own file in a folder named like the containing class.
 <sup>[[link](#file-classes)]</sup>
 
@@ -3110,6 +3110,23 @@ resource cleanup when possible.
   # good
   hash.key?(:test)
   hash.value?(value)
+  ```
+
+* <a name="hash-each"></a>
+  Use `Hash#each_key` instead of `Hash#key.each` and `Hash#each_value`
+  instead of `Hash#values.each`.
+<sup>[[link](#hash-each)]</sup>
+
+  ```Ruby
+  # bad
+  hash.keys.each { |k| p k }
+  hash.values.each { |v| p v }
+  hash.each { |k, _v| p k }
+  hash.each { |_k, v| p v }
+
+  # good
+  hash.each_key { |k| p k }
+  hash.each_value { |v| p v }
   ```
 
 * <a name="hash-fetch"></a>
