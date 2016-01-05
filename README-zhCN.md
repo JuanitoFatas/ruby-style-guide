@@ -2850,6 +2850,21 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   hash.key?(:test)
   hash.value?(value)
   ```
+* <a name="hash-each"></a>
+  倾向使用 `Hash#each_key` 而不是 `Hash#keys.each`，使用 `Hash#each_value` 而不是 `Hash#values.each`。
+<sup>[[link](#hash-each)]</sup>
+
+  ```Ruby
+  # 差
+  hash.keys.each { |k| p k }
+  hash.values.each { |v| p v }
+  hash.each { |k, _v| p k }
+  hash.each { |_k, v| p v }
+
+  # 好
+  hash.each_key { |k| p k }
+  hash.each_value { |v| p v }
+  ```
 
 * <a name="hash-fetch"></a>
   当处理应该存在的哈希键时，使用 `Hash#fetch`。
