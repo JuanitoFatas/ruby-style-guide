@@ -740,7 +740,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="no-semicolon-ifs"></a>
-  永远不要使用 `if x: ...`。使用三元操作符来替代。
+  永远不要使用 `if x; ...`。使用三元操作符来替代。
 <sup>[[link](#no-semicolon-ifs)]</sup>
 
   ```Ruby
