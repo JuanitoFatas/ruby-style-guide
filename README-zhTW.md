@@ -81,10 +81,10 @@
     ```
 
 * <a name="crlf"></a>
-  使用 Unix 風格的行編碼 (BSD/Solaris/Linux/OSX 的使用者不用擔心，Windows 使用者要特別小心。)
+  使用 Unix 風格的行編碼（BSD/Solaris/Linux/OSX 的使用者不用擔心，Windows 使用者要特別小心。）
 <sup>[[link](#crlf)]</sup>
 
-    * 如果你使用 Git ，你也許會想加入下面這個配置設定，來保護你的專案被 Windows 的行編碼侵入：
+    * 如果你使用 Git，你也許會想加入下面這個設定，避免專案被 Windows 的行編碼入侵：
 
       ```bash
       $ git config --global core.autocrlf true
