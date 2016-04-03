@@ -495,7 +495,7 @@
     ```
 
 * <a name="rdoc-conventions"></a>
-  使用 RDoc 以及它的慣例來撰寫 API 文件。不要在註解區塊及 `def` 之前放一個空行。
+  使用 [RDoc](http://rdoc.sourceforge.net/doc/) 以及它的慣例來撰寫 API 文件。不要在註解區塊及 `def` 之前放一個空行。
 <sup>[[link](#rdoc-conventions)]</sup>
 
 * <a name="80-character-limits"></a>
@@ -939,20 +939,26 @@
 
     ```Ruby
     class Person
-      attr_reader :name, :age
+      attr_reader(:name, :age)  # 不好
+      attr_reader :name, :age   # 好
 
       # 忽略
     end
 
-    temperance = Person.new('Temperance', 30)
-    temperance.name
+    temperance = Person.new 'Temperance', 30  # 不好
+    temperance = Person.new('Temperance', 30) # 好
 
-    puts temperance.age
+    puts(temperance.age)  # 不好
+    puts temperance.age   # 好
 
-    x = Math.sin(y)
-    array.delete(e)
+    x = Math.sin y  # 不好
+    x = Math.sin(y) # 好
 
-    bowling.score.should == 0
+    array.delete e  # 不好
+    array.delete(e) # 好
+
+    expect(bowling.score).to eq 0   # 不好
+    expect(bowling.score).to eq(0)  # 好
     ```
 
 * <a name="no-braces-opts-hash"></a>

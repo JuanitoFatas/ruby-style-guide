@@ -492,7 +492,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="rdoc-conventions"></a>
-  使用 RDoc 及其惯例来编写 API 文档。注意，不要在注释与 `def` 之间添加空行。
+  使用 [RDoc][rdoc] 及其惯例来编写 API 文档。注意，不要在注释与 `def` 之间添加空行。
 <sup>[[link](#rdoc-conventions)]</sup>
 
 * <a name="80-character-limits"></a>
@@ -1041,20 +1041,26 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
   ```Ruby
   class Person
-    attr_reader :name, :age
+    attr_reader(:name, :age)  # 差
+    attr_reader :name, :age   # 好
 
     # 省略主体
   end
 
-  temperance = Person.new('Temperance', 30)
-  temperance.name
+  temperance = Person.new 'Temperance', 30  # 差
+  temperance = Person.new('Temperance', 30) # 好
 
-  puts temperance.age
+  puts(temperance.age)  # 差
+  puts temperance.age   # 好
 
-  x = Math.sin(y)
-  array.delete(e)
+  x = Math.sin y  # 差
+  x = Math.sin(y) # 好
 
-  bowling.score.should == 0
+  array.delete e  # 差
+  array.delete(e) # 好
+
+  expect(bowling.score).to eq 0   # 差
+  expect(bowling.score).to eq(0)  # 好
   ```
 
 * <a name="no-braces-opts-hash"></a>
@@ -3589,3 +3595,4 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 [trpl]: http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177
 [Pandoc]: http://pandoc.org/
 [RuboCop]: https://github.com/bbatsov/rubocop
+[rdoc]: http://rdoc.sourceforge.net/doc/
