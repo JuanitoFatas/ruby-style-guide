@@ -25,7 +25,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
 许多项目有其自己的编程风格指南（往往是源于本指南而创建）。当项目的风格指南与本指南发生冲突时，应以项目级的指南为准。
 
-你可以使用 [Transmuter][] 生成本指南的 PDF 或 HTML 版本。
+你可以使用 [Pandoc][] 生成本指南的 PDF 或 HTML 版本。
 
 [RuboCop][] 工具会自动检查你的 Ruby 代码是否符合这份 Ruby 风格指南。
 
@@ -3587,5 +3587,5 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 [rails-style-guide]: https://github.com/bbatsov/rails-style-guide
 [pickaxe]: https://pragprog.com/book/ruby4/programming-ruby-1-9-2-0
 [trpl]: http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177
-[Transmuter]: https://github.com/kalbasit/transmuter
+[Pandoc]: http://pandoc.org/
 [RuboCop]: https://github.com/bbatsov/rubocop
