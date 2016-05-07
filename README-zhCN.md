@@ -52,6 +52,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 * [类与模块](#类与模块)
 * [异常](#异常)
 * [集合](#集合)
+* [数值](#数值)
 * [字符串](#字符串)
 * [正则表达式](#正则表达式)
 * [百分号字面量](#百分号字面量)
@@ -160,13 +161,12 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="spaces-operators"></a>
-  操作符前后适当地添加空格，在逗号 `,`、冒号 `:` 及分号 `;` 之后，在 `{` 前后，在 `}` 之前。尽管 Ruby 解释器（大部分情况下）会忽略空格，但适量的空格可以增强代码的可读性。
+  操作符前后适当地添加空格，在逗号 `,`、冒号 `:` 及分号 `;` 之后。尽管 Ruby 解释器（大部分情况下）会忽略空格，但适量的空格可以增强代码的可读性。
 <sup>[[link](#spaces-operators)]</sup>
 
   ```Ruby
   sum = 1 + 2
   a, b = 1, 2
-  [1, 2, 3].each { |e| puts e }
   class FooError < StandardError; end
   ```
 
@@ -179,8 +179,24 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   # 好
   e = M * c**2
   ```
+* <a name="spaces-braces"></a>
+  `(`、`[` 之后，`]`、`)` 之前，不要添加任何空格。在 `{` 前后，在 `}` 之前添加空格。
+<sup>[[link](#spaces-braces)]</sup>
 
-  `{` 与 `}` 需要额外说明，因为它们可以同时用在区块、哈希字面量及字符串插值中。对于哈希字面量，有两种可被接受的风格：
+
+  ```Ruby
+  # 差
+  some( arg ).other
+  [ 1, 2, 3 ].each{|e| puts e}
+
+  # 好
+  some(arg).other
+  [1, 2, 3].each { |e| puts e }
+  ```
+
+  `{` 与 `}` 需要额外说明，因为它们可以同时用在区块、哈希字面量及字符串插值中。
+
+  对于哈希字面量，有两种可被接受的风格。第一种风格更具可读性（在 Ruby 社区里似乎更为流行）。第二种风格的优点是，在视觉上使得区块与哈希字面量有所区分。无论你选择何种风格，务必在使用时保持连贯性。
 
   ```Ruby
   # 好 - { 之后 与 } 之前有空格
@@ -190,20 +206,14 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   {one: 1, two: 2}
   ```
 
-  第一种风格更具可读性（在 Ruby 社区里似乎更为流行）。第二种风格的优点是，在视觉上使得区块与哈希字面量有所区分。无论你选择何种风格，务必在使用时保持连贯性。
-
-* <a name="no-spaces-braces"></a>
-  `(`、`[` 之后，`]`、`)` 之前，不要添加任何空格。
-<sup>[[link](#no-spaces-braces)]</sup>
+  对于插值表达式，括号内两端不要添加空格。
 
   ```Ruby
   # 差
-  some( arg ).other
-  [ 1, 2, 3 ].size
+  "From: #{ user.first_name }, #{ user.last_name }"
 
   # 好
-  some(arg).other
-  [1, 2, 3].size
+  "From: #{user.first_name}, #{user.last_name}"
   ```
 
 * <a name="no-space-bang"></a>
@@ -621,11 +631,12 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   first, second = multi_return
 
   # 好 - 与 * 操作符配合使用
-  first, *list = [1, 2, 3, 4]
+  first, *list = [1, 2, 3, 4] # first => 1, list => [2, 3, 4]
 
-  hello_array = *'Hello'
+  hello_array = *'Hello' # => ["Hello"]
 
-  a = *(1..3)
+  a = *(1..3) # => [1, 2, 3]
+  ```
   ```
 
 * <a name="trailing-underscore-variables"></a>
@@ -1586,19 +1597,20 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   # => 'one, two, three'
   ```
 
-* <a name="splat-arrays"></a>
-  当你希望处理的变量类型是数组，但不太确定其是否真的是数组时，通过使用 `[*var]` 或 `Array()` 来替代显式的数组类型检查与转换。
-<sup>[[link](#splat-arrays)]</sup>
+* <a name="array-coercion"></a>
+  当你希望处理的变量类型是数组，但不太确定其是否真的是数组时，通过使用 `Array()` 来替代显式的数组类型检查与转换。
+<sup>[[link](#array-coercion)]</sup>
+
 
   ```Ruby
   # 差
   paths = [paths] unless paths.is_a? Array
   paths.each { |path| do_something(path) }
 
-  # 好
+  # 差 - 总是构建新的数组对象
   [*paths].each { |path| do_something(path) }
 
-  # 好 - 并且更具可读性
+  # 好
   Array(paths).each { |path| do_something(path) }
   ```
 
@@ -1883,6 +1895,42 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 * <a name="bool-methods-qmark"></a>
   谓词方法（返回布尔值的方法）的名字应当以问号结尾。（比如 `Array#empty?`）。不返回布尔值的方法不应以问号结尾。
 <sup>[[link](#bool-methods-qmark)]</sup>
+
+* <a name="bool-methods-prefix"></a>
+  谓词方法的名字应当避免使用 `is`、`does`、`can` 等助动词作为前缀。这些助动词在实际场景中显得冗余，且与标准库的命名习惯（比如 `empty?`、`include?`）很不一致。
+<sup>[[link](#bool-methods-prefix)]</sup>
+
+  ```Ruby
+  # 差
+  class Person
+    def is_tall?
+      true
+    end
+
+    def can_play_basketball?
+      false
+    end
+
+    def does_like_candy?
+      true
+    end
+  end
+
+  # 好
+  class Person
+    def tall?
+      true
+    end
+
+    def basketball_player?
+      false
+    end
+
+    def likes_candy?
+      true
+    end
+  end
+  ```
 
 * <a name="dangerous-method-bang"></a>
   具有潜在**危险性**的方法，当其存在对应安全版本的方法时，其名字应当以惊叹号结尾。（比如修改 `self` 或参数值的方法、相对 `exit` 方法不会在退出时运行 finalizers 执行清理工作的 `exit!` 方法等）
@@ -2966,6 +3014,23 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
       @awesome_things
     end
   end
+  ```
+
+## 数值
+
+* <a name="integer-type-checking"></a>
+  通过 `Integer` 检查对象是否是数值类型，而不是 `Fixnum` 或 `Bignum`。因为 `Fixnum` 或 `Bignum` 表达的数值大小存在范围限定。
+<sup>[[link](#integer-type-checking)]</sup>
+
+  ```Ruby
+  timestamp = Time.now.to_i
+
+  # 差
+  timestamp.is_a? Fixnum
+  timestamp.is_a? Bignum
+
+  # 好
+  timestamp.is_a? Integer
   ```
 
 ## 字符串
