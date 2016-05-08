@@ -3049,18 +3049,6 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   email_with_name = format('%s <%s>', user.name, user.email)
   ```
 
-* <a name="pad-string-interpolation"></a>
-  对于插值表达式，括号内两端不要添加空格。
-<sup>[[link](#pad-string-interpolation)]</sup>
-
-  ```Ruby
-  # 差
-  "From: #{ user.first_name }, #{ user.last_name }"
-
-  # 好
-  "From: #{user.first_name}, #{user.last_name}"
-  ```
-
 * <a name="consistent-string-literals"></a>
   使用统一的风格创建字符串字面量。在 Ruby 社区中存在两种流行的风格：默认单引号（风格 A）与默认双引号（风格 B）。
 <sup>[[link](#consistent-string-literals)]</sup>
