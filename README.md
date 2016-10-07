@@ -3,12 +3,11 @@
 > Role models are important. <br>
 > -- Officer Alex J. Murphy / RoboCop
 
-One thing has always bothered me as a Ruby developer - Python developers have a
-great programming style reference
-([PEP-8][]) and we never got an official
-guide, documenting Ruby coding style and best practices. And I do believe that
-style matters. I also believe that a great hacker community, such as Ruby has,
-should be quite capable of producing this coveted document.
+One thing has always bothered me as a Ruby developer&mdash;Python developers
+have a great programming style reference ([PEP-8][]) and we never got an
+official guide, documenting Ruby coding style and best practices. And I do
+believe that style matters. I also believe that a great hacker community, such
+as Ruby has, should be quite capable of producing this coveted document.
 
 This guide started its life as our internal company Ruby coding guidelines
 (written by yours truly). At some point I decided that the work I was doing
@@ -29,15 +28,15 @@ By the way, if you're into Rails you might want to check out the complementary
 
 This Ruby style guide recommends best practices so that real-world Ruby
 programmers can write code that can be maintained by other real-world Ruby
-programmers. A style guide that reflects real-world usage gets used, and a style
-guide that holds to an ideal that has been rejected by the people it is supposed
-to help risks not getting used at all &ndash; no matter how good it is.
+programmers. A style guide that reflects real-world usage gets used, while a
+style guide that holds to an ideal that has been rejected by the people it is
+supposed to help risks not getting used at all&mdash;no matter how good it is.
 
 The guide is separated into several sections of related rules. I've tried to add
 the rationale behind the rules (if it's omitted I've assumed it's pretty
 obvious).
 
-I didn't come up with all the rules out of nowhere - they are mostly
+I didn't come up with all the rules out of nowhere&mdash;they are mostly
 based on my extensive career as a professional software engineer,
 feedback and suggestions from members of the Ruby community and
 various highly regarded Ruby programming resources, such as
@@ -75,7 +74,7 @@ Translations of the guide are available in the following languages:
 * [Portuguese](https://github.com/rubensmabueno/ruby-style-guide/blob/master/README-PT-BR.md)
 * [Russian](https://github.com/arbox/ruby-style-guide/blob/master/README-ruRU.md)
 * [Spanish](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
-* [Vietnamese](https://github.com/scrum2b/ruby-style-guide/blob/master/README-viVN.md)
+* [Vietnamese](https://github.com/CQBinh/ruby-style-guide/blob/master/README-viVN.md)
 
 ## Table of Contents
 
@@ -89,6 +88,7 @@ Translations of the guide are available in the following languages:
 * [Collections](#collections)
 * [Numbers](#numbers)
 * [Strings](#strings)
+* [Date & Time](#date--time)
 * [Regular Expressions](#regular-expressions)
 * [Percent Literals](#percent-literals)
 * [Metaprogramming](#metaprogramming)
@@ -123,7 +123,7 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="crlf"></a>
-  Use Unix-style line endings. (*BSD/Solaris/Linux/OS X users are covered by
+  Use Unix-style line endings. (\*BSD/Solaris/Linux/OS X users are covered by
   default, Windows users have to be extra careful.)
 <sup>[[link](#crlf)]</sup>
 
@@ -136,8 +136,8 @@ Translations of the guide are available in the following languages:
     ```
 
 * <a name="no-semicolon"></a>
-  Don't use `;` to separate statements and expressions. As a corollary - use one
-  expression per line.
+  Don't use `;` to separate statements and expressions. As a corollary&mdash;use
+  one expression per line.
 <sup>[[link](#no-semicolon)]</sup>
 
   ```Ruby
@@ -174,8 +174,8 @@ Translations of the guide are available in the following languages:
 * <a name="no-single-line-methods"></a>
   Avoid single-line methods. Although they are somewhat popular in the wild,
   there are a few peculiarities about their definition syntax that make their
-  use undesirable. At any rate - there should be no more than one expression in
-  a single-line method.
+  use undesirable. At any rate&mdash;there should be no more than one expression
+  in a single-line method.
 <sup>[[link](#no-single-line-methods)]</sup>
 
   ```Ruby
@@ -248,7 +248,7 @@ Translations of the guide are available in the following languages:
   The first variant is slightly more readable (and arguably more
   popular in the Ruby community in general). The second variant has
   the advantage of adding visual difference between block and hash
-  literals. Whichever one you pick - apply it consistently.
+  literals. Whichever one you pick&mdash;apply it consistently.
 
   ```Ruby
   # good - space after { and before }
@@ -409,10 +409,10 @@ Translations of the guide are available in the following languages:
   ```Ruby
   # bad - easier to move/add/remove parameters, but still not preferred
   some_method(
-               size,
-               count,
-               color,
-             )
+    size,
+    count,
+    color,
+  )
 
   # bad
   some_method(size, count, color, )
@@ -460,9 +460,9 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="consistent-multi-line-chains"></a>
-    Adopt a consistent multi-line method chaining style. There are two
-    popular styles in the Ruby community, both of which are considered
-    good - leading `.` (Option A) and trailing `.` (Option B).
+    Adopt a consistent multi-line method chaining style. There are two popular
+    styles in the Ruby community, both of which are considered
+    good&mdash;leading `.` (Option A) and trailing `.` (Option B).
 <sup>[[link](#consistent-multi-line-chains)]</sup>
 
   * **(Option A)** When continuing a chained method invocation on
@@ -569,6 +569,28 @@ Translations of the guide are available in the following languages:
   num = 1_000_000
   ```
 
+* <a name="numeric-literal-prefixes"></a>
+  Prefer smallcase letters for numeric literal prefixes.
+  `0o` for octal, `0x` for hexadecimal and `0b` for binary.
+  Do not use `0d` prefix for decimal literals.
+<sup>[[link](#numeric-literal-prefixes)]</sup>
+
+  ```Ruby
+  # bad
+  num = 01234
+  num = 0O1234
+  num = 0X12AB
+  num = 0B10101
+  num = 0D1234
+  num = 0d1234
+
+  # good - easier to separate digits from the prefix
+  num = 0o1234
+  num = 0x12AB
+  num = 0b10101
+  num = 1234
+  ```
+
 * <a name="rdoc-conventions"></a>
     Use [Rdoc][rdoc] and its conventions for API documentation.  Don't put an
     empty line between the comment block and the `def`.
@@ -649,6 +671,74 @@ Translations of the guide are available in the following languages:
      # body omitted
    end
    ```
+
+* <a name="method-invocation-parens"></a>
+  Use parentheses around the arguments of method invocations,
+  especially if the first argument begins with an open parenthesis `(`,
+  as in `f((3 + 2) + 1)`.
+<sup>[[link](#method-invocation-parens)]</sup>
+
+  ```Ruby
+  # bad
+  x = Math.sin y
+  # good
+  x = Math.sin(y)
+
+  # bad
+  array.delete e
+  # good
+  array.delete(e)
+
+  # bad
+  temperance = Person.new 'Temperance', 30
+  # good
+  temperance = Person.new('Temperance', 30)
+  ```
+
+  Only omit parentheses for
+
+  * Method calls with no arguments:
+
+    ```Ruby
+    # bad
+    Kernel.exit!()
+    2.even?()
+    fork()
+    'test'.upcase()
+
+    # good
+    Kernel.exit!
+    2.even?
+    fork
+    'test'.upcase
+    ```
+
+  * Methods that are part of an internal DSL (e.g., Rake, Rails, RSpec):
+
+    ```Ruby
+    # bad
+    expect(bowling.score).to eq 0
+    # good
+    expect(bowling.score).to eq(0)
+    ```
+
+  * Methods that have "keyword" status in Ruby:
+
+    ```Ruby
+    class Person
+      # bad
+      attr_reader(:name, :age)
+      # good
+      attr_reader :name, :age
+
+      # body omitted
+    end
+
+    # bad
+    puts(temperance.age)
+    # good
+    puts temperance.age
+    ```
 
 * <a name="optional-arguments"></a>
     Define optional arguments at the end of the list of arguments.
@@ -754,10 +844,10 @@ Translations of the guide are available in the following languages:
 
 * <a name="no-for-loops"></a>
     Do not use `for`, unless you know exactly why. Most of the time iterators
-    should be used instead. `for` is implemented in terms of `each` (so
-    you're adding a level of indirection), but with a twist - `for`
-    doesn't introduce a new scope (unlike `each`) and variables defined
-    in its block will be visible outside it.
+    should be used instead. `for` is implemented in terms of `each` (so you're
+    adding a level of indirection), but with a twist&mdash;`for` doesn't
+    introduce a new scope (unlike `each`) and variables defined in its block
+    will be visible outside it.
 <sup>[[link](#no-for-loops)]</sup>
 
   ```Ruby
@@ -779,7 +869,7 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="no-then"></a>
-  Do not use `then` for multi-line `if/unless`.
+  Do not use `then` for multi-line `if`/`unless`.
 <sup>[[link](#no-then)]</sup>
 
   ```Ruby
@@ -905,6 +995,11 @@ Translations of the guide are available in the following languages:
   Avoid the use of `!!`.
 <sup>[[link](#no-bang-bang)]</sup>
 
+  `!!` converts a value to boolean, but you don't need this explicit
+  conversion in the condition of a control expression; using it only
+  obscures your intention. If you want to do a `nil` check, use `nil?`
+  instead.
+
   ```Ruby
   # bad
   x = 'test'
@@ -912,10 +1007,6 @@ Translations of the guide are available in the following languages:
   if !!x
     # body omitted
   end
-
-  x = false
-  # double negation is useless on booleans
-  !!x # => false
 
   # good
   x = 'test'
@@ -950,12 +1041,12 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="no-multiline-ternary"></a>
-  Avoid multi-line `?:` (the ternary operator); use `if/unless` instead.
+  Avoid multi-line `?:` (the ternary operator); use `if`/`unless` instead.
 <sup>[[link](#no-multiline-ternary)]</sup>
 
 * <a name="if-as-a-modifier"></a>
-  Favor modifier `if/unless` usage when you have a single-line body. Another
-  good alternative is the usage of control flow `&&/||`.
+  Favor modifier `if`/`unless` usage when you have a single-line body. Another
+  good alternative is the usage of control flow `&&`/`||`.
 <sup>[[link](#if-as-a-modifier)]</sup>
 
   ```Ruby
@@ -972,7 +1063,7 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="no-multiline-if-modifiers"></a>
-  Avoid modifier `if/unless` usage at the end of a non-trivial multi-line
+  Avoid modifier `if`/`unless` usage at the end of a non-trivial multi-line
   block.
 <sup>[[link](#no-multiline-if-modifiers)]</sup>
 
@@ -991,7 +1082,7 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="no-nested-modifiers"></a>
-  Avoid nested modifier `if/unless/while/until` usage. Favor `&&/||` if
+  Avoid nested modifier `if`/`unless`/`while`/`until` usage. Favor `&&`/`||` if
   appropriate.
 <sup>[[link](#no-nested-modifiers)]</sup>
 
@@ -1041,9 +1132,9 @@ Translations of the guide are available in the following languages:
   end
   ```
 
-* <a name="no-parens-if"></a>
-  Don't use parentheses around the condition of an `if/unless/while/until`.
-<sup>[[link](#no-parens-if)]</sup>
+* <a name="no-parens-around-condition"></a>
+  Don't use parentheses around the condition of a control expression.
+<sup>[[link](#no-parens-around-condition)]</sup>
 
   ```Ruby
   # bad
@@ -1150,49 +1241,6 @@ condition](#safe-assignment-in-condition).
   end
   ```
 
-* <a name="no-dsl-parens"></a>
-  Omit parentheses around parameters for methods that are part of an internal
-  DSL (e.g. Rake, Rails, RSpec), methods that have "keyword" status in Ruby
-  (e.g. `attr_reader`, `puts`) and attribute access methods. Use parentheses
-  around the arguments of all other method invocations.
-<sup>[[link](#no-dsl-parens)]</sup>
-
-  ```Ruby
-  class Person
-    # bad
-    attr_reader(:name, :age)
-    # good
-    attr_reader :name, :age
-
-    # body omitted
-  end
-
-  # bad
-  temperance = Person.new 'Temperance', 30
-  # good
-  temperance = Person.new('Temperance', 30)
-
-  # bad
-  puts(temperance.age)
-  # good
-  puts temperance.age
-
-  # bad
-  x = Math.sin y
-  # good
-  x = Math.sin(y)
-
-  # bad
-  array.delete e
-  # good
-  array.delete(e)
-
-  # bad
-  expect(bowling.score).to eq 0
-  # good
-  expect(bowling.score).to eq(0)
-  ```
-
 * <a name="no-braces-opts-hash"></a>
   Omit the outer braces around an implicit options hash.
 <sup>[[link](#no-braces-opts-hash)]</sup>
@@ -1218,24 +1266,6 @@ condition](#safe-assignment-in-condition).
     # good
     validates :name, presence: true, length: { within: 1..10 }
   end
-  ```
-
-* <a name="no-args-no-parens"></a>
-  Omit parentheses for method calls with no arguments.
-<sup>[[link](#no-args-no-parens)]</sup>
-
-  ```Ruby
-  # bad
-  Kernel.exit!()
-  2.even?()
-  fork()
-  'test'.upcase()
-
-  # good
-  Kernel.exit!
-  2.even?
-  fork
-  'test'.upcase
   ```
 
 * <a name="single-action-blocks"></a>
@@ -1278,7 +1308,7 @@ condition](#safe-assignment-in-condition).
   ```
 
   Some will argue that multi-line chaining would look OK with the use of {...},
-  but they should ask themselves - is this code really readable and can the
+  but they should ask themselves&mdash;is this code really readable and can the
   blocks' contents be extracted into nifty methods?
 
 * <a name="block-argument"></a>
@@ -1542,11 +1572,6 @@ condition](#safe-assignment-in-condition).
   # good
   f(3 + 2) + 1
   ```
-
-* <a name="parens-as-args"></a>
-  If the first argument to a method begins with an open parenthesis, always
-  use parentheses in the method invocation. For example, write `f((3 + 2) + 1)`.
-<sup>[[link](#parens-as-args)]</sup>
 
 * <a name="always-warn-at-runtime"></a>
   Always run the Ruby interpreter with the `-w` option so it will warn you if
@@ -1873,7 +1898,7 @@ no parameters.
   # bad
   def compute_thing(thing)
     if thing[:foo]
-      update_with_bar(thing)
+      update_with_bar(thing[:foo])
       if thing[:foo][:bar]
         partial_compute(thing)
       else
@@ -2228,12 +2253,12 @@ no parameters.
   comment at all.
 <sup>[[link](#comment-upkeep)]</sup>
 
-> Good code is like a good joke - it needs no explanation. <br>
-> -- Russ Olsen
+> Good code is like a good joke: it needs no explanation. <br>
+> &mdash; old programmers maxim, through [Russ Olsen](http://eloquentruby.com/blog/2011/03/07/good-code-and-good-jokes/)
 
 * <a name="refactor-dont-comment"></a>
   Avoid writing comments to explain bad code. Refactor the code to make it
-  self-explanatory. (Do or do not - there is no try. --Yoda)
+  self-explanatory. ("Do or do not&mdash;there is no try." Yoda)
 <sup>[[link](#refactor-dont-comment)]</sup>
 
 ### Comment Annotations
@@ -2520,6 +2545,37 @@ no parameters.
     def initialize(first_name, last_name)
       @first_name = first_name
       @last_name = last_name
+    end
+  end
+  ```
+
+* <a name="accessor_mutator_method_names"></a>
+  For accessors and mutators, avoid prefixing method names with
+  `get_` and `set_`.
+  It is a Ruby convention to use attribute names for accessors (readers) and
+  `attr_name=` for mutators (writers).
+<sup>[[link](#accessor_mutator_method_names)]</sup>
+
+  ```Ruby
+  # bad
+  class Person
+    def get_name
+      "#{@first_name} #{@last_name}"
+    end
+
+    def set_name(name)
+      @first_name, @last_name = name.split(' ')
+    end
+  end
+
+  # good
+  class Person
+    def name
+      "#{@first_name} #{@last_name}"
+    end
+
+    def name=(name)
+      @first_name, @last_name = name.split(' ')
     end
   end
   ```
@@ -3304,8 +3360,9 @@ resource cleanup when possible.
 ## Numbers
 
 * <a name="integer-type-checking"></a>
-  Use `Integer` check type of an integer number. Since `Fixnum` is platform-dependent, checking against it will
-  return different results on 32-bit and 64-bit machines.
+  Use `Integer` check type of an integer number. Since `Fixnum` is
+  platform-dependent, checking against it will return different results on
+  32-bit and 64-bit machines.
 <sup>[[link](#integer-type-checking)]</sup>
 
   ```Ruby
@@ -3318,6 +3375,19 @@ resource cleanup when possible.
   # good
   timestamp.is_a? Integer
   ```
+
+  * <a name="random-numbers"></a>
+    Prefer to use ranges when generating random numbers instead of integers with offsets,
+    since it clearly states your intentions. Imagine simulating a role of a dice:
+  <sup>[[link](#random-numbers)]</sup>
+
+    ```Ruby
+    # bad
+    rand(6) + 1
+
+    # good
+    rand(1..6)
+    ```
 
 ## Strings
 
@@ -3339,7 +3409,7 @@ resource cleanup when possible.
 
 * <a name="consistent-string-literals"></a>
   Adopt a consistent string literal quoting style. There are two popular
-  styles in the Ruby community, both of which are considered good - single
+  styles in the Ruby community, both of which are considered good&mdash;single
   quotes by default (Option A) and double quotes by default (Option B).
 <sup>[[link](#consistent-string-literals)]</sup>
 
@@ -3370,8 +3440,8 @@ resource cleanup when possible.
 
 * <a name="no-character-literals"></a>
   Don't use the character literal syntax `?x`. Since Ruby 1.9 it's basically
-  redundant - `?x` would interpreted as `'x'` (a string with a single character
-  in it).
+  redundant&mdash;`?x` would interpreted as `'x'` (a string with a single
+  character in it).
 <sup>[[link](#no-character-literals)]</sup>
 
   ```Ruby
@@ -3514,6 +3584,35 @@ resource cleanup when possible.
       other_method
     end
   END
+  ```
+
+## Date & Time
+
+* <a name="time-now"></a>
+  Prefer `Time.now` over `Time.new` when retrieving the current system time.
+<sup>[[link](#time-now)]</sup>
+
+* <a name="no-datetime"></a>
+  Don't use `DateTime` unless you need to account for historical calendar
+  reform -- and if you do, explicitly specify the `start` argument to
+  clearly state your intentions.
+<sup>[[link](#no-datetime)]</sup>
+
+  ```Ruby
+  # bad - uses DateTime for current time
+  DateTime.now
+
+  # good - uses Time for current time
+  Time.now
+
+  # bad - uses DateTime for modern date
+  DateTime.iso8601('2016-06-29')
+
+  # good - uses Date for modern date
+  Date.iso8601('2016-06-29')
+
+  # good - uses DateTime with start argument for historical date
+  DateTime.iso8601('1751-04-23', Date::ENGLAND)
   ```
 
 ## Regular Expressions
@@ -3907,10 +4006,6 @@ resource cleanup when possible.
   for trivial command line options.
 <sup>[[link](#optionparser)]</sup>
 
-* <a name="time-now"></a>
-  Prefer `Time.now` over `Time.new` when retrieving the current system time.
-<sup>[[link](#time-now)]</sup>
-
 * <a name="functional-code"></a>
   Code in a functional way, avoiding mutation when that makes sense.
 <sup>[[link](#functional-code)]</sup>
@@ -3951,12 +4046,12 @@ on this guide.
 
 # Contributing
 
-The guide is still a work in progress - some rules are lacking examples, some
-rules don't have examples that illustrate them clearly enough. Improving such rules
-is a great (and simple way) to help the Ruby community!
+The guide is still a work in progress&mdash;some rules are lacking examples,
+some rules don't have examples that illustrate them clearly enough. Improving
+such rules is a great (and simple way) to help the Ruby community!
 
-In due time these issues will (hopefully) be addressed - just keep them in mind
-for now.
+In due time these issues will (hopefully) be addressed&mdash;just keep them in
+mind for now.
 
 Nothing written in this guide is set in stone. It's my desire to work
 together with everyone interested in Ruby coding style, so that we could
