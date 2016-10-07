@@ -53,6 +53,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 * [异常](#异常)
 * [集合](#集合)
 * [数值](#数值)
+* [日期与时间](#日期与时间)
 * [字符串](#字符串)
 * [正则表达式](#正则表达式)
 * [百分号字面量](#百分号字面量)
@@ -353,10 +354,10 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```Ruby
   # 差 - 尽管移动、新增、删除参数颇为方便，但仍不推荐这种写法
   some_method(
-               size,
-               count,
-               color,
-             )
+    size,
+    count,
+    color,
+  )
 
   # 差
   some_method(size, count, color, )
@@ -501,6 +502,26 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   num = 1_000_000
   ```
 
+* <a name="numeric-literal-prefixes"></a>
+  当数值需要前缀标识进制时，倾向使用小写字母。使用 `0o` 标识八进制，使用 `0x` 标识十六进制，使用 `0b` 标识二进制。十进制数值无需前缀（`0d`）标识。
+<sup>[[link](#numeric-literal-prefixes)]</sup>
+
+  ```Ruby
+  # 差
+  num = 01234
+  num = 0O1234
+  num = 0X12AB
+  num = 0B10101
+  num = 0D1234
+  num = 0d1234
+
+  # 好 - 方便区分数值前缀与具体数字
+  num = 0o1234
+  num = 0x12AB
+  num = 0b10101
+  num = 1234
+  ```
+
 * <a name="rdoc-conventions"></a>
   使用 [RDoc][rdoc] 及其惯例来编写 API 文档。注意，不要在注释与 `def` 之间添加空行。
 <sup>[[link](#rdoc-conventions)]</sup>
@@ -576,6 +597,60 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
      # 省略主体
    end
    ```
+
+* <a name="method-invocation-parens"></a>
+  方法调用应当使用括号包裹参数，尤其是第一个参数以 `(` 开头时，比如 `f((3 + 2) + 1)`；
+<sup>[[link](#method-invocation-parens)]</sup>
+
+  ```Ruby
+  x = Math.sin y  # 差
+  x = Math.sin(y) # 好
+
+  array.delete e  # 差
+  array.delete(e) # 好
+
+  temperance = Person.new 'Temperance', 30  # 差
+  temperance = Person.new('Temperance', 30) # 好
+  ```
+
+  但在下述情况下可以省略括号：
+
+  * 无参调用
+
+    ```Ruby
+    # 差
+    Kernel.exit!()
+    2.even?()
+    fork()
+    'test'.upcase()
+
+    # 好
+    Kernel.exit!
+    2.even?
+    fork
+    'test'.upcase
+    ```
+
+  * 内部 DSL 的组成部分（比如 Rake、Rails、RSpec）
+
+    ```Ruby
+    expect(bowling.score).to eq 0  # 差
+    expect(bowling.score).to eq(0) # 好
+    ```
+
+  * 具有“关键字”特性的方法
+
+    ```Ruby
+    class Person
+      attr_reader(:name, :age) # 差
+      attr_reader :name, :age  # 好
+
+      # 省略主体
+    end
+
+    puts(temperance.age) # 差
+    puts temperance.age  # 好
+    ```
 
 * <a name="optional-arguments"></a>
   定义可选参数时，将可选参数放置在参数列表尾部。如果可选参数出现在列表头部，则此方法在调用时可能会产生预期之外的结果。
@@ -687,7 +762,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="no-then"></a>
-  永远不要在多行 `if/unless` 中使用 `then`。
+  永远不要在多行 `if`/`unless` 中使用 `then`。
 <sup>[[link](#no-then)]</sup>
 
   ```Ruby
@@ -806,6 +881,8 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   避免使用 `!!`。
 <sup>[[link](#no-bang-bang)]</sup>
 
+  `!!` 会将表达式结果转换为布尔值，但对于流程控制的表达式通常并不需要如此显式的转换过程。如果需要做 `nil` 检查，那么调用对象的 `nil?` 方法。
+
   ```Ruby
   # 差
   x = 'test'
@@ -813,10 +890,6 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   if !!x
     # 省略主体
   end
-
-  x = false
-  # 对于布尔变量，双重否定是多余的
-  !!x # => false
 
   # 好
   x = 'test'
@@ -850,11 +923,11 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="no-multiline-ternary"></a>
-  避免使用多行三元操作符（`?:`）。使用 `if/unless` 来替代。
+  避免使用多行三元操作符（`?:`）。使用 `if`/`unless` 来替代。
 <sup>[[link](#no-multiline-ternary)]</sup>
 
 * <a name="if-as-a-modifier"></a>
-  对于单行主体，倾向使用 `if/unless` 修饰语法。另一种方法是使用流程控制 `&&/||`。
+  对于单行主体，倾向使用 `if`/`unless` 修饰语法。另一种方法是使用流程控制 `&&`/`||`。
 <sup>[[link](#if-as-a-modifier)]</sup>
 
   ```Ruby
@@ -871,7 +944,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="no-multiline-if-modifiers"></a>
-  避免在多行区块后使用 `if/unless` 修饰语法。
+  避免在多行区块后使用 `if`/`unless` 修饰语法。
 <sup>[[link](#no-multiline-if-modifiers)]</sup>
 
   ```Ruby
@@ -889,7 +962,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="no-nested-modifiers"></a>
-  避免使用嵌套 `if/unless/while/until` 修饰语法。适当情况下，使用 `&&/||` 来替代。
+  避免使用嵌套 `if`/`unless`/`while`/`until` 修饰语法。适当情况下，使用 `&&`/`||` 来替代。
 <sup>[[link](#no-nested-modifiers)]</sup>
 
   ```Ruby
@@ -938,9 +1011,11 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   end
   ```
 
-* <a name="no-parens-if"></a>
-  不要使用括号包裹 `if/unless/while/until` 的条件表达式。
-<sup>[[link](#no-parens-if)]</sup>
+* <a name="no-parens-around-condition"></a>
+  不要使用括号包裹流程控制中的条件表达式。
+<sup>[[link](#no-parens-around-condition)]</sup>
+
+
 
   ```Ruby
   # 差
@@ -1045,34 +1120,6 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   end
   ```
 
-* <a name="no-dsl-parens"></a>
-  对于 DSL 的内部方法（比如 Rake、Rails、RSpec）、具有“关键字”特性的内部方法（比如 `attr_reader`、`puts`）、以及属性存取方法，省略这些方法外围的括号。所有其他的方法调用则使用括号。
-<sup>[[link](#no-dsl-parens)]</sup>
-
-  ```Ruby
-  class Person
-    attr_reader(:name, :age)  # 差
-    attr_reader :name, :age   # 好
-
-    # 省略主体
-  end
-
-  temperance = Person.new 'Temperance', 30  # 差
-  temperance = Person.new('Temperance', 30) # 好
-
-  puts(temperance.age)  # 差
-  puts temperance.age   # 好
-
-  x = Math.sin y  # 差
-  x = Math.sin(y) # 好
-
-  array.delete e  # 差
-  array.delete(e) # 好
-
-  expect(bowling.score).to eq 0   # 差
-  expect(bowling.score).to eq(0)  # 好
-  ```
-
 * <a name="no-braces-opts-hash"></a>
   对于可选参数的哈希，省略其外围的花括号。
 <sup>[[link](#no-braces-opts-hash)]</sup>
@@ -1097,24 +1144,6 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
     # 好
     validates :name, presence: true, length: { within: 1..10 }
   end
-  ```
-
-* <a name="no-args-no-parens"></a>
-  无参调用方法时，省略括号。
-<sup>[[link](#no-args-no-parens)]</sup>
-
-  ```Ruby
-  # 差
-  Kernel.exit!()
-  2.even?()
-  fork()
-  'test'.upcase()
-
-  # 好
-  Kernel.exit!
-  2.even?
-  fork
-  'test'.upcase
   ```
 
 * <a name="single-action-blocks"></a>
@@ -1401,10 +1430,6 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   # 好
   f(3 + 2) + 1
   ```
-
-* <a name="parens-as-args"></a>
-  如果方法调用的第一个参数以左括号开头，则此方法调用应该使用括号，比如 `f((3 + 2) + 1)`。
-<sup>[[link](#parens-as-args)]</sup>
 
 * <a name="always-warn-at-runtime"></a>
   运行 Ruby 解释器时，总是开启 `-w` 选项来。如果你忘了某个上述某个规则，它就会警告你！
@@ -1708,7 +1733,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   # 差
   def compute_thing(thing)
     if thing[:foo]
-      update_with_bar(thing)
+      update_with_bar(thing[:foo])
       if thing[:foo][:bar]
         partial_compute(thing)
       else
@@ -2299,6 +2324,34 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
     def initialize(first_name, last_name)
       @first_name = first_name
       @last_name = last_name
+    end
+  end
+  ```
+
+* <a name="accessor_mutator_method_names"></a>
+  对于访问器方法，避免使用 `get_` 作为名字前缀；对于更改器方法，避免使用 `set_` 作为名字前缀。Ruby 语言中，通常使用 `attr_name` 作为访问器的方法名，使用 `attr_name=` 作为更改器的方法名。
+<sup>[[link](#accessor_mutator_method_names)]</sup>
+
+  ```Ruby
+  # 差
+  class Person
+    def get_name
+      "#{@first_name} #{@last_name}"
+    end
+
+    def set_name(name)
+      @first_name, @last_name = name.split(' ')
+    end
+  end
+
+  # 好
+  class Person
+    def name
+      "#{@first_name} #{@last_name}"
+    end
+
+    def name=(name)
+      @first_name, @last_name = name.split(' ')
     end
   end
   ```
@@ -3032,6 +3085,18 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   timestamp.is_a? Integer
   ```
 
+* <a name="random-numbers"></a>
+  对于随机数的生成，倾向使用 Range 来表示，而不是 Integer + 偏移量，这样可以更加清晰地表达你的意图，类比于投掷骰子。
+<sup>[[link](#random-numbers)]</sup>
+
+  ```Ruby
+  # 差
+  rand(6) + 1
+
+  # 好
+  rand(1..6)
+  ```
+
 ## 字符串
 
 * <a name="string-interpolation"></a>
@@ -3213,6 +3278,29 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
       other_method
     end
   END
+  ```
+
+## 日期与时间
+
+* <a name="no-datetime"></a>
+  避免使用 `DateTime`，除非你确实需要处理历法改革（儒略/格里历的改革），此时通过设置 `start` 参数来明确你的意图。
+<sup>[[link](#no-datetime)]</sup>
+
+  ```Ruby
+  # 差 - 使用 DateTime 表示当前时间
+  DateTime.now
+
+  # 好 - 使用 Time 表示当前时间
+  Time.now
+
+  # 差 - 使用 DateTime 表示近现代日期
+  DateTime.iso8601('2016-06-29')
+
+  # 好 - 使用 Date 表示近现代日期
+  Date.iso8601('2016-06-29')
+
+  # 好 - 使用 DateTime 表示日期，通过设置 start 参数为 Date::ENGLANG 明确表示使用 England 历法改革版本
+  DateTime.iso8601('1751-04-23', Date::ENGLAND)
   ```
 
 ## 正则表达式
