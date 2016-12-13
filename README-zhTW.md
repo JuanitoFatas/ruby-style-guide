@@ -2395,9 +2395,7 @@
     ```
 
 * <a name="percent-w"></a>
-  Prefer `%w` to the literal array syntax when you need an array of
-words(non-empty strings without spaces and special characters in them).
-Apply this rule only to arrays with two or more elements.
+  當陣列由兩個以上的字串組成，而且字串不包含空格及特別字元時，偏好使用 `%w` 創建陣列。
 <sup>[[link](#percent-w)]</sup>
 
     ```Ruby
@@ -2409,9 +2407,7 @@ Apply this rule only to arrays with two or more elements.
     ```
 
 * <a name="percent-i"></a>
-  Prefer `%i` to the literal array syntax when you need an array of
-symbols(and you don't need to maintain Ruby 1.9 compatibility). Apply
-this rule only to arrays with two or more elements.
+  當陣列由兩個以上的 symbol 組成，而且你不需要維護 Ruby 1.9 兼容性時，偏好使用 `%i` 創建陣列。
 <sup>[[link](#percent-i)]</sup>
 
     ```Ruby
