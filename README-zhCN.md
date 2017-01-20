@@ -634,8 +634,8 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   * 内部 DSL 的组成部分（比如 Rake、Rails、RSpec）
 
     ```Ruby
-    expect(bowling.score).to eq 0  # 差
-    expect(bowling.score).to eq(0) # 好
+    validates(:name, presence: true)  # 差
+    validates :name, presence: true   # 好
     ```
 
   * 具有“关键字”特性的方法
@@ -893,7 +893,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
   # 好
   x = 'test'
-  unless x.nil?
+  if x
     # 省略主体
   end
   ```
@@ -1163,7 +1163,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 <sup>[[link](#single-line-blocks)]</sup>
 
   ```Ruby
-  names = %w(Bozhidar Steve Sarah)
+  names = %w[Bozhidar Steve Sarah]
 
   # 差
   names.each do |name|
@@ -1227,7 +1227,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="no-self-unless-required"></a>
-  避免在不需要的情况下使用 `self`。（只有在调用 `self` 的修改器时才需要）
+  避免在不需要的情况下使用 `self`。（只有在调用 `self` 的修改器、以保留字命名的方法、重载的运算符时才需要）
 <sup>[[link](#no-self-unless-required)]</sup>
 
   ```Ruby
@@ -1613,11 +1613,11 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
   ```Ruby
   # 差
-  %w(one two three) * ', '
+  %w[one two three] * ', '
   # => 'one, two, three'
 
   # 好
-  %w(one two three).join(', ')
+  %w[one two three].join(', ')
   # => 'one, two, three'
   ```
 
@@ -1839,6 +1839,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   :someSymbol
 
   someVar = 5
+  var_10 = 10
 
   def someMethod
     ...
@@ -1851,8 +1852,35 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   # 好
   :some_symbol
 
+  some_var = 5
+  var10 = 10
+
   def some_method
     ...
+  end
+  ```
+
+* <a name="snake-case-symbols-methods-vars-with-numbers"></a>
+  给符号、方法、变量命名时，避免分隔字母与数字。
+<sup>[[link](#snake-case-symbols-methods-vars-with-numbers)]</sup>
+
+  ```Ruby
+  # 差
+  :some_sym_1
+
+  some_var_1 = 1
+
+  def some_method_1
+    # 做一些事情
+  end
+
+  # 好
+  :some_sym1
+
+  some_var1 = 1
+
+  def some_method1
+    # 做一些事情
   end
   ```
 
@@ -2005,10 +2033,6 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   end
   ```
 
-* <a name="reduce-blocks"></a>
-  当配合单行区块使用 `reduce` 时，将参数命名为 `|a, e|`（accumulator/累加器，element/元素）。
-<sup>[[link](#reduce-blocks)]</sup>
-
 * <a name="other-arg"></a>
   当定义二元操作符时，将参数命名为 `other`（`<<` 与 `[]` 例外，因为其语义与此不同）。
 <sup>[[link](#other-arg)]</sup>
@@ -2116,6 +2140,72 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   适当情况下，可以自行定制其他注解关键字，但别忘记在项目的 `README` 或类似文档中予以说明。
 <sup>[[link](#document-annotations)]</sup>
 
+### Magic Comments
+
+* <a name="magic-comments-first"></a>
+  Place magic comments above all code and documentation. Magic comments should only go below shebangs if they are needed in your source file.
+<sup>[[link](#magic-comments-first)]</sup>
+
+  ```Ruby
+  # good
+  # frozen_string_literal: true
+  # Some documentation about Person
+  class Person
+  end
+
+  # bad
+  # Some documentation about Person
+  # frozen_string_literal: true
+  class Person
+  end
+  ```
+
+  ```Ruby
+  # good
+  #!/usr/bin/env ruby
+  # frozen_string_literal: true
+  App.parse(ARGV)
+
+  # bad
+  # frozen_string_literal: true
+  #!/usr/bin/env ruby
+  App.parse(ARGV)
+  ```
+
+* <a name="one-magic-comment-per-line"></a>
+  Use one magic comment per line if you need multiple.
+<sup>[[link](#one-magic-comment-per-line)]</sup>
+
+  ```Ruby
+  # good
+  # frozen_string_literal: true
+  # encoding: ascii-8bit
+
+  # bad
+  # -*- frozen_string_literal: true; encoding: ascii-8bit -*-
+  ```
+
+* <a name="separate-magic-comments-from-code"></a>
+  Separate magic comments from code and documentation with a blank line.
+<sup>[[link](#separate-magic-comments-from-code)]</sup>
+
+  ```Ruby
+  # good
+  # frozen_string_literal: true
+
+  # Some documentation for Person
+  class Person
+    # Some code
+  end
+
+  # bad
+  # frozen_string_literal: true
+  # Some documentation for Person
+  class Person
+    # Some code
+  end
+  ```
+
 ## 类与模块
 
 * <a name="consistent-classes"></a>
@@ -2129,7 +2219,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
     include AnotherModule
 
     # 内部类
-    CustomErrorKlass = Class.new(StandardError)
+    CustomError = Class.new(StandardError)
 
     # 接着是常量
     SOME_CONSTANT = 20
@@ -2586,6 +2676,31 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   end
   ```
 
+* <a name="class-and-self"></a>
+  在模块方法，或是类方法内部调用自身其他方法时，通常省略模块名/类名/`self`。
+<sup>[[link](#class-and-self)]</sup>
+
+  ```Ruby
+  class TestClass
+    # 差
+    def self.call(param1, param2)
+      TestClass.new(param1).call(param2)
+    end
+
+    # 差
+    def self.call(param1, param2)
+      self.new(param1).call(param2)
+    end
+
+    # 好
+    def self.call(param1, param2)
+      new(param1).call(param2)
+    end
+
+    # 省略其他方法
+  end
+  ```
+
 ## 异常
 
 * <a name="prefer-raise-over-fail"></a>
@@ -2852,7 +2967,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   STATES = ['draft', 'open', 'closed']
 
   # 好
-  STATES = %w(draft open closed)
+  STATES = %w[draft open closed]
   ```
 
 * <a name="percent-i"></a>
@@ -2864,7 +2979,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   STATES = [:draft, :open, :closed]
 
   # 好
-  STATES = %i(draft open closed)
+  STATES = %i[draft open closed]
   ```
 
 * <a name="no-trailing-array-commas"></a>
@@ -2944,7 +3059,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="hash-key"></a>
-  倾向使用 `Hash#key?` 而不是 `Hash#has_key?`，使用 `Hash#value?` 而不是 `Hash#has_value?`。Matz [在此](http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/43765)提及，较长形式的方法将被废弃。
+  倾向使用 `Hash#key?` 而不是 `Hash#has_key?`，使用 `Hash#value?` 而不是 `Hash#has_value?`。
 <sup>[[link](#hash-key)]</sup>
 
   ```Ruby
@@ -3427,7 +3542,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="percent-q"></a>
-  避免使用 `%q`，除非字符串同时存在 `'` 与 `"`。优先考虑更具可读性的常规字符串，除非字符串中存在大量需要转义的字符。
+  避免使用 `%()` 或 `%q`，除非字符串同时存在 `'` 与 `"`。优先考虑更具可读性的常规字符串，除非字符串中存在大量需要转义的字符。
 <sup>[[link](#percent-q)]</sup>
 
   ```Ruby
@@ -3474,17 +3589,35 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 <sup>[[link](#percent-s)]</sup>
 
 * <a name="percent-literal-braces"></a>
-  使用 `%` 字面量语法时，倾向使用 `()`（`%r` 除外，因为圆括号在正则表达式中比较常用，此时可以使用 `{}` 等其他形式来替代）。
+  针对不同的百分号字面量，使用不同的括号类型。
 <sup>[[link](#percent-literal-braces)]</sup>
+  - 针对构建字符串的 `%q`, `%Q` 字面量，使用 `()`。
+  - 针对构建数组的 `%w`, `%i`, `%W`, `%I` 字面量，使用 `[]`，以与常规的数组字面量保持一致。
+  - 针对构建正则的 `%r` 字面量，使用 `{}`，此乃惯例。
+  - 针对 `%s`, `%x` 等其他字面量，使用 `()`。
 
   ```Ruby
   # 差
-  %w[one two three]
   %q{"Test's king!", John said.}
 
   # 好
-  %w(one two three)
   %q("Test's king!", John said.)
+
+  # 差
+  %w(one two three)
+  %i(one two three)
+
+  # 好
+  %w[one two three]
+  %i[one two three]
+
+  # 差
+  %r((\w+)-(\d+))
+  %r{\w{1,2}\d{2,5}}
+
+  # 好
+  %r{(\w+)-(\d+)}
+  %r|\w{1,2}\d{2,5}|
   ```
 
 ## 元编程
