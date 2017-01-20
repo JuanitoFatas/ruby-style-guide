@@ -71,7 +71,7 @@ Translations of the guide are available in the following languages:
 * [German](https://github.com/arbox/de-ruby-style-guide/blob/master/README-deDE.md)
 * [Japanese](https://github.com/fortissimo1997/ruby-style-guide/blob/japanese/README.ja.md)
 * [Korean](https://github.com/dalzony/ruby-style-guide/blob/master/README-koKR.md)
-* [Portuguese](https://github.com/rubensmabueno/ruby-style-guide/blob/master/README-PT-BR.md)
+* [Portuguese (pt-BR)](https://github.com/rubensmabueno/ruby-style-guide/blob/master/README-PT-BR.md)
 * [Russian](https://github.com/arbox/ruby-style-guide/blob/master/README-ruRU.md)
 * [Spanish](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
 * [Vietnamese](https://github.com/CQBinh/ruby-style-guide/blob/master/README-viVN.md)
@@ -717,9 +717,9 @@ Translations of the guide are available in the following languages:
 
     ```Ruby
     # bad
-    expect(bowling.score).to eq 0
+    validates(:name, presence: true)
     # good
-    expect(bowling.score).to eq(0)
+    validates :name, presence: true
     ```
 
   * Methods that have "keyword" status in Ruby:
@@ -1010,34 +1010,36 @@ Translations of the guide are available in the following languages:
 
   # good
   x = 'test'
-  unless x.nil?
+  if x
     # body omitted
   end
   ```
 
 * <a name="no-and-or-or"></a>
-  The `and` and `or` keywords are banned. It's just not worth it. Always use
-  `&&` and `||` instead.
+  The `and` and `or` keywords are banned. The minimal added readability is just
+  not worth the high probability of introducing subtle bugs. For boolean
+  expressions, always use `&&` and `||` instead. For flow control, use
+  `if` and `unless`; `&&` and `||` are also acceptable but less clear.
 <sup>[[link](#no-and-or-or)]</sup>
 
   ```Ruby
   # bad
   # boolean expression
-  if some_condition and some_other_condition
-    do_something
-  end
+  ok = got_needed_arguments and arguments_are_valid
 
   # control flow
-  document.saved? or document.save!
+  document.save or fail(RuntimError, "Failed to save document!")
 
   # good
   # boolean expression
-  if some_condition && some_other_condition
-    do_something
-  end
+  ok = got_needed_arguments && arguments_are_valid
 
   # control flow
-  document.saved? || document.save!
+  fail(RuntimeError, "Failed to save document!") unless document.save
+
+  # ok
+  # control flow
+  document.save || fail(RuntimeError, "Failed to save document!")
   ```
 
 * <a name="no-multiline-ternary"></a>
@@ -1288,7 +1290,7 @@ condition](#safe-assignment-in-condition).
 <sup>[[link](#single-line-blocks)]</sup>
 
   ```Ruby
-  names = %w(Bozhidar Steve Sarah)
+  names = %w[Bozhidar Steve Sarah]
 
   # bad
   names.each do |name|
@@ -1357,7 +1359,7 @@ condition](#safe-assignment-in-condition).
 
 * <a name="no-self-unless-required"></a>
   Avoid `self` where not required. (It is only required when calling a self
-  write accessor.)
+  write accessor, methods named after reserved words, or overloadable operators.)
 <sup>[[link](#no-self-unless-required)]</sup>
 
   ```Ruby
@@ -1772,11 +1774,11 @@ no parameters.
 
   ```Ruby
   # bad
-  %w(one two three) * ', '
+  %w[one two three] * ', '
   # => 'one, two, three'
 
   # good
-  %w(one two three).join(', ')
+  %w[one two three].join(', ')
   # => 'one, two, three'
   ```
 
@@ -2020,6 +2022,7 @@ no parameters.
   :someSymbol
 
   someVar = 5
+  var_10  = 10
 
   def someMethod
     # some code
@@ -2032,10 +2035,38 @@ no parameters.
   # good
   :some_symbol
 
+  some_var = 5
+  var10    = 10
+
   def some_method
     # some code
   end
   ```
+
+* <a name="snake-case-symbols-methods-vars-with-numbers"></a>
+  Do not separate numbers from letters on symbols, methods and variables.
+<sup>[[link](#snake-case-symbols-methods-vars-with-numbers)]</sup>
+
+  ```Ruby
+  # bad
+  :some_sym_1
+
+  some_var_1 = 1
+
+  def some_method_1
+    # some code
+  end
+
+  # good
+  :some_sym1
+
+  some_var1 = 1
+
+  def some_method1
+    # some code
+  end
+  ```
+
 
 * <a name="camelcase-classes"></a>
   Use `CamelCase` for classes and modules.  (Keep acronyms like HTTP, RFC, XML
@@ -2197,11 +2228,6 @@ no parameters.
   end
   ```
 
-* <a name="reduce-blocks"></a>
-  When using `reduce` with short blocks, name the arguments `|a, e|`
-  (accumulator, element).
-<sup>[[link](#reduce-blocks)]</sup>
-
 * <a name="other-arg"></a>
   When defining binary operators, name the parameter `other`(`<<` and `[]` are
   exceptions to the rule, since their semantics are different).
@@ -2329,6 +2355,72 @@ no parameters.
   document them in your project's `README` or similar.
 <sup>[[link](#document-annotations)]</sup>
 
+### Magic Comments
+
+* <a name="magic-comments-first"></a>
+  Place magic comments above all code and documentation. Magic comments should only go below shebangs if they are needed in your source file.
+<sup>[[link](#magic-comments-first)]</sup>
+
+  ```Ruby
+  # good
+  # frozen_string_literal: true
+  # Some documentation about Person
+  class Person
+  end
+
+  # bad
+  # Some documentation about Person
+  # frozen_string_literal: true
+  class Person
+  end
+  ```
+
+  ```Ruby
+  # good
+  #!/usr/bin/env ruby
+  # frozen_string_literal: true
+  App.parse(ARGV)
+
+  # bad
+  # frozen_string_literal: true
+  #!/usr/bin/env ruby
+  App.parse(ARGV)
+  ```
+
+* <a name="one-magic-comment-per-line"></a>
+  Use one magic comment per line if you need multiple.
+<sup>[[link](#one-magic-comment-per-line)]</sup>
+
+  ```Ruby
+  # good
+  # frozen_string_literal: true
+  # encoding: ascii-8bit
+
+  # bad
+  # -*- frozen_string_literal: true; encoding: ascii-8bit -*-
+  ```
+
+* <a name="separate-magic-comments-from-code"></a>
+  Separate magic comments from code and documentation with a blank line.
+<sup>[[link](#separate-magic-comments-from-code)]</sup>
+
+  ```Ruby
+  # good
+  # frozen_string_literal: true
+
+  # Some documentation for Person
+  class Person
+    # Some code
+  end
+
+  # bad
+  # frozen_string_literal: true
+  # Some documentation for Person
+  class Person
+    # Some code
+  end
+  ```
+
 ## Classes & Modules
 
 * <a name="consistent-classes"></a>
@@ -2342,7 +2434,7 @@ no parameters.
     include AnotherModule
 
     # inner classes
-    CustomErrorKlass = Class.new(StandardError)
+    CustomError = Class.new(StandardError)
 
     # constants are next
     SOME_CONSTANT = 20
@@ -2837,6 +2929,35 @@ no parameters.
   end
   ```
 
+* <a name="class-and-self"></a>
+  When class (or module) methods call other such methods, omit the use of a
+  leading `self` or own name followed by a `.` when calling other such methods.
+  This is often seen in "service classes" or other similar concepts where a
+  class is treated as though it were a function. This convention tends to reduce
+  repetitive boilerpate in such classes.
+  <sup>[[link](#class-and-self)]</sup>
+
+  ```Ruby
+  class TestClass
+    # bad -- more work when class renamed/method moved
+    def self.call(param1, param2)
+      TestClass.new(param1).call(param2)
+    end
+
+    # bad -- more verbose than necessary
+    def self.call(param1, param2)
+      self.new(param1).call(param2)
+    end
+
+    # good
+    def self.call(param1, param2)
+      new(param1).call(param2)
+    end
+
+    # ...other methods...
+  end
+  ```
+
 ## Exceptions
 
 * <a name="prefer-raise-over-fail"></a>
@@ -3121,7 +3242,7 @@ resource cleanup when possible.
   STATES = ['draft', 'open', 'closed']
 
   # good
-  STATES = %w(draft open closed)
+  STATES = %w[draft open closed]
   ```
 
 * <a name="percent-i"></a>
@@ -3135,7 +3256,7 @@ resource cleanup when possible.
   STATES = [:draft, :open, :closed]
 
   # good
-  STATES = %i(draft open closed)
+  STATES = %i[draft open closed]
   ```
 
 * <a name="no-trailing-array-commas"></a>
@@ -3223,9 +3344,7 @@ resource cleanup when possible.
 
 * <a name="hash-key"></a>
   Use `Hash#key?` instead of `Hash#has_key?` and `Hash#value?` instead of
-  `Hash#has_value?`. As noted
-  [here](http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/43765) by
-  Matz, the longer forms are considered deprecated.
+  `Hash#has_value?`.
 <sup>[[link](#hash-key)]</sup>
 
   ```Ruby
@@ -3749,9 +3868,9 @@ resource cleanup when possible.
   ```
 
 * <a name="percent-q"></a>
-  Avoid `%q` unless you have a string with both `'` and `"` in it. Regular
-  string literals are more readable and should be preferred unless a lot of
-  characters would have to be escaped in them.
+  Avoid %() or the equivlant %q() unless you have a string with both `'` and
+  `"` in it. Regular string literals are more readable and should be preferred
+  unless a lot of characters would have to be escaped in them.
 <sup>[[link](#percent-q)]</sup>
 
   ```Ruby
@@ -3801,20 +3920,39 @@ resource cleanup when possible.
 <sup>[[link](#percent-s)]</sup>
 
 * <a name="percent-literal-braces"></a>
-  Prefer `()` as delimiters for all `%` literals, except `%r`. Since parentheses
-  often appear inside regular expressions in many scenarios a less common
-  character like `{` might be a better choice for a delimiter, depending on the
-  regexp's content.
-<sup>[[link](#percent-literal-braces)]</sup>
+  Use the braces that are the most appropriate for the various kinds of percent
+  literals.
+  <sup>[[link](#percent-literal-braces)]</sup>
+  - `()` for string literals(`%q`, `%Q`).
+  - `[]` for array literals(`%w`, `%i`, `%W`, `%I`) as it is aligned with
+  the standard array literals.
+  - `{}` for regexp literals(`%r`) since parentheses often appear inside regular
+  expressions. That's why a less common character with `{` is usually the best
+  delimiter for `%r` literals.
+  - `()` for all other literals (e.g. `%s`, `%x`)
 
   ```Ruby
   # bad
-  %w[one two three]
   %q{"Test's king!", John said.}
 
   # good
-  %w(one two three)
   %q("Test's king!", John said.)
+
+  # bad
+  %w(one two three)
+  %i(one two three)
+
+  # good
+  %w[one two three]
+  %i[one two three]
+
+  # bad
+  %r((\w+)-(\d+))
+  %r{\w{1,2}\d{2,5}}
+
+  # good
+  %r{(\w+)-(\d+)}
+  %r|\w{1,2}\d{2,5}|
   ```
 
 ## Metaprogramming
