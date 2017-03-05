@@ -49,6 +49,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 * [命名](#命名)
 * [注释](#注释)
   * [注解](#注解)
+  * [Magic Comments](#magic-comments)
 * [类与模块](#类与模块)
 * [异常](#异常)
 * [集合](#集合)
@@ -344,6 +345,88 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
   def some_method
     result
+  end
+  ```
+
+* <a name="two-or-more-empty-lines"></a>
+  在各个段落之间，使用一个空行分隔。
+<sup>[[link](#two-or-more-empty-lines)]</sup>
+
+  ```Ruby
+  # 差 - 使用了两个空行
+  some_method
+
+
+  some_method
+
+  # 好
+  some_method
+
+  some_method
+  ```
+
+* <a name="empty-lines-around-access-modifier"></a>
+  在属性修饰器之后，使用一个空行分隔。
+<sup>[[link](#empty-lines-around-access-modifier)]</sup>
+
+  ```Ruby
+  # 差
+  class Foo
+    attr_reader :foo
+    def foo
+      # 做一些事情
+    end
+  end
+
+  # 好
+  class Foo
+    attr_reader :foo
+
+    def foo
+      # 做一些事情
+    end
+  end
+  ```
+
+* <a name="empty-lines-around-bodies"></a>
+  在不同缩进的代码之间，不要使用空行分隔。
+<sup>[[link](#empty-lines-around-bodies)]</sup>
+
+  ```Ruby
+  # 差
+  class Foo
+
+    def foo
+
+      begin
+
+        do_something do
+
+          something
+
+        end
+
+      rescue
+
+        something
+
+      end
+
+    end
+
+  end
+
+  # 好
+  class Foo
+    def foo
+      begin
+        do_something do
+          something
+        end
+      rescue
+        something
+      end
+    end
   end
   ```
 
@@ -905,21 +988,21 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```Ruby
   # 差
   # 布尔表达式
-  if some_condition and some_other_condition
-    do_something
-  end
+  ok = got_needed_arguments and arguments_are_valid
 
   # 流程控制
-  document.saved? or document.save!
+  document.save or fail(RuntimeError, "Failed to save document!")
 
   # 好
   # 布尔表达式
-  if some_condition && some_other_condition
-    do_something
-  end
+  ok = got_needed_arguments && arguments_are_valid
 
   # 流程控制
-  document.saved? || document.save!
+  fail(RuntimeError, "Failed to save document!") unless document.save
+
+  # 流程控制
+  document.save || fail(RuntimeError, "Failed to save document!")
+
   ```
 
 * <a name="no-multiline-ternary"></a>
@@ -2252,6 +2335,23 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 
     def some_private_method
     end
+  end
+  ```
+
+* <a name="mixin-grouping"></a>
+  在混入多个模块时，倾向使用多行语法。
+<sup>[[link](#mixin-grouping)]</sup>
+
+  ```Ruby
+  # 差
+  class Person
+    include Foo, Bar
+  end
+
+  # 好
+  class Person
+    include Foo
+    include Bar
   end
   ```
 
