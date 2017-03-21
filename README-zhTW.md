@@ -45,6 +45,7 @@
 * [命名](#命名)
 * [註解](#註解)
   * [註釋](#註釋)
+  * [魔法註解](#魔法註解)
 * [類別與模組](#類別與模組)
 * [異常](#異常)
 * [集合](#集合)
@@ -1866,6 +1867,72 @@
 * <a name="document-annotations"></a>
   如果你覺得適當的話，使用其他你習慣的註釋關鍵字，但記得把它們記錄在專案的 `README` 或類似的地方。
 <sup>[[link](#document-annotations)]</sup>
+
+### 魔法註解
+
+* <a name="magic-comments-first"></a>
+  在代碼或是文件的最上方加入魔法註解，但如果你需要在原始檔案內使用 shebangs 的話，魔法註解應該放在他的下方。
+<sup>[[link](#magic-comments-first)]</sup>
+
+  ```Ruby
+  # 好
+  # frozen_string_literal: true
+  # 有關 Person 的一些文件
+  class Person
+  end
+
+  # 不好
+  # 有關 Person 的一些文件
+  # frozen_string_literal: true
+  class Person
+  end
+  ```
+
+  ```Ruby
+  # 好
+  #!/usr/bin/env ruby
+  # frozen_string_literal: true
+  App.parse(ARGV)
+
+  # 不好
+  # frozen_string_literal: true
+  #!/usr/bin/env ruby
+  App.parse(ARGV)
+  ```
+
+* <a name="one-magic-comment-per-line"></a>
+  你如果需要多個的話，使用一行一個魔法註解。
+<sup>[[link](#one-magic-comment-per-line)]</sup>
+
+  ```Ruby
+  # 好
+  # frozen_string_literal: true
+  # encoding: ascii-8bit
+
+  # 不好
+  # -*- frozen_string_literal: true; encoding: ascii-8bit -*-
+  ```
+
+* <a name="separate-magic-comments-from-code"></a>
+  使用一個空行分隔魔法註解與程式碼或是文件。
+<sup>[[link](#separate-magic-comments-from-code)]</sup>
+
+  ```Ruby
+  # 好
+  # frozen_string_literal: true
+
+  # 有關 Person 的一些文件
+  class Person
+    # Some code
+  end
+
+  # 不好
+  # frozen_string_literal: true
+  # 有關 Person 的一些文件
+  class Person
+    # Some code
+  end
+  ```
 
 ## 類別與模組
 
