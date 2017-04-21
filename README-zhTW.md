@@ -50,6 +50,7 @@
 * [異常](#異常)
 * [集合](#集合)
 * [字串](#字串)
+* [日期與時間](#日期與時間)
 * [正規表示法](#正規表示法)
 * [百分比字面](#百分比字面)
 * [元程式設計](#元程式設計)
@@ -2669,6 +2670,33 @@
     end
   END
   ```
+
+## 日期與時間
+
+* <a name="time-now"></a>
+  當需要現在系統時間時，偏好使用 `Time.now` 勝於 `Time.new` 。 
+<sup>[[link](#time-now)]</sup>
+
+* <a name="no-datetime"></a>
+  除非你的計算需要考慮歷史上的曆法變革，否則避免使用 `DateTime` 。但如果你使用了，請確實設置 `start` 參數來清楚描述你的意圖。
+<sup>[[link](#no-datetime)]</sup>
+
+  ```Ruby
+  # 不好 - 對於現在時間使用 DateTime
+  DateTime.now
+
+  # 好 - 對於現在時間使用 Time
+  Time.now
+
+  # 不好 - 對於近代日期使用 DateTime
+  DateTime.iso8601('2016-06-29')
+
+  # 好 - 對於近代日期使用 Date
+  Date.iso8601('2016-06-29')
+
+  # 好 - 對於歷史日期使用 DateTime 且明確定義 start 參數為 ENGLAND 曆法
+  DateTime.iso8601('1751-04-23', Date::ENGLAND)
+  ```
 
 ## 正規表示法
 
