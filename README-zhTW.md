@@ -2645,31 +2645,31 @@
   使用 Ruby 2.3 新增的`<<~` 操作符來縮排 heredocs 中的多行文本。
 <sup>[[link](#squiggly-heredocs)]</sup>
 
-  ```Ruby
-  # 差 — 使用 Powerpack 專案的 String#strip_margin
-  code = <<-END.strip_margin('|')
-    |def test
-    | some_method
-    | other_method
-    |end
-  END
+  ```Ruby
+  # 差 — 使用 Powerpack 專案的 String#strip_margin
+  code = <<-END.strip_margin('|')
+    |def test
+    |  some_method
+    |  other_method
+    |end
+  END
 
-  # 差
-  code = <<-END
-  def test
-    some_method
-    other_method
-  end
-  END
+  # 差
+  code = <<-END
+  def test
+    some_method
+    other_method
+  end
+  END
 
-  # 好
-  code = <<~END
-    def test
-      some_method
-      other_method
-    end
-  END
-  ```
+  # 好
+  code = <<~END
+    def test
+      some_method
+      other_method
+    end
+  END
+  ```
 
 ## 日期與時間
 
