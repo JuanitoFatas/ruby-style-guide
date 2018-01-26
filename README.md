@@ -236,6 +236,17 @@ Translations of the guide are available in the following languages:
   o_scale = 1/48r
   ```
 
+  Another exception is the safe navigation operator:
+  ```ruby
+  # bad
+  foo &. bar
+  foo &.bar
+  foo&. bar
+
+  # good
+  foo&.bar
+  ```
+
 * <a name="spaces-braces"></a>
   No spaces after `(`, `[` or before `]`, `)`.
   Use spaces around `{` and before `}`.
@@ -720,9 +731,9 @@ Translations of the guide are available in the following languages:
 ## Syntax
 
 * <a name="double-colons"></a>
-    Use `::` only to reference constants(this includes classes and
+    Use `::` only to reference constants (this includes classes and
     modules) and constructors (like `Array()` or `Nokogiri::HTML()`).
-    Do not use `::` for regular method invocation.
+     * Do not use `::` for regular method invocation.
 <sup>[[link](#double-colons)]</sup>
 
   ```ruby
@@ -735,6 +746,24 @@ Translations of the guide are available in the following languages:
   some_object.some_method
   SomeModule::SomeClass::SOME_CONST
   SomeModule::SomeClass()
+  ```
+
+* <a name="colon-method-definition"></a>
+    Do not use `::` to define class methods.
+<sup>[[link](#colon-method-definition)]</sup>
+
+  ```ruby
+  # bad
+  class Foo
+    def self::some_method
+    end
+  end
+
+  # good
+  class Foo
+    def self.some_method
+    end
+  end
   ```
 
 * <a name="method-parens"></a>
