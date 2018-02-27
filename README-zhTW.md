@@ -49,6 +49,7 @@
 * [類別與模組](#類別與模組)
 * [異常](#異常)
 * [集合](#集合)
+* [數字](#數字)
 * [字串](#字串)
 * [日期與時間](#日期與時間)
 * [正規表示法](#正規表示法)
@@ -2561,6 +2562,35 @@
 * <a name="no-modifying-collections"></a>
   在遍歷一個集合時，不要改動它。
 <sup>[[link](#no-modifying-collections)]</sup>
+
+## 數字
+
+* <a name="integer-type-checking"></a>
+  使用 `Integer` 來檢查整數的類型，因為 `Fixnum` 的定義取決於平台，在 32 位元與 64 位元的機器上會回傳不同的結果。
+<sup>[[link](#integer-type-checking)]</sup>
+
+  ```ruby
+  timestamp = Time.now.to_i
+
+  # 不好
+  timestamp.is_a? Fixnum
+  timestamp.is_a? Bignum
+
+  # 好
+  timestamp.is_a? Integer
+  ```
+
+  * <a name="random-numbers"></a>
+    在生成隨機數時偏好使用範圍（ranges），而不是帶偏移量的整數，因為他明確的展現你的意圖，想像一下你真的在骰一個骰子。
+  <sup>[[link](#random-numbers)]</sup>
+
+    ```ruby
+    # 不好
+    rand(6) + 1
+
+    # 好
+    rand(1..6)
+    ```
 
 ## 字串
 
