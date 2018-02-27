@@ -29,14 +29,14 @@
 
 * [简体中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
 * [繁體中文](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
-* [法文](https://github.com/porecreat/ruby-style-guide/blob/master/README-frFR.md)
-* [德文](https://github.com/arbox/ruby-style-guide/blob/master/README-deDE.md)
+* [阿拉伯語](https://github.com/HassanTC/ruby-style-guide/blob/master/README-EgAr.md)
+* [法文](https://github.com/gauthier-delacroix/ruby-style-guide/blob/master/README-frFR.md)
 * [日文](https://github.com/fortissimo1997/ruby-style-guide/blob/japanese/README.ja.md)
 * [韓文](https://github.com/dalzony/ruby-style-guide/blob/master/README-koKR.md)
 * [葡萄牙文](https://github.com/rubensmabueno/ruby-style-guide/blob/master/README-PT-BR.md)
 * [俄文](https://github.com/arbox/ruby-style-guide/blob/master/README-ruRU.md)
 * [西班牙文](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
-* [越南文](https://github.com/scrum2b/ruby-style-guide/blob/master/README-viVN.md)
+* [越南文](https://github.com/CQBinh/ruby-style-guide/blob/master/README-viVN.md)
 
 ## 目錄
 
