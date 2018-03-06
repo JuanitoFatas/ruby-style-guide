@@ -166,10 +166,10 @@
     ```Ruby
     sum = 1 + 2
     a, b = 1, 2
-    [1, 2, 3].each { |e| puts e }
     class FooError < StandardError; end
     ```
-    （針對運算子）唯一的例外是當使用指數運算子時：
+
+    有幾個例外狀況，其中一個是使用指數運算子時：
 
     ```Ruby
     # 不好
@@ -179,7 +179,47 @@
     e = M * c**2
     ```
 
-    由於 `{` 與 `}` 被用在區塊與雜湊的語法，以及嵌入字串的表達式裡，應該要被更清晰的表達。對於雜湊的語法，可以接受下列兩種撰寫方式。
+    另一個例外是在有理數中的分線（slash）：
+
+    ```ruby
+    # 不好
+    o_scale = 1 / 48r
+
+    # 好
+    o_scale = 1/48r
+    ```
+
+    最後一個例外狀況則是安全運算子（safe navigation operator）：
+
+    ```ruby
+    # 不好
+    foo &. bar
+    foo &.bar
+    foo&. bar
+
+    # 好
+    foo&.bar
+    ```
+
+* <a name="spaces-braces"></a>
+  不要有空格在 `(` 、 `[` 之後，或 `]` 、 `)` 之前。
+  在 `{` 、 `}` 的前後加上空格。
+<sup>[[link](#spaces-braces)]</sup>
+
+    ```ruby
+    # bad
+    some( arg ).other
+    [ 1, 2, 3 ].each{|e| puts e}
+
+    # good
+    some(arg).other
+    [1, 2, 3].each { |e| puts e }
+    ```
+
+    由於 `{` 與 `}` 被用在區塊與雜湊的語法，以及嵌入字串的表達式裡，應該要被更清晰的表達。
+
+    對於雜湊的語法，可以接受下列兩種撰寫方式。
+    第一種寫法稍微容易閱讀（一般來說在 Ruby 社群裡也較為普及）。第二種寫法的優點是能夠在視覺上區分區塊與雜湊字面語法。不管你選擇哪一種方式——持續使用它。
 
     ```Ruby
     # 好 - 在 { 之後與 } 之前加上空格
@@ -189,27 +229,14 @@
     {one: 1, two: 2}
     ```
 
-    第一種寫法稍微容易閱讀（一般來說在Ruby社群裡也較為普及）。第二種寫法的優點是能夠在視覺上區分區塊與雜湊字面語法。不管你選擇哪一種方式 - 持續使用它。
-
-    至於嵌入的表達式，一樣有兩種可行的選擇：
+    至於嵌入的表達式則不在大括號中加入空格。
 
     ```Ruby
-    # 好 - 沒有空格
-    "string#{expr}"
+    # 不好
+    "From: #{ user.first_name }, #{ user.last_name }"
 
-    # ok - 也許比較好閱讀
-    "string#{ expr }"
-    ```
-
-    第一種風格非常普遍，原則上建議你持續使用它。第二種風格稍微容易閱讀（可議）。與雜湊一樣 - 選擇其中一種風格並持續使用。
-
-* <a name="no-spaces-braces"></a>
-  不要有空格在 `(` 、 `[` 之後，或 `]` 、 `)` 之前。
-<sup>[[link](#no-spaces-braces)]</sup>
-
-    ```Ruby
-    some(arg).other
-    [1, 2, 3].size
+    # 好
+    "From: #{user.first_name}, #{user.last_name}"
     ```
 
 * <a name="no-space-bang"></a>
@@ -342,6 +369,88 @@
     end
     ```
 
+* <a name="two-or-more-empty-lines"></a>
+  不要在同一處中使用多個空行。
+<sup>[[link](#two-or-more-empty-lines)]</sup>
+
+  ```Ruby
+  # 不好 - 兩個空行
+  some_method
+
+
+  some_method
+
+  # 好
+  some_method
+
+  some_method
+  ```
+
+* <a name="empty-lines-around-access-modifier"></a>
+  使用空行圍繞存取修飾符（Access modifier）。
+<sup>[[link](#empty-lines-around-access-modifier)]</sup>
+
+  ```Ruby
+  # 不好
+  class Foo
+    attr_reader :foo
+    def foo
+      # do something...
+    end
+  end
+
+  # 好
+  class Foo
+    attr_reader :foo
+
+    def foo
+      # do something...
+    end
+  end
+  ```
+
+* <a name="empty-lines-around-bodies"></a>
+  不要用空行圍繞方法、類別、模組、程式碼區塊。
+<sup>[[link](#empty-lines-around-bodies)]</sup>
+
+  ```Ruby
+  # 不好
+  class Foo
+
+    def foo
+
+      begin
+
+        do_something do
+
+          something
+
+        end
+
+      rescue
+
+        something
+
+      end
+
+    end
+
+  end
+
+  # 好
+  class Foo
+    def foo
+      begin
+        do_something do
+          something
+        end
+      rescue
+        something
+      end
+    end
+  end
+  ```
+
 * <a name="no-trailing-params-comma"></a>
   避免在方法最後一個參數之後加逗號，尤其是參數沒有分佈在不同行的時候。
 <sup>[[link](#no-trailing-params-comma)]</sup>
@@ -349,10 +458,10 @@
   ```Ruby
   # 不好 - 比較容易移動/新增/移除參數，但還是不偏好這種做法
   some_method(
-               size,
-               count,
-               color,
-             )
+    size,
+    count,
+    color,
+  )
 
   # 不好
   some_method(size, count, color, )
@@ -497,6 +606,28 @@
     num = 1_000_000
     ```
 
+* <a name="numeric-literal-prefixes"></a>
+  使用數值前綴時偏好使用小寫字母。
+  `0o` 用於八進位數、`0x` 用於十六進位數和 `0b` 用於二進位數。
+  不要使用 `0d` 前綴表示十進位數。
+<sup>[[link](#numeric-literal-prefixes)]</sup>
+
+  ```ruby
+  # 不好
+  num = 01234
+  num = 0O1234
+  num = 0X12AB
+  num = 0B10101
+  num = 0D1234
+  num = 0d1234
+
+  # 好 - 容易從前綴區分出數字
+  num = 0o1234
+  num = 0x12AB
+  num = 0b10101
+  num = 1234
+  ```
+
 * <a name="rdoc-conventions"></a>
   使用 [RDoc](http://rdoc.sourceforge.net/doc/) 以及它的慣例來撰寫 API 文件。不要在註解區塊及 `def` 之前放一個空行。
 <sup>[[link](#rdoc-conventions)]</sup>
@@ -508,6 +639,10 @@
 * <a name="no-trailing-whitespace"></a>
   避免尾隨的空白（trailing whitesapce）。
 <sup>[[link](#no-trailing-whitespace)]</sup>
+
+* <a name="newline-eof"></a>
+  每個檔案的最後以空行做結尾。
+<sup>[[link](#newline-eof)]</sup>
 
 * <a name="no-block-comments"></a>
   不要使用區塊註解，它們不能夠在開頭置入空白，而且無法像一般的註解一樣容易的被辨識出來。
