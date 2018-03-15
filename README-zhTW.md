@@ -2283,32 +2283,40 @@
 ### 魔法註解
 
 * <a name="magic-comments-first"></a>
-  在代碼或是文件的最上方加入魔法註解，但如果你需要在原始檔案內使用 shebangs 的話，魔法註解應該放在他的下方。
+  在代碼或是文件的最上方加入魔法註解（除了 shebangs ，我們等等會討論到他）。
 <sup>[[link](#magic-comments-first)]</sup>
 
   ```Ruby
   # 好
   # frozen_string_literal: true
+
   # 有關 Person 的一些文件
   class Person
   end
 
   # 不好
   # 有關 Person 的一些文件
+
   # frozen_string_literal: true
   class Person
   end
   ```
 
+* <a name="below-shebang"></a>
+  當魔法註解與 shebangs 同時出現的話，將前者至於後者之後。
+<sup>[[link](#below-shebang)]</sup>
+
   ```Ruby
   # 好
   #!/usr/bin/env ruby
   # frozen_string_literal: true
+
   App.parse(ARGV)
 
   # 不好
   # frozen_string_literal: true
   #!/usr/bin/env ruby
+
   App.parse(ARGV)
   ```
 
