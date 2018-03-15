@@ -704,6 +704,173 @@
      end
      ```
 
+* <a name="method-invocation-parens"></a>
+  在調用方法時在參數的外圍加上括號，特別是第一個參數是以左括號開頭，如 `(` 在 `f((3 + 2) + 1)`裡。
+<sup>[[link](#method-invocation-parens)]</sup>
+
+  ```ruby
+  # 不好
+  x = Math.sin y
+  # 好
+  x = Math.sin(y)
+
+  # 不好
+  array.delete e
+  # 好
+  array.delete(e)
+
+  # 不好
+  temperance = Person.new 'Temperance', 30
+  # 好
+  temperance = Person.new('Temperance', 30)
+  ```
+
+  在以下的情況下盡量移除括號
+
+  * 不帶參數的呼叫方法：
+
+    ```ruby
+    # 不好
+    Kernel.exit!()
+    2.even?()
+    fork()
+    'test'.upcase()
+
+    # 好
+    Kernel.exit!
+    2.even?
+    fork
+    'test'.upcase
+    ```
+
+  * 方法是內部領域特定語言（internal DSL）的一部分（如： Rake, Rails, RSpec）：
+
+    ```ruby
+    # 不好
+    validates(:name, presence: true)
+    # 好
+    validates :name, presence: true
+    ```
+
+  * 在 Ruby 中有 Methods 狀態的方法：
+
+    ```ruby
+    class Person
+      # 不好
+      attr_reader(:name, :age)
+      # 好
+      attr_reader :name, :age
+
+      # body omitted
+    end
+    ```
+
+  在以下的情況下可以移除括號
+
+  * Methods that have "keyword" status in Ruby, but are not declarative:
+
+    ```Ruby
+    # 好
+    puts(temperance.age)
+    system('ls')
+    # 也很好
+    puts temperance.age
+    system 'ls'
+    ```
+
+* <a name="optional-arguments"></a>
+    將可選參數定義於參數排列的末端。
+    Ruby 在呼叫可選參數放在前面的方法時會出現一些無法預期的結果。
+<sup>[[link](#optional-arguments)]</sup>
+
+  ```Ruby
+  # 不好
+  def some_method(a = 1, b = 2, c, d)
+    puts "#{a}, #{b}, #{c}, #{d}"
+  end
+
+  some_method('w', 'x') # => '1, 2, w, x'
+  some_method('w', 'x', 'y') # => 'w, 2, x, y'
+  some_method('w', 'x', 'y', 'z') # => 'w, x, y, z'
+
+  # 好
+  def some_method(c, d, a = 1, b = 2)
+    puts "#{a}, #{b}, #{c}, #{d}"
+  end
+
+  some_method('w', 'x') # => '1, 2, w, x'
+  some_method('w', 'x', 'y') # => 'y, 2, w, x'
+  some_method('w', 'x', 'y', 'z') # => 'y, z, w, x'
+  ```
+
+* <a name="parallel-assignment"></a>
+    在定義變數時避免使用平行賦值（parallel assignment）。
+    平行賦值僅能用於呼叫方法時的回傳值、與 * 星號運算符（splat operator）共同使用、或者是用於交換變數賦值。
+    平行賦值的可讀性是低於分開賦值的。
+<sup>[[link](#parallel-assignment)]</sup>
+
+  ```Ruby
+  # 不好
+  a, b, c, d = 'foo', 'bar', 'baz', 'foobar'
+
+  # 好
+  a = 'foo'
+  b = 'bar'
+  c = 'baz'
+  d = 'foobar'
+
+  # 好 - 交換變數賦值
+  # 交換變數賦值是一個特殊的例子，因為他允許你交換各個已經賦予給變數的值。
+  a = 'foo'
+  b = 'bar'
+
+  a, b = b, a
+  puts a # => 'bar'
+  puts b # => 'foo'
+
+  # 好 - 方法回傳
+  def multi_return
+    [1, 2]
+  end
+
+  first, second = multi_return
+
+  # 好 - 與 * 運算符一起使用
+  first, *list = [1, 2, 3, 4] # first => 1, list => [2, 3, 4]
+
+  hello_array = *'Hello' # => ["Hello"]
+
+  a = *(1..3) # => [1, 2, 3]
+  ```
+
+* <a name="trailing-underscore-variables"></a>
+  避免在平行賦值時使用不必要的尾隨底線變數，比起單純使用底線變數，為底線變數命名更好，能夠提供更多的資訊。
+  如果在左側的賦值有定義 * 星號變數（splat variable），且星號變數非底線變數時，尾隨底線變數是必要的。
+<sup>[[link]](#trailing-underscore-variables)</sup>
+
+  ```Ruby
+  # 不好
+  foo = 'one,two,three,four,five'
+  # 不必要的賦值並沒有提供有用的資訊
+  first, second, _ = foo.split(',')
+  first, _, _ = foo.split(',')
+  first, *_ = foo.split(',')
+
+
+  # 好
+  foo = 'one,two,three,four,five'
+  # 必要的底線在此明確指出你需要除了最後一個元素以外的所有元素
+  *beginning, _ = foo.split(',')
+  *beginning, something, _ = foo.split(',')
+
+  a, = foo.split(',')
+  a, b, = foo.split(',')
+  # 不必要的賦值給予未使用的變數，但賦值提供了我們有用的資訊
+  first, _second = foo.split(',')
+  first, _second, = foo.split(',')
+  first, *_ending = foo.split(',')
+  ```
+
 * <a name="no-for-loops"></a>
   永遠不要使用 `for` ，除非你很清楚為什麼。大部分情況應該使用迭代器來取代。`for` 是由 `each` 所實作的（所以你加入了一層的迂迴），但出乎意料的是 — `for` 並沒有包含一個新的視野 (不像是 `each`）而在這個區塊中定義的變數將會被外部所看到。
 <sup>[[link](#no-for-loops)]</sup>
@@ -927,6 +1094,18 @@
   end
   ```
 
+* <a name="no-nested-modifiers"></a>
+  避免巢狀使用 `if`/`unless`/`while`/`until` 修飾符，如果 `&&`/`||` 合適的話是更好的選擇。
+<sup>[[link](#no-nested-modifiers)]</sup>
+
+  ```Ruby
+  # 不好
+  do_something if other_condition if some_condition
+
+  # 好
+  do_something if some_condition && other_condition
+  ```
+
 * <a name="unless-for-negatives"></a>
   否定條件偏愛 `unless` 優於 `if` （或是控制流程 `||`）。
 <sup>[[link](#unless-for-negatives)]</sup>
@@ -1071,34 +1250,6 @@
   end
   ```
 
-* <a name="no-dsl-parens"></a>
-  忽略圍繞方法參數的括號，如內部 DSL (如：Rake, Rails, RSpec)，Ruby 中帶有 "關鍵字" 狀態的方法（如：`attr_reader`, `puts`）以及屬性存取方法。所有其他的方法呼叫，使用括號圍繞參數。
-<sup>[[link](#no-dsl-parens)]</sup>
-
-    ```Ruby
-    class Person
-      attr_reader(:name, :age)  # 不好
-      attr_reader :name, :age   # 好
-
-      # 忽略
-    end
-
-    temperance = Person.new 'Temperance', 30  # 不好
-    temperance = Person.new('Temperance', 30) # 好
-
-    puts(temperance.age)  # 不好
-    puts temperance.age   # 好
-
-    x = Math.sin y  # 不好
-    x = Math.sin(y) # 好
-
-    array.delete e  # 不好
-    array.delete(e) # 好
-
-    expect(bowling.score).to eq 0   # 不好
-    expect(bowling.score).to eq(0)  # 好
-    ```
-
 * <a name="no-braces-opts-hash"></a>
   省略圍繞在隱式選項雜湊外圍的花括號。
 <sup>[[link](#no-braces-opts-hash)]</sup>
@@ -1125,22 +1276,16 @@
   end
   ```
 
-* <a name="no-args-no-parens"></a>
-  方法呼叫不包含參數時，省略圓括號。
-<sup>[[link](#no-args-no-parens)]</sup>
+* <a name="single-action-blocks"></a>
+  當調用函數為區塊中的唯一操作時，使用 proc 簡單表示。
+<sup>[[link](#single-action-blocks)]</sup>
 
   ```Ruby
   # 不好
-  Kernel.exit!()
-  2.even?()
-  fork()
-  'test'.upcase()
+  names.map { |name| name.upcase }
 
   # 好
-  Kernel.exit!
-  2.even?
-  fork
-  'test'.upcase
+  names.map(&:upcase)
   ```
 
 * <a name="single-line-blocks"></a>
@@ -1148,7 +1293,7 @@
 <sup>[[link](#single-line-blocks)]</sup>
 
     ```Ruby
-    names = ['Bozhidar', 'Steve', 'Sarah']
+    names = %w[Bozhidar Steve Sarah]
 
     # 不好
     names.each do |name|
@@ -1415,13 +1560,40 @@
     f(3 + 2) + 1
     ```
 
-* <a name="parens-as-args"></a>
-  如果方法的第一個參數由左括號開始，永遠在這個方法呼叫裡使用括號。舉個例子，寫 `f((3+2) + 1)`。
-<sup>[[link](#parens-as-args)]</sup>
-
 * <a name="always-warn-at-runtime"></a>
   總是使用 `-w` 來執行 Ruby 直譯器，如果你忘了某個上述的規則，它就會警告你！
 <sup>[[link](#always-warn-at-runtime)]</sup>
+
+* <a name="no-nested-methods"></a>
+  不要使用巢狀定義方法，使用 lambda 取代。
+  巢狀方法定義會在同一個範圍（例如 class）內實作出與外面相同的方法，而且， "巢狀方法" 在每一次呼叫包含定義的方法時都會重新定義。
+<sup>[[link](#no-nested-methods)]</sup>
+
+  ```ruby
+  # 不好
+  def foo(x)
+    def bar(y)
+      # 主體省略
+    end
+
+    bar(x)
+  end
+
+  # 好 - 與上一個例子相同，但是每次呼叫 foo 並不會重新定義 bar
+  def bar(y)
+    # 主體省略
+  end
+
+  def foo(x)
+    bar(x)
+  end
+
+  # 也很好
+  def foo(x)
+    bar = ->(y) { ... }
+    bar.call(x)
+  end
+  ```
 
 * <a name="lambda-multi-line"></a>
   對單行區塊主體使用新的 lambda 字面語法，多行區塊使用 `lambda` 方法。
@@ -1447,6 +1619,30 @@
       tmp * b / 50
     end
     ```
+
+* <a name="stabby-lambda-with-args"></a>
+  在定義 stabby lambda （使用 -> 箭頭符號）時別省略參數外的括號。
+<sup>[[link](#stabby-lambda-with-args)]</sup>
+
+  ```Ruby
+  # 不好
+  l = ->x, y { something(x, y) }
+
+  # 好
+  l = ->(x, y) { something(x, y) }
+  ```
+
+* <a name="stabby-lambda-no-args"></a>
+  在定義 stabby lambda （使用 -> 箭頭符號）時，如果沒有參數的話，省略括號。
+<sup>[[link](#stabby-lambda-no-args)]</sup>
+
+  ```Ruby
+  # 不好
+  l = ->() { something }
+
+  # 好
+  l = -> { something }
+  ```
 
 * <a name="proc"></a>
   偏愛 `proc` 勝過 `Proc.new` 。
@@ -1541,6 +1737,18 @@
   # 好
   format('%{first} %{second}', first: 20, second: 10)
   # => '20 10'
+  ```
+
+* <a name="named-format-tokens"></a>
+  使用插值於格式化字串時，偏好使用 `%<name>s` 剩餘 `%{name}`，因為他帶有此數值類型的資訊。
+<sup>[[link]](#named-format-tokens)</sup>
+
+  ```ruby
+  # 不好
+  format('Hello, %{name}', name: 'John')
+
+  # 好
+  format('Hello, %<name>s', name: 'John')
   ```
 
 * <a name="array-join"></a>
