@@ -1994,8 +1994,35 @@
   # 好
   :some_symbol
 
+  some_var = 5
+  var10    = 10
+
   def some_method
     ...
+  end
+  ```
+
+* <a name="snake-case-symbols-methods-vars-with-numbers"></a>
+  在命名符號、方法或變數時，不要分開字母跟數字。
+<sup>[[link](#snake-case-symbols-methods-vars-with-numbers)]</sup>
+
+  ```Ruby
+  # 不好
+  :some_sym_1
+
+  some_var_1 = 1
+
+  def some_method_1
+    # 一些程式碼
+  end
+
+  # 好
+  :some_sym1
+
+  some_var1 = 1
+
+  def some_method1
+    # 一些程式碼
   end
   ```
 
@@ -2006,24 +2033,32 @@
   ```Ruby
   # 不好
   class Someclass
-    ...
+    # 一些程式碼
   end
 
   class Some_Class
-    ...
+    # 一些程式碼
   end
 
   class SomeXml
-    ...
+    # 一些程式碼
+  end
+
+  class XmlSomething
+    # 一些程式碼
   end
 
   # 好
   class SomeClass
-    ...
+    # 一些程式碼
   end
 
   class SomeXML
-    ...
+    # 一些程式碼
+  end
+
+  class XMLSomething
+    # 一些程式碼
   end
   ```
 
@@ -2054,6 +2089,42 @@
 * <a name="bool-methods-qmark"></a>
   判斷式方法的名字（回傳布林值的方法）應以問號結尾。(即 `Array#empty?` )。非回傳布林值的方法，不應以問號結尾。
 <sup>[[link](#bool-methods-qmark)]</sup>
+
+* <a name="bool-methods-prefix"></a> 
+  避免在使用動詞命名的判斷式加上前綴如 `is`、`does` 或是 `can`，這些前綴與 Ruby 核心函式庫內的判斷式如 `empty?` 和 `include?` 相較之下顯得多餘且邏輯不一致。
+<sup>[[link](#bool-methods-prefix)]</sup>
+
+  ```ruby
+  # 不好
+  class Person
+    def is_tall?
+      true
+    end
+
+    def can_play_basketball?
+      false
+    end
+
+    def does_like_candy?
+      true
+    end
+  end
+
+  # 好
+  class Person
+    def tall?
+      true
+    end
+
+    def basketball_player?
+      false
+    end
+
+    def likes_candy?
+      true
+    end
+  end
+  ```
 
 * <a name="dangerous-method-bang"></a>
   有潛在“危險性”的方法，若此 *危險* 方法有安全版本存在時，應以安全版本名加上驚嘆號結尾（即：改動 `self` 或參數、 `exit!` 等等方法）。
@@ -2103,10 +2174,6 @@
     end
   end
   ```
-
-* <a name="reduce-blocks"></a>
-  在短的區塊使用 `reduce` 時，把參數命名為 `|a, e|` (累加器，元素)
-<sup>[[link](#reduce-blocks)]</sup>
 
 * <a name="other-arg"></a>
   在定義二元操作符時，把參數命名為 `other` （`<<` 與 `[]` 是這條規則的例外，因為它們的語義不同）。
