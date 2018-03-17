@@ -2366,6 +2366,9 @@
       extend SomeModule
       include AnotherModule
 
+      # 內部類別
+      CustomError = Class.new(StandardError)
+
       # 接著是常數
       SOME_CONSTANT = 20
 
@@ -2377,6 +2380,10 @@
 
       # 公開的類別方法接在下一行
       def self.some_method
+      end
+
+      # 初始化方法置於類別方法與其他實例方法之中
+      def initialize
       end
 
       # 跟著是公開的實體方法
@@ -2396,6 +2403,98 @@
     end
     ```
 
+* <a name="mixin-grouping"></a>
+  引入多個 mixin 時分開聲明。
+<sup>[[link](#mixin-grouping)]</sup>
+
+  ```ruby
+  # 不好
+  class Person
+    include Foo, Bar
+  end
+
+  # 好
+  class Person
+    # 把多個 mixin 分開聲明
+    include Foo
+    include Bar
+  end
+  ```
+
+* <a name="file-classes"></a>
+  別在同一個類別中巢狀多個類別，試著在各別的類別檔案中分開包裝類別。
+<sup>[[link](#file-classes)]</sup>
+
+  ```Ruby
+  # 不好
+
+  # foo.rb
+  class Foo
+    class Bar
+      # 裡面有 30 個方法
+    end
+
+    class Car
+      # 裡面有 20 個方法
+    end
+
+    # 裡面有 30 個方法
+  end
+
+  # 好
+
+  # foo.rb
+  class Foo
+    # 裡面有 30 個方法
+  end
+
+  # foo/bar.rb
+  class Foo
+    class Bar
+      # 裡面有 30 個方法
+    end
+  end
+
+  # foo/car.rb
+  class Foo
+    class Car
+      # 裡面有 20 個方法
+    end
+  end
+  ```
+
+* <a name="namespace-definition"></a>
+  使用明確的巢狀定義（和重啟）命名類別和模組，因為 Ruby 的[詞法作用域（lexical scoping）](https://cirw.in/blog/constant-lookup.html)，使用範圍解析運算符（::）時，根據巢狀模組定義的方式，可能導致意料之外的常數查找。
+  <sup>[[link](#namespace-definition)]</sup>
+
+  ```Ruby
+  module Utilities
+    class Queue
+    end
+  end
+
+  # 不好
+  class Utilities::Store
+    Module.nesting # => [Utilities::Store]
+
+    def initialize
+      # 參考到最高層級 ::Queue 類別，因為 Utilities 並不在當前的巢狀鏈中
+      @queue = Queue.new
+    end
+  end
+
+  # 好
+  module Utilities
+    class WaitingList
+      Module.nesting # => [Utilities::WaitingList, Utilities]
+
+      def initialize
+        @queue = Queue.new # 參考 Utilities::Queue
+      end
+    end
+  end
+  ```
+
 * <a name="modules-vs-classes"></a>
   偏好模組，勝過只有類別方法的類。類別應該只在產生實例是合理的時候使用。
 <sup>[[link](#modules-vs-classes)]</sup>
@@ -2404,7 +2503,7 @@
     # 差
     class SomeClass
       def self.some_method
-        # body omitted
+        # 主體省略
       end
 
       def self.some_other_method
@@ -2416,7 +2515,7 @@
       module_function
 
       def some_method
-        # body omitted
+        # 主體省略
       end
 
       def some_other_method
@@ -2515,6 +2614,48 @@
     end
     ```
 
+* <a name="accessor_mutator_method_names"></a>
+  使用存取器（accessors）和修改器（mutators）時，避免在方法名稱前面加上 `get_` 與 `set_` 的前綴。在 Ruby 中，慣例上使用屬性名稱當作存取器（讀）和使用 `attr_name=` 當修改器（寫）。
+<sup>[[link](#accessor_mutator_method_names)]</sup>
+
+  ```ruby
+  # 不好
+  class Person
+    def get_name
+      "#{@first_name} #{@last_name}"
+    end
+
+    def set_name(name)
+      @first_name, @last_name = name.split(' ')
+    end
+  end
+
+  # 好
+  class Person
+    def name
+      "#{@first_name} #{@last_name}"
+    end
+
+    def name=(name)
+      @first_name, @last_name = name.split(' ')
+    end
+  end
+  ```
+
+* <a name="attr"></a>
+  避免使用 `attr`。 使用 `attr_reader` 和 `attr_accessor` 。
+<sup>[[link](#attr)]</sup>
+
+  ```Ruby
+  # 不好 - 產生一個屬性存取器 (Ruby 1.9 時已移除)
+  attr :something, true
+  attr :one, :two, :three # 與 attr_reader 作用相同
+
+  # 好
+  attr_accessor :something
+  attr_reader :one, :two, :three
+  ```
+
 * <a name="struct-new"></a>
   考慮使用 `Struct.new`，它替你定義了那些瑣碎的存取器（accessors），建構式（constructor）以及比較運算元（comparison operators）。
 <sup>[[link](#struct-new)]</sup>
@@ -2534,17 +2675,32 @@
     Person = Struct.new(:first_name, :last_name) do
     end
     ```
+
 * <a name="no-extend-struct-new"></a>
-  考慮加入工廠方法來提供額外合理的方式，來創造一個特定類別的實體。
+  別使用 `Struct.new` 擴展一個實例初始化，如果檔案引入太多次，在帶入多餘的類別來擴展可能也會同時來入了奇怪的錯誤。
 <sup>[[link](#no-extend-struct-new)]</sup>
 
-    ```Ruby
-    class Person
-      def self.create(options_hash)
-        # 省略主體
-      end
+  ```Ruby
+  # 不好
+  class Person < Struct.new(:first_name, :last_name)
+  end
+
+  # 好
+  Person = Struct.new(:first_name, :last_name)
+  ```
+    
+* <a name="factory-methods"></a>
+  考慮加入工廠方法來提供額外合理的方式，來創造一個特定類別的實體。
+<sup>[[link](#factory-methods)]</sup>
+
+  ```Ruby
+  class Person
+    def self.create(options_hash)
+      # 主體省略
     end
-    ```
+  end
+  ```
+
 * <a name="duck-typing"></a>
   偏好[鴨子類型](http://en.wikipedia.org/wiki/Duck_typing)勝於繼承。
 <sup>[[link](#duck-typing)]</sup>
@@ -2661,6 +2817,91 @@
       end
     end
     ```
+
+* <a name="alias-method-lexically"></a>
+  當要幫在同一個類別作用域（lexical class scope）的方法使用別名時，
+  比起使用 `self` 的解法，偏好使用 `alias` ，
+  它更加清楚的告訴使用者，除非明確聲明，否則你的別名不會被任何子類別修改，運行時亦同。
+<sup>[[link](#alias-method-lexically)]</sup>
+
+  ```ruby
+  class Westerner
+    def first_name
+      @names.first
+    end
+
+    alias given_name first_name
+  end
+  ```
+
+  由於 `alias` 如同 `def`，是個關鍵字，所以偏好無型態符號的參數（bareword arguments）勝過
+  符號或是字串，換個說法，使用 `alias foo bar` 而不是 `alias :foo :bar`。
+
+  同時注意 Ruby 如何處理別名和繼承：當別名被定義時，別名的參照已經決定了，而非動態發出。
+
+  ```ruby
+  class Fugitive < Westerner
+    def first_name
+      'Nobody'
+    end
+  end
+  ```
+
+  在這個例子裡 `Fugitive#given_name` 仍會呼叫 `Westerner#first_name` 方法，
+  而非 `Fugitive#first_name`. 想要複寫 `Fugitive#given_name` 的行為，你必須重新定義初始的類別。
+
+  ```ruby
+  class Fugitive < Westerner
+    def first_name
+      'Nobody'
+    end
+
+    alias given_name first_name
+  end
+  ```
+
+* <a name="alias-method"></a>
+  當別名使用在模組、類別或是運行中單例類別的方法時，使用 `alias_method` ，
+  在這些情境下，使用作用域中的 `alias` 將會使運行無法預期。
+<sup>[[link](#alias-method)]</sup>
+
+  ```Ruby
+  module Mononymous
+    def self.included(other)
+      other.class_eval { alias_method :full_name, :given_name }
+    end
+  end
+
+  class Sting < Westerner
+    include Mononymous
+  end
+  ```
+
+* <a name="class-and-self"></a>
+  當一個類別（或是模組）方法呼叫其他類似的方法時，隱藏開頭的 `self` 或是隱藏在 `.` 之後自己的名字。
+  這在服務類別（service classes）或是其他把類別當作函式使用的概念中常見，這樣的習慣會減少這種類別出現重複樣板。
+  <sup>[[link](#class-and-self)]</sup>
+
+  ```Ruby
+  class TestClass
+    # 不好 -- 類別重新命名或是方法變更時需要花更多功夫
+    def self.call(param1, param2)
+      TestClass.new(param1).call(param2)
+    end
+
+    # 不好 -- 過於詳細
+    def self.call(param1, param2)
+      self.new(param1).call(param2)
+    end
+
+    # 好
+    def self.call(param1, param2)
+      new(param1).call(param2)
+    end
+
+    # 其他方法...
+  end
+  ```
 
 ## 異常
 
