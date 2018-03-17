@@ -2905,17 +2905,43 @@
 
 ## 異常
 
-* <a name="fail-method"></a>
-  使用 `fail` 方法來發出異常信號。僅在捕捉到異常時使用 `raise` 並重新拋出異常（因為沒有失敗，所以顯式地拋出異常）
-<sup>[[link](#fail-method)]</sup>
+* <a name="prefer-raise-over-fail"></a>
+  對於異常建議使用 `raise` 勝過 `fail`。
+  <sup>[[link](#prefer-raise-over-fail)]</sup>
 
-    ```Ruby
-    begin
-     fail 'Oops';
-    rescue => error
-      raise if error.message != 'Oops'
-    end
-    ```
+  ```Ruby
+  # bad
+  fail SomeException, 'message'
+
+  # good
+  raise SomeException, 'message'
+  ```
+
+* <a name="no-explicit-runtimeerror"></a>
+  當使用兩個參數的 `raise` 時，別明確指出 `RuntimeError`。
+<sup>[[link](#no-explicit-runtimeerror)]</sup>
+
+  ```ruby
+  # 不好
+  raise RuntimeError, 'message'
+
+  # 好 - 單個參數預設為 RuntimeError
+  raise 'message'
+  ```
+
+* <a name="exception-class-messages"></a>
+  偏好提供給 `raise` 異常類別和訊息共兩個分開的參數，勝於直接給異常實例。
+<sup>[[link](#exception-class-messages)]</sup>
+
+  ```Ruby
+  # 不好
+  raise SomeException.new('message')
+  # 這邊是沒有辦法使用 `raise SomeException.new('message'), backtrace` 的.
+
+  # 好
+  raise SomeException, 'message'
+  # 與 `raise SomeException, 'message', backtrace` 一致.
+  ```
 
 * <a name="no-return-ensure"></a>
   永遠不要從 `ensure` 區塊返回。如果你顯式地從 `ensure` 區塊中的一個方法返回，那麼這方法會如同沒有異常般的返回。實際上，異常會被默默地丟掉。
@@ -3102,6 +3128,23 @@
       f.close unless f.nil?
     end
     ```
+
+* <a name="auto-release-resources"></a>
+盡量使用可自動清理資源的取得方法。
+<sup>[[link](#auto-release-resources)]</sup>
+
+  ```ruby
+  # 不好 - 你需要明確關閉檔案描述符（file descriptor）
+  f = File.open('testfile')
+  # 檔案裡的一些動作
+  f.close
+
+  # 好 - 檔案描述符會自行關閉
+  File.open('testfile') do |f|
+    # 檔案裡的一些動作
+  end
+  ```
+
 * <a name="standard-exceptions"></a>
   偏愛使用標準函式庫的異常處理勝於導入新的異常類別。
 <sup>[[link](#standard-exceptions)]</sup>
