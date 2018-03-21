@@ -3162,7 +3162,9 @@
 
     # 好
     arr = []
+    arr = Array.new(10)
     hash = {}
+    hash = Hash.new(0)
     ```
 
 * <a name="percent-w"></a>
@@ -3189,6 +3191,25 @@
     STATES = %i(draft open closed)
     ```
 
+* <a name="no-trailing-array-commas"></a>
+  避免在 `Array` 或 `Hash` 的最後一個項目後使用逗號，特別是他們不是分行表示時。
+<sup>[[link](#no-trailing-array-commas)]</sup>
+
+  ```ruby
+  # 不好 - 易於移動、增加、移除項目，但仍不是好選擇
+  VALUES = [
+             1001,
+             2020,
+             3333,
+           ]
+
+  # 不好
+  VALUES = [1001, 2020, 3333, ]
+
+  # 好
+  VALUES = [1001, 2020, 3333]
+  ```
+
 * <a name="no-gappy-arrays"></a>
   避免在陣列中創造巨大的間隔。
 <sup>[[link](#no-gappy-arrays)]</sup>
@@ -3197,6 +3218,12 @@
     arr = []
     arr[100] = 1 # 現在你有一個很多 nil 的陣列
     ```
+
+* <a name="first-and-last"></a>
+  當需要取得陣列第一個或是最後一個元素時，偏好
+  使用 `first` 或 `last` 勝過 `[0]` 或 `[-1]`。
+<sup>[[link](#first-and-last)]</sup>
+
 * <a name="set-vs-array"></a>
   當處理獨一無二的元素時，使用 `Set` 來替代 `Array` 。`Set` 實現了不重複的無序數值集合。`Set` 是陣列直觀的內部操作功能與雜湊的快速存取的混合體。
 <sup>[[link](#set-vs-array)]</sup>
@@ -3229,6 +3256,51 @@
     hash = { one: 1, two: 2, three: 3 }
     ```
 
+* <a name="no-mixed-hash-syntaces"></a>
+  別在同一個雜湊表示中混用 Ruby 1.9 雜湊表示式和火箭表示式（=>）。
+  當你的鍵值不是符號時，他就是雜湊火箭表示式
+<sup>[[link](#no-mixed-hash-syntaces)]</sup>
+
+  ```Ruby
+  # 不好
+  { a: 1, 'b' => 2 }
+
+  # 好
+  { :a => 1, 'b' => 2 }
+  ```
+
+* <a name="hash-key"></a>
+  使用 `Hash#key?` 取代 `Hash#has_key?` 和
+  使用 `Hash#value?` 取代 `Hash#has_value?`。
+<sup>[[link](#hash-key)]</sup>
+
+  ```ruby
+  # 不好
+  hash.has_key?(:test)
+  hash.has_value?(value)
+
+  # 好
+  hash.key?(:test)
+  hash.value?(value)
+  ```
+
+* <a name="hash-each"></a>
+  使用 `Hash#each_key` 取代 `Hash#keys.each` 
+  和使用 `Hash#each_value` 取代 `Hash#values.each` 。
+<sup>[[link](#hash-each)]</sup>
+
+  ```ruby
+  # 不好
+  hash.keys.each { |k| p k }
+  hash.values.each { |v| p v }
+  hash.each { |k, _v| p k }
+  hash.each { |_k, v| p v }
+
+  # 好
+  hash.each_key { |k| p k }
+  hash.each_value { |v| p v }
+  ```
+
 * <a name="hash-fetch"></a>
   在處理需要出現的雜湊鍵時，使用 `fetch` 。
 <sup>[[link](#hash-fetch)]</sup>
@@ -3244,18 +3316,47 @@
     ```
 
 * <a name="hash-fetch-defaults"></a>
-  Use `fetch` with second argument to set a default value
+  透過 `Hash#fetch` 來引入雜湊的值，而非使用邏輯符。
 <sup>[[link](#hash-fetch-defaults)]</sup>
 
-   ```Ruby
-   batman = { name: 'Bruce Wayne', is_evil: false }
+  ```Ruby
+  batman = { name: 'Bruce Wayne', is_evil: false }
 
-   # bad - if we just use || operator with falsy value we won't get the expected result
-   batman[:is_evil] || true # => true
+  # 不好 - 如果只使用 || 運算符與假值，我們不會得到預期的結果
+  batman[:is_evil] || true # => true
 
-   # good - fetch work correctly with falsy values
-   batman.fetch(:is_evil, true) # => false
-   ```
+  # 好 - fetch 與假值正常運作中
+  batman.fetch(:is_evil, true) # => false
+  ```
+
+* <a name="use-hash-blocks"></a>
+  如果程式碼需要求值，可能會導致副作用或是成本過高時，偏好使用程式區塊（block）取代 `Hash#fetch` 裡的預設值。
+  <sup>[[link](#use-hash-blocks)]</sup>
+
+  ```ruby
+  batman = { name: 'Bruce Wayne' }
+
+  # 不好 - 如果我們使用預設值，便急於對他求值
+  # 發生多次的話它將會拖慢程式
+  batman.fetch(:powers, obtain_batman_powers) # obtain_batman_powers 是個非常重量級的呼叫
+
+  # 好 - 程式區塊為惰性求值，他僅會在 KeyError 異常時作動
+  batman.fetch(:powers) { obtain_batman_powers }
+  ```
+
+* <a name="hash-values-at"></a>
+  當你需要從雜湊中連續檢索多個值時，使用`Hash#values_at`。
+<sup>[[link](#hash-values-at)]</sup>
+
+  ```ruby
+  # 不好
+  email = data['email']
+  username = data['nickname']
+
+  # 好
+  email, username = data.values_at('email', 'nickname')
+  ```
+
 
 * <a name="ordered-hashes"></a>
   相信這個事實吧，Ruby 1.9 的雜湊是有序的。
@@ -3265,6 +3366,39 @@
   在遍歷一個集合時，不要改動它。
 <sup>[[link](#no-modifying-collections)]</sup>
 
+* <a name="accessing-elements-directly"></a>
+  當要取用集合的元素時，如有提供的話盡量使用讀取器的替代方法，避免直接使用 `[n]` 取用。
+  這可以讓你避免從 `nil` 上呼叫 `[]`。
+<sup>[[link](#accessing-elements-directly)]</sup>
+
+  ```ruby
+  # 不好
+  Regexp.last_match[1]
+
+  # 好
+  Regexp.last_match(1)
+  ```
+
+* <a name="provide-alternate-accessor-to-collections"></a>
+  要為一個集合提供存取器時，提供一個替代方法在存取時幫使用者檢查是否存取到 `nil`。
+<sup>[[link](#provide-alternate-accessor-to-collections)]</sup>
+
+  ```ruby
+  # 不好
+  def awesome_things
+    @awesome_things
+  end
+
+  # 好
+  def awesome_things(index = nil)
+    if index && @awesome_things
+      @awesome_things[index]
+    else
+      @awesome_things
+    end
+  end
+  ```
+  
 ## 數字
 
 * <a name="integer-type-checking"></a>
