@@ -3682,24 +3682,45 @@
 <sup>[[link](#non-capturing-regexp)]</sup>
 
     ```Ruby
-    /(first|second)/   # 不好
-    /(?:first|second)/ # 好
+    # 不好
+    /(first|second)/   
+
+    # 好
+    /(?:first|second)/
     ```
+
 * <a name="no-perl-regexp-last-matchers"></a>
-  避免使用 `$1-9`，因為它們很難追蹤它們包含什麼。可以使用命名群組來替代。
+  別用難以理解的老式 Perl 變數來表示最後的正規表示式匹配值（像是 `$1`、`$2` 等等)，使用 `Regexp.last_match(n)` 取代。
 <sup>[[link](#no-perl-regexp-last-matchers)]</sup>
 
+
     ```Ruby
-    # 不好
     /(regexp)/ =~ string
     ...
+
+    # 不好
     process $1
 
     # 好
-    /(?<meaningful_var>regexp)/ =~ string
-    ...
-    process meaningful_var
+    process Regexp.last_match(1)
     ```
+
+* <a name="no-numbered-regexes"></a>
+  避免使用編號群組，因為它們很難追蹤它們包含什麼。可以使用命名群組來替代。
+<sup>[[link](#no-numbered-regexes)]</sup>
+
+  ```Ruby
+  # 不好
+  /(regexp)/ =~ string
+  # 一些程式碼
+  process Regexp.last_match(1)
+
+  # 好
+  /(?<meaningful_var>regexp)/ =~ string
+  # 一些程式碼
+  process meaningful_var
+  ```
+  
 * <a name="limit-escapes"></a>
   字元類別只有幾個你需要關心的特殊字元：`^`, `-`, `\`, `]`，所以你不用逃脫字元 `.` 或在 `[]` 的中括號。
 <sup>[[link](#limit-escapes)]</sup>
@@ -3730,6 +3751,12 @@
 * <a name="gsub-blocks"></a>
   針對複雜的替換，`sub` 或 `gsub` 可以與區塊或雜湊來使用。
 <sup>[[link](#gsub-blocks)]</sup>
+
+  ```Ruby
+  words = 'foo bar'
+  words.sub(/f/, 'f' => 'F') # => 'Foo bar'
+  words.gsub(/\w+/) { |word| word.capitalize } # => 'Foo Bar'
+  ```
 
 ## 百分比字面
 
