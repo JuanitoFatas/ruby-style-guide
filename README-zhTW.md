@@ -3440,27 +3440,58 @@
 
     # 好
     email_with_name = "#{user.name} <#{user.email}>"
-    ```
 
-* <a name="pad-string-interpolation"></a>
-  考慮替字串插值留白。這使插值在字串裡看起來更清楚。
-<sup>[[link](#pad-string-interpolation)]</sup>
-
-    ```Ruby
-    "#{ user.last_name }, #{ user.first_name }"
+    # 好
+    email_with_name = format('%s <%s>', user.name, user.email)
     ```
 
 * <a name="consistent-string-literals"></a>
-  當你不需要插入特殊符號如 `\t`, `\n`, `'`, 等等時，偏好單引號的字串。
+  選擇一個統一的字串風格吧！在 Ruby 社群中有兩種普遍的方法，分別是預設使用單引號（選項一）跟預設使用雙引號（選項二）。
 <sup>[[link](#consistent-string-literals)]</sup>
+
+  * **(選項一)** 當你不需要插入特殊符號如 `\t`, `\n`, `'`, 等等時，偏好單引號的字串。
 
     ```Ruby
     # 不好
     name = "Bozhidar"
 
+    name = 'De\'Andre'
+
     # 好
     name = 'Bozhidar'
+
+    name = "De'Andre"
     ```
+
+  * **(選項二)** 偏好使用雙引號，除非你的字串內包含 `"` 或是你必須要避免跳脫字元。
+
+    ```Ruby
+    # 不好
+    name = 'Bozhidar'
+
+    sarcasm = "I \"like\" it."
+
+    # 好
+    name = "Bozhidar"
+
+    sarcasm = 'I "like" it.'
+    ```
+
+  在這個指南中，字串風格是採用前者。
+
+* <a name="no-character-literals"></a>
+  別用字元表示語法 `?x`，從 Ruby 1.9 之後他已經是多餘的，
+  `?x` 會被解譯成 `'x'`（內有一個字元的字串）。
+<sup>[[link](#no-character-literals)]</sup>
+
+  ```Ruby
+  # 不好
+  char = ?c
+
+  # 好
+  char = 'c'
+  ```
+
 * <a name="curlies-interpolate"></a>
   別忘了使用 `{}` 圍繞要被插入字串的實體與全域變數。
 <sup>[[link](#curlies-interpolate)]</sup>
@@ -3492,13 +3523,34 @@
     # 好
     puts "$global = #{$global}"
     ```
+
+* <a name="no-to-s"></a>
+  別使用 `Object#to_s` 在字串的插入中，他會自動調用的。
+<sup>[[link](#no-to-s)]</sup>
+
+  ```Ruby
+  # 不好
+  message = "This is the #{result.to_s}."
+
+  # 好
+  message = "This is the #{result}."
+  ```
+
 * <a name="concat-strings"></a>
   當你需要建構龐大的資料區段（chunk）時，避免使用 `String#+` 。
   使用 `String#<<` 來替代。字串串接在對的地方改變字串實體，並且永遠比 `String#+` 來得快，`String#+` 創造了一堆新的字串物件。
 <sup>[[link](#concat-strings)]</sup>
 
     ```Ruby
-    # 好也比較快
+    # 不好
+    html = ''
+    html += '<h1>Page title</h1>'
+
+    paragraphs.each do |paragraph|
+      html += "<p>#{paragraph}</p>"
+    end
+
+    # 好又快
     html = ''
     html << '<h1>Page title</h1>'
 
@@ -3507,34 +3559,77 @@
     end
     ```
 
+* <a name="heredocs"></a>
+  當使用多行字串的 heredocs 時，請記得他們保留空白字符的事實，
+  使用一些修剪空白的邊距是很好的做法。 
+<sup>[[link](#heredocs)]</sup>
+
+  ```ruby
+  code = <<-END.gsub(/^\s+\|/, '')
+    |def test
+    |  some_method
+    |  other_method
+    |end
+  END
+  # => "def test\n  some_method\n  other_method\nend\n"
+  ```
+
 * <a name="squiggly-heredocs"></a>
   使用 Ruby 2.3 新增的`<<~` 操作符來縮排 heredocs 中的多行文本。
 <sup>[[link](#squiggly-heredocs)]</sup>
 
   ```Ruby
   # 差 — 使用 Powerpack 專案的 String#strip_margin
-  code = <<-END.strip_margin('|')
+  code = <<-RUBY.strip_margin('|')
     |def test
     |  some_method
     |  other_method
     |end
-  END
+  RUBY
 
   # 差
-  code = <<-END
+  code = <<-RUBY
   def test
     some_method
     other_method
   end
-  END
+  RUBY
 
   # 好
-  code = <<~END
+  code = <<~RUBY
     def test
       some_method
       other_method
     end
+  RUBY
+  ```
+
+* <a name="heredoc-delimiters"></a>
+  為 heredocs 使用描述性分隔符並且添加有關 heredoc 內容的信息，
+  附帶的好處是，如果使用正確的分隔符，某些編輯器可以突出顯示 heredocs 中的程式碼。
+<sup>[[link](#heredoc-delimiters)]</sup>
+
+  ```Ruby
+  # 不好
+  code = <<~END
+    def foo
+      bar
+    end
   END
+
+  # 好
+  code = <<~RUBY
+    def foo
+      bar
+    end
+  RUBY
+
+  # 好
+  code = <<~SUMMARY
+    An imposing black structure provides a connection between the past and
+    the future in this enigmatic adaptation of a short story by revered
+    sci-fi author Arthur C. Clarke.
+  SUMMARY
   ```
 
 ## 日期與時間
