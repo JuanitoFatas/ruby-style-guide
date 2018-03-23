@@ -3761,7 +3761,7 @@
 ## 百分比字面
 
 * <a name="percent-q-shorthand"></a>
-  使用 `%()` 給需要插值與嵌入雙引號的單行字串。多行字串，偏好使用 heredocs 。
+  使用 `%()`（比 `%Q` 還短) 給需要插值與嵌入雙引號的單行字串。多行字串，偏好使用 heredocs 。
 <sup>[[link](#percent-q-shorthand)]</sup>
 
     ```Ruby
@@ -3780,25 +3780,86 @@
     # 好（需要插值、有雙引號以及單行）
     %(<tr><td class="name">#{name}</td>)
     ```
+
+* <a name="percent-q"></a>
+  避免使用 `%()` 或是 `%q()` 除非你的的字串中同時擁有 `'` 與
+  `"`。偏好可讀性高的一般字串表示法，除非其中有太多跳脫字元。
+<sup>[[link](#percent-q)]</sup>
+
+    ```Ruby
+    # 不好
+    name = %q(Bruce Wayne)
+    time = %q(8 o'clock)
+    question = %q("What did you say?")
+
+    # 好
+    name = 'Bruce Wayne'
+    time = "8 o'clock"
+    question = '"What did you say?"'
+    quote = %q(<p class='quote'>"What did you say?"</p>)
+    ```
+
 * <a name="percent-r"></a>
   正規表示法要匹配多於一個的 `/` 字元時，使用 `%r`。
 <sup>[[link](#percent-r)]</sup>
 
     ```Ruby
     # 不好
-    %r(\s+)
-
-    # 仍不好
-    %r(^/(.*)$)
-    # 應當是 /^\/(.*)$/
+    %r{\s+}
 
     # 好
-    %r(^/blog/2011/(.*)$)
+    %r{^/(.*)$}
+    %r{^/blog/2011/(.*)$}
     ```
 
+* <a name="percent-x"></a>
+  避免使用 `%x` 除非你要調用帶有 `` ` `` 的指令（這不太可能）。
+<sup>[[link](#percent-x)]</sup>
+
+  ```Ruby
+  # 不好
+  date = %x(date)
+
+  # 好
+  date = `date`
+  echo = %x(echo `date`)
+  ```
+
+* <a name="percent-s"></a>
+  避免使用 `%s`，社群似乎一致認同 `:"some string"` 是建立有空格符號的最佳解。
+<sup>[[link](#percent-s)]</sup>
+
 * <a name="percent-literal-braces"></a>
-  偏好 `()` 作為所有 `%` 字面的分隔符。
-<sup>[[link](#percent-literal-braces)]</sup>
+  偏好 `()` 作為各種 `%` 字面的最佳分隔符。
+  <sup>[[link](#percent-literal-braces)]</sup>
+  - `()` 用於字串的字面表示（`%q`, `%Q`）。
+  - `[]` 用於陣列的字面表示（`%w`, `%i`, `%W`, `%I`）如同一般陣列一樣對齊。
+  - `{}` 用於正規表示式（`%r`），因為括號（`()`）在正規表示式中經常出現，因此使用少見的 `{` 在 `%r` 中是最好的選擇。
+  - `()` 用於其他的字面表示（像是 `%s`, `%x`）。
+
+  ```Ruby
+  # 不好
+  %q{"Test's king!", John said.}
+
+  # 好
+  %q("Test's king!", John said.)
+
+  # 不好
+  %w(one two three)
+  %i(one two three)
+
+  # 好
+  %w[one two three]
+  %i[one two three]
+
+  # 不好
+  %r((\w+)-(\d+))
+  %r{\w{1,2}\d{2,5}}
+
+  # 好
+  %r{(\w+)-(\d+)}
+  %r|\w{1,2}\d{2,5}|
+  ```
 
 ## 元程式設計
 
