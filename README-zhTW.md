@@ -4063,22 +4063,29 @@
 
 ### RuboCop
 
-[RuboCop](https://github.com/bbatsov/rubocop) is a Ruby code style
-checker based on this style guide. RuboCop already covers a
-significant portion of the Guide, supports both MRI 1.9 and MRI 2.0
-and has good Emacs integration.
+[RuboCop](https://github.com/bbatsov/rubocop) 是一個基於本指南的 Ruby 語言風格檢查器，幾乎包含了此指南重要的部分，支援 MRI 1.9、MRI 2.0 還有良好的 Emacs 協作。
 
 ### RubyMine
 
-[RubyMine](http://www.jetbrains.com/ruby/)'s code inspections are
-[partially based](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
-on this guide.
+[RubyMine](http://www.jetbrains.com/ruby/)的程式碼檢查[部分基於](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)本指南。
 
 # 貢獻
+
+本指南仍處於不斷更新的狀態 &mdash; 有些規則缺乏範例、有些規則則是缺乏清楚的例子來說明他，協助改進這些規則是一個很好（同時也簡單）的方法來幫助 Ruby 社群。
+
+時機成熟時，（希望）這些問題將會被解決 &mdash; 記著吧！
 
 在本指南所寫的每個東西都不是定案。這只是我渴望想與同樣對 Ruby 程式設計風格有興趣的大家一起工作，以致於最終我們可以替整個 Ruby 社群創造一個有益的資源。
 
 歡迎開票或發送一個帶有改進的更新請求。在此提前感謝你的幫助！
+
+你同時也可以透過[Gratipay](https://gratipay.com/~bbatsov/)來為本指南（還有 RuboCop）提供一些財務上的貢獻。
+
+[![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.png)](https://gratipay.com/~bbatsov/)
+
+## 如何貢獻？
+
+真的很簡單，只要照著[貢獻指南](https://github.com/bbatsov/ruby-style-guide/blob/master/CONTRIBUTING.md)即可。
 
 # 授權
 
