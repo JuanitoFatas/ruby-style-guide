@@ -3936,6 +3936,63 @@
     # 而最好是在每個可找到的屬性被宣告時，使用 define_method。
     ```
 
+* <a name="prefer-public-send"></a>
+  偏好使用 `public_send` 更勝於 `send`，如此一來可以避開 `private`/`protected` 的洩漏。
+<sup>[[link](#prefer-public-send)]</sup>
+
+  ```Ruby
+  # 我們有一個包含 Activatable 模組的 ActiveModel Organization
+  module Activatable
+    extend ActiveSupport::Concern
+
+    included do
+      before_create :create_token
+    end
+
+    private
+
+    def reset_token
+      # 一些程式碼
+    end
+
+    def create_token
+      # 一些程式碼
+    end
+
+    def activate!
+      # 一些程式碼
+    end
+  end
+
+  class Organization < ActiveRecord::Base
+    include Activatable
+  end
+
+  linux_organization = Organization.find(...)
+  # 不好 - 私有方法被使用
+  linux_organization.send(:reset_token)
+  # 好 - 會拋出例外
+  linux_organization.public_send(:reset_token)
+  ```
+
+* <a name="prefer-__send__"></a>
+  偏好 `__send__` 勝於 `send`，後者可能會與現有方法重疊。
+<sup>[[link](#prefer-__send__)]</sup>
+
+  ```Ruby
+  require 'socket'
+
+  u1 = UDPSocket.new
+  u1.bind('127.0.0.1', 4913)
+  u2 = UDPSocket.new
+  u2.connect('127.0.0.1', 4913)
+  # 並不會傳遞訊息給接收器物件
+  # 取而代之的是他會經由 UDP socket 傳遞訊息
+  u2.send :sleep, 0
+  # 以下的方法才會確實的傳遞訊息給接收器物件
+  u2.__send__ ...
+  ```
+
 ## 其它
 
 * <a name="always-warn"></a>
