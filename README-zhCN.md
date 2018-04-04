@@ -2226,7 +2226,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
 ### Magic Comments
 
 * <a name="magic-comments-first"></a>
-  Place magic comments above all code and documentation. Magic comments should only go below shebangs if they are needed in your source file.
+  将魔术注释放置在所有代码和文档之上，如果代码中需要 shebangs，魔术注释应该只在 shebangs 下面。
 <sup>[[link](#magic-comments-first)]</sup>
 
   ```Ruby
@@ -2256,7 +2256,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="one-magic-comment-per-line"></a>
-  Use one magic comment per line if you need multiple.
+  有多个魔术注释时每行只写一个。
 <sup>[[link](#one-magic-comment-per-line)]</sup>
 
   ```Ruby
@@ -2269,7 +2269,7 @@ Ruby 社区尚未就某些规则达成明显的共识，比如字符串字面量
   ```
 
 * <a name="separate-magic-comments-from-code"></a>
-  Separate magic comments from code and documentation with a blank line.
+  魔术注释和代码及文档之间间隔一个空行。
 <sup>[[link](#separate-magic-comments-from-code)]</sup>
 
   ```Ruby
