@@ -678,6 +678,24 @@
     SomeModule::SomeClass()
     ```
 
+* <a name="colon-method-definition"></a>
+  別使用 `::` 來定義類別方法。
+<sup>[[link](#colon-method-definition)]</sup>
+
+  ```ruby
+  # 不好
+  class Foo
+    def self::some_method
+    end
+  end
+
+  # 好
+  class Foo
+    def self.some_method
+    end
+  end
+  ```
+
 * <a name="method-parens"></a>
   使用 `def` 時，當有參數時使用括號。當方法不接受任何參數時，省略括號。
 <sup>[[link](#method-parens)]</sup>
@@ -1012,6 +1030,9 @@
   避免使用 `!!`。
 <sup>[[link](#no-bang-bang)]</sup>
 
+  `!!` 會將數值轉換為布林值，但在流程控制上你不需要使用它，他只會混淆你的意圖。
+  如果你需要檢查 `nil` 值，請使用 `nil?` 檢查。
+
   ```Ruby
   # 不好
   x = 'test'
@@ -1020,13 +1041,9 @@
     # 省略主體
   end
 
-  x = false
-  # 雙重否定對布林值來說是不必要的
-  !!x # => false
-
   # 好
   x = 'test'
-  unless x.nil?
+  if x
     # 省略主體
   end
   ```
@@ -3557,6 +3574,23 @@
     paragraphs.each do |paragraph|
       html << "<p>#{paragraph}</p>"
     end
+    ```
+
+* <a name="dont-abuse-gsub"></a>
+  如果你有更好更快的選擇，別使用 `String#gsub`。
+<sup>[[link](#dont-abuse-gsub)]</sup>
+
+    ```ruby
+    url = 'http://example.com'
+    str = 'lisp-case-rules'
+
+    # 不好
+    url.gsub('http://', 'https://')
+    str.gsub('-', '_')
+
+    # 好
+    url.sub('http://', 'https://')
+    str.tr('-', '_')
     ```
 
 * <a name="heredocs"></a>
