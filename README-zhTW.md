@@ -2577,7 +2577,7 @@
 <sup>[[link](#liskov)]</sup>
 
 * <a name="solid-design"></a>
-  盡可能讓你的類別越[堅固](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design\))越好。
+  盡可能讓你的類別越[堅固](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design))越好。
 <sup>[[link](#solid-design)]</sup>
 
 * <a name="define-to-s"></a>
