@@ -1757,7 +1757,7 @@
   ```
 
 * <a name="named-format-tokens"></a>
-  使用插值於格式化字串時，偏好使用 `%<name>s` 剩餘 `%{name}`，因為他帶有此數值類型的資訊。
+  使用插值於格式化字串時，偏好使用 `%<name>s` 勝於 `%{name}`，因為他帶有此數值類型的資訊。
 <sup>[[link]](#named-format-tokens)</sup>
 
   ```ruby
@@ -2107,7 +2107,7 @@
   判斷式方法的名字（回傳布林值的方法）應以問號結尾。(即 `Array#empty?` )。非回傳布林值的方法，不應以問號結尾。
 <sup>[[link](#bool-methods-qmark)]</sup>
 
-* <a name="bool-methods-prefix"></a> 
+* <a name="bool-methods-prefix"></a>
   避免在使用動詞命名的判斷式加上前綴如 `is`、`does` 或是 `can`，這些前綴與 Ruby 核心函式庫內的判斷式如 `empty?` 和 `include?` 相較之下顯得多餘且邏輯不一致。
 <sup>[[link](#bool-methods-prefix)]</sup>
 
@@ -2577,7 +2577,7 @@
 <sup>[[link](#liskov)]</sup>
 
 * <a name="solid-design"></a>
-  盡可能讓你的類別越[堅固](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design\))越好。
+  盡可能讓你的類別越[堅固](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design))越好。
 <sup>[[link](#solid-design)]</sup>
 
 * <a name="define-to-s"></a>
@@ -2705,7 +2705,7 @@
   # 好
   Person = Struct.new(:first_name, :last_name)
   ```
-    
+
 * <a name="factory-methods"></a>
   考慮加入工廠方法來提供額外合理的方式，來創造一個特定類別的實體。
 <sup>[[link](#factory-methods)]</sup>
@@ -3302,7 +3302,7 @@
   ```
 
 * <a name="hash-each"></a>
-  使用 `Hash#each_key` 取代 `Hash#keys.each` 
+  使用 `Hash#each_key` 取代 `Hash#keys.each`
   和使用 `Hash#each_value` 取代 `Hash#values.each` 。
 <sup>[[link](#hash-each)]</sup>
 
@@ -3415,7 +3415,7 @@
     end
   end
   ```
-  
+
 ## 數字
 
 * <a name="integer-type-checking"></a>
@@ -3595,7 +3595,7 @@
 
 * <a name="heredocs"></a>
   當使用多行字串的 heredocs 時，請記得他們保留空白字符的事實，
-  使用一些修剪空白的邊距是很好的做法。 
+  使用一些修剪空白的邊距是很好的做法。
 <sup>[[link](#heredocs)]</sup>
 
   ```ruby
@@ -3669,7 +3669,7 @@
 ## 日期與時間
 
 * <a name="time-now"></a>
-  當需要現在系統時間時，偏好使用 `Time.now` 勝於 `Time.new` 。 
+  當需要現在系統時間時，偏好使用 `Time.now` 勝於 `Time.new` 。
 <sup>[[link](#time-now)]</sup>
 
 * <a name="no-datetime"></a>
@@ -3717,7 +3717,7 @@
 
     ```Ruby
     # 不好
-    /(first|second)/   
+    /(first|second)/
 
     # 好
     /(?:first|second)/
@@ -3754,7 +3754,7 @@
   # 一些程式碼
   process meaningful_var
   ```
-  
+
 * <a name="limit-escapes"></a>
   字元類別只有幾個你需要關心的特殊字元：`^`, `-`, `\`, `]`，所以你不用逃脫字元 `.` 或在 `[]` 的中括號。
 <sup>[[link](#limit-escapes)]</sup>
@@ -3943,7 +3943,7 @@
   元程式設計避免使用 `method_missing`。會讓 Backtraces 變得很凌亂；行為沒有列在 `#methods` 裡；拼錯的方法呼叫可能默默的工作（`nukes.launch_state = false`)。考慮使用 delegation, proxy, 或是 `define_method` 來取代。如果你必須使用 `method_missing`，
 <sup>[[link](#no-method-missing)]</sup>
 
-  - 確保[也定義了 `respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
+  - 確保也定義了 [`respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
   - 僅捕捉字首定義良好的方法，像是 `find_by_*` ― 讓你的程式碼愈肯定(assertive)愈好。
   - 在最後的敘述句(statement)呼叫 `super`
   - 從 delegate 到 assertive, 不神奇的(non-magical)方法：
