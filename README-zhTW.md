@@ -1757,7 +1757,7 @@
   ```
 
 * <a name="named-format-tokens"></a>
-  使用插值於格式化字串時，偏好使用 `%<name>s` 剩餘 `%{name}`，因為他帶有此數值類型的資訊。
+  使用插值於格式化字串時，偏好使用 `%<name>s` 勝於 `%{name}`，因為他帶有此數值類型的資訊。
 <sup>[[link]](#named-format-tokens)</sup>
 
   ```ruby
@@ -2577,7 +2577,7 @@
 <sup>[[link](#liskov)]</sup>
 
 * <a name="solid-design"></a>
-  盡可能讓你的類別越[堅固](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design\))越好。
+  盡可能讓你的類別越[堅固](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design))越好。
 <sup>[[link](#solid-design)]</sup>
 
 * <a name="define-to-s"></a>
@@ -3943,7 +3943,7 @@
   元程式設計避免使用 `method_missing`。會讓 Backtraces 變得很凌亂；行為沒有列在 `#methods` 裡；拼錯的方法呼叫可能默默的工作（`nukes.launch_state = false`)。考慮使用 delegation, proxy, 或是 `define_method` 來取代。如果你必須使用 `method_missing`，
 <sup>[[link](#no-method-missing)]</sup>
 
-  - 確保[也定義了 `respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
+  - 確保也定義了 [`respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
   - 僅捕捉字首定義良好的方法，像是 `find_by_*` ― 讓你的程式碼愈肯定(assertive)愈好。
   - 在最後的敘述句(statement)呼叫 `super`
   - 從 delegate 到 assertive, 不神奇的(non-magical)方法：
